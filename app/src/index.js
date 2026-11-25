@@ -23,6 +23,7 @@ import {
 import { canSend, sendSignInLink, showLinkOnPage } from "./mail.js";
 import { humanCheckOn, isHuman } from "./human.js";
 import { googleOn, authUrl, challengeOf, flowCookie, FLOW_COOKIE, emailFromCode } from "./google.js";
+import { runChecks } from "./watchdog.js";
 import { limitFor, planName, expiresAtFor, normalizeDestination, cleanLabel, cleanEndsAt, newSlug, FREE_DAYS } from "./codes.js";
 import { FORMATS, build } from "./export.js";
 import { upgradeKey, upgradeOptions, highestPlan, productsOf, verifyWebhook } from "./billing.js";
@@ -206,10 +207,22 @@ const ownHosts = (env, request) => [redirectOrigin(env).hostname, new URL(reques
 const publicCode = (env, r) => ({
   id: r.id, slug: r.slug, url: shortUrl(env, r.hostname, r.slug), destination: r.destination,
   label: r.label, expires_at: r.expires_at, ends_at: r.ends_at, disabled: Boolean(r.disabled), created_at: r.created_at,
+  backup_destination: r.backup_destination, check_status: r.check_status, checked_at: r.checked_at, failing_since: r.failing_since,
 });
 
-const SELECT_CODE = "SELECT id, slug, hostname, destination, label, expires_at, ends_at, disabled, created_at FROM codes";
+const SELECT_CODE = `SELECT id, slug, hostname, destination, label, expires_at, ends_at, disabled, created_at,
+  backup_destination, check_status, checked_at, failing_since FROM codes`;
 const BAD_DESTINATION = "That doesn't look like a web address we can send people to. Try something like example.com/menu.";
+const BAD_BACKUP = "That backup link doesn't look like a web address we can send people to. Try something like example.com/closed.";
+
+// Optional backup link: { value } (null = none) or { error }. Same rules as the destination.
+function cleanBackup(value, destination, own) {
+  if (value === null || value === undefined || String(value).trim() === "") return { value: null };
+  const url = normalizeDestination(value, own);
+  if (!url) return { error: BAD_BACKUP };
+  if (url === destination) return { error: "The backup link should be a different page from the destination." };
+  return { value: url };
+}
 
 async function withAccount(request, env, fn) {
   const account = await currentAccount(request, env);
@@ -239,6 +252,8 @@ const createCode = (request, env) => withAccount(request, env, async (account) =
   const expiresAt = expiresAtFor(account.plan, t);
   const ends = cleanEndsAt(body?.ends_at, t, expiresAt);
   if (ends.error) return json({ ok: false, error: ends.error }, 400);
+  const backup = cleanBackup(body?.backup_destination, destination, ownHosts(env, request));
+  if (backup.error) return json({ ok: false, error: backup.error }, 400);
 
   const limit = limitFor(account.plan);
   const hostname = redirectOrigin(env).hostname;
@@ -248,10 +263,10 @@ const createCode = (request, env) => withAccount(request, env, async (account) =
       // The plan limit is checked inside the same statement as the insert, so two quick clicks can't exceed it.
       const result = await env.DB
         .prepare(
-          `INSERT INTO codes (account_id, hostname, slug, destination, label, expires_at, ends_at)
-           SELECT ?1, ?2, ?3, ?4, ?5, ?6, ?8 WHERE (SELECT COUNT(*) FROM codes WHERE account_id = ?1) < ?7`,
+          `INSERT INTO codes (account_id, hostname, slug, destination, label, expires_at, ends_at, backup_destination)
+           SELECT ?1, ?2, ?3, ?4, ?5, ?6, ?8, ?9 WHERE (SELECT COUNT(*) FROM codes WHERE account_id = ?1) < ?7`,
         )
-        .bind(account.id, hostname, slug, destination, label, expiresAt, limit, ends.value)
+        .bind(account.id, hostname, slug, destination, label, expiresAt, limit, ends.value, backup.value)
         .run();
       if (result.meta.changes === 0) {
         return json({ ok: false, error: `Your ${planName(account.plan)} plan allows ${limit} codes. Delete one, or upgrade for more.` }, 403);
@@ -272,18 +287,38 @@ const editCode = (request, env, id) => withAccount(request, env, async (account)
   const label = cleanLabel(body?.label);
   if (label === null) return json({ ok: false, error: "Keep the name under 80 characters." }, 400);
   // "AND account_id" means you can only ever see or change your own codes.
-  const current = await env.DB.prepare("SELECT expires_at, ends_at FROM codes WHERE id = ?1 AND account_id = ?2").bind(id, account.id).first();
+  const current = await env.DB
+    .prepare("SELECT expires_at, ends_at, backup_destination FROM codes WHERE id = ?1 AND account_id = ?2")
+    .bind(id, account.id)
+    .first();
   if (!current) return json({ ok: false, error: "That code wasn't found." }, 404);
-  // The end time only changes when the request mentions it; leaving it out keeps the one already set.
+  // The end time and backup link only change when the request mentions them; leaving them out keeps what's set.
   let endsAt = current.ends_at;
   if (body && Object.hasOwn(body, "ends_at")) {
     const ends = cleanEndsAt(body.ends_at, now(), current.expires_at);
     if (ends.error) return json({ ok: false, error: ends.error }, 400);
     endsAt = ends.value;
   }
+  let backupUrl = current.backup_destination;
+  if (body && Object.hasOwn(body, "backup_destination")) {
+    const backup = cleanBackup(body.backup_destination, destination, ownHosts(env, request));
+    if (backup.error) return json({ ok: false, error: backup.error }, 400);
+    backupUrl = backup.value;
+  }
+  if (backupUrl === destination) return json({ ok: false, error: "The destination and the backup link should be different pages." }, 400);
+  // A new destination starts with a clean check record, so an old failure can't send scans to the backup.
+  // (SQLite works out every SET from the row as it was, so "destination = ?1" compares with the old one.)
   const result = await env.DB
-    .prepare("UPDATE codes SET destination = ?1, label = ?2, ends_at = ?5 WHERE id = ?3 AND account_id = ?4")
-    .bind(destination, label, id, account.id, endsAt)
+    .prepare(
+      `UPDATE codes SET
+         check_status = CASE WHEN destination = ?1 THEN check_status END,
+         check_fails = CASE WHEN destination = ?1 THEN check_fails ELSE 0 END,
+         checked_at = CASE WHEN destination = ?1 THEN checked_at END,
+         failing_since = CASE WHEN destination = ?1 THEN failing_since END,
+         destination = ?1, label = ?2, ends_at = ?5, backup_destination = ?6
+       WHERE id = ?3 AND account_id = ?4`,
+    )
+    .bind(destination, label, id, account.id, endsAt, backupUrl)
     .run();
   if (result.meta.changes === 0) return json({ ok: false, error: "That code wasn't found." }, 404);
   const row = await env.DB.prepare(`${SELECT_CODE} WHERE id = ?1`).bind(id).first();
@@ -466,5 +501,10 @@ export default {
       console.error(pathname, err?.message); // the details go to the logs, never to the visitor
       return json({ ok: false, error: "Something went wrong. Please try again." }, 500);
     }
+  },
+
+  // Every 15 minutes (the cron in wrangler.jsonc): check that a batch of codes' destinations still load.
+  async scheduled(controller, env, ctx) {
+    ctx.waitUntil(runChecks(env).catch((err) => console.error("link check", err?.message)));
   },
 };

@@ -147,6 +147,29 @@ function stateText(code, now) {
   return { text: `${byOwner ? "Ends" : "Expires"} ${inTime(at - now)}`, tone: at - now <= 3 * 86400 ? "warn" : "" };
 }
 
+// "5 minutes ago", "3 hours ago", "2 days ago".
+function ago(seconds) {
+  if (seconds < 3600) return `${Math.max(1, Math.round(seconds / 60))} min ago`;
+  if (seconds < 2 * 86400) return `${Math.round(seconds / 3600)} hours ago`;
+  return `${Math.round(seconds / 86400)} days ago`;
+}
+
+// What the link watchdog found the last time it opened this code's destination.
+function healthText(code, now) {
+  if (code.check_status === "failing") {
+    const since = new Date(code.failing_since * 1000).toLocaleString([], { dateStyle: "medium", timeStyle: "short" });
+    return {
+      text: code.backup_destination
+        ? `The destination hasn't loaded since ${since}. Scans go to your backup link until it works again.`
+        : `The destination hasn't loaded since ${since}. Fix it, or add a backup link so scans still reach a working page.`,
+      bad: true,
+    };
+  }
+  if (code.check_status === "ok") return { text: `Destination checked ${ago(now - code.checked_at)}: it loads.` };
+  if (code.check_status === "unknown") return { text: "We couldn't confirm the destination loads: the site may block automatic checks." };
+  return { text: "We check each destination about once a day. Not checked yet." };
+}
+
 // "Stop working" control, used when creating a code and when changing a code's end time.
 // value(): undefined = invalid input, null = no end time, or Unix seconds.
 function endsControl(prefix, current = null) {
@@ -273,6 +296,9 @@ function confirmDelete(code, reload) {
 
 function renderRow(code, now, reload) {
   const state = stateText(code, now);
+  // Destination health only matters while scans can still reach it.
+  const live = !code.disabled && state.tone !== "bad";
+  const health = healthText(code, now);
   const dest = el("p", { class: "code-dest" }, el("span", { class: "sr-only" }, "Goes to "), code.destination);
   const error = el("p", { class: "msg-error", role: "alert" });
 
@@ -310,6 +336,26 @@ function renderRow(code, now, reload) {
     form.querySelector("select").focus();
   };
 
+  // Add, change or remove the backup link, inline, in place of the action buttons.
+  const startBackup = () => {
+    const input = el("input", { id: `backup-${code.id}`, type: "text", value: code.backup_destination ?? "", spellcheck: "false", placeholder: "example.com/closed" });
+    const save = async (value) => {
+      const r = await api(`/api/codes/${code.id}`, { destination: code.destination, label: code.label, backup_destination: value }, "PATCH");
+      if (r.ok) reload(value ? "Backup link saved. If the destination stops loading, scans go there." : "Backup link removed.");
+      else error.textContent = r.data.error ?? "That didn't save. Please try again.";
+    };
+    const form = el("form", { class: "ends-form" },
+      el("label", { for: `backup-${code.id}` }, "Backup link"), input,
+      el("div", { class: "actions" },
+        el("button", { type: "submit", class: "btn" }, "Save backup link"),
+        code.backup_destination ? el("button", { type: "button", class: "btn", onclick: () => save(null) }, "Remove") : null,
+        el("button", { type: "button", class: "btn btn-quiet", onclick: () => form.replaceWith(actions) }, "Cancel")),
+      el("p", { class: "hint" }, "We check the destination about once a day. If it fails 3 checks in a row, scans go here instead until it loads again."));
+    form.addEventListener("submit", (e) => { e.preventDefault(); error.textContent = ""; save(input.value); });
+    actions.replaceWith(form);
+    input.focus();
+  };
+
   const copy = async (e) => {
     try {
       await navigator.clipboard.writeText(code.url);
@@ -326,6 +372,7 @@ function renderRow(code, now, reload) {
     el("a", { class: "btn", href: code.url, target: "_blank", rel: "noopener noreferrer" }, "Open link ↗"),
     el("button", { type: "button", class: "btn", onclick: startEdit }, "Change destination"),
     el("button", { type: "button", class: "btn", onclick: startEnds }, code.ends_at == null ? "Set end time" : "Change end time"),
+    el("button", { type: "button", class: "btn", onclick: startBackup }, code.backup_destination ? "Change backup link" : "Add backup link"),
     el("button", { type: "button", class: "btn btn-quiet", onclick: () => confirmDelete(code, reload) }, "Delete"));
 
   return el("li", { class: "code-row" },
@@ -335,7 +382,9 @@ function renderRow(code, now, reload) {
         el("span", { class: "mono code-link" }, code.url.replace(/^https?:\/\//, "")), // shorter to read; Copy uses the full link
         el("button", { type: "button", class: "btn btn-quiet btn-small", onclick: copy }, "Copy"))),
     dest,
+    code.backup_destination ? el("p", { class: "code-dest" }, "Backup: ", code.backup_destination) : null,
     el("span", { class: `code-state pill pill-${state.tone || "neutral"}` }, state.text),
+    live ? el("p", { class: health.bad ? "code-health msg-error" : "code-health hint" }, health.text) : null,
     actions,
     error);
 }

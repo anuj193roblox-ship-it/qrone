@@ -4,6 +4,8 @@
   "main": "app/src/index.js",
   "compatibility_date": "2026-11-24",
   "observability": { "enabled": true },
+  // Link watchdog (app/src/watchdog.js): checks a batch of code destinations every 15 minutes.
+  "triggers": { "crons": ["*/15 * * * *"] },
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",

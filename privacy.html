@@ -21,7 +21,7 @@
     <p>Dynamic codes need an account. For that we keep:</p>
     <ul>
       <li>Your email address, to send you sign-in links and tell your account apart.</li>
-      <li>Your codes: their name, where they point, and when they were made or expire.</li>
+      <li>Your codes: their name, where they point, any backup link, when they were made or expire, and whether the destination loaded when we last checked it.</li>
       <li>Your plan, and a record of each payment: the amount, the date and the payment provider's reference. Never your card details.</li>
     </ul>
     <p>One cookie keeps you signed in for up to 30 days. It is needed for the account to work and is not used for tracking or ads. Sign-in links work once and expire after 15 minutes. We store only a scrambled fingerprint of each link and cookie, never the link or cookie itself.</p>
@@ -29,7 +29,7 @@
     <p>If you choose Continue with Google, Google tells us only your email address and that it's verified. We don't ask for your name, photo or contacts.</p>
     <p>Sign-in emails are sent by Resend. It sees your email address and the email itself, including the sign-in link, under its own privacy policy. The sign-in form also shows Cloudflare Turnstile, a check that you're a person and not a script. Cloudflare reads technical details from your browser for that check, under its own privacy policy.</p>
     <h2>When someone scans a code</h2>
-    <p>Our redirect server looks up where the code points and sends the scanner there. We don't record scans. Cloudflare, which runs our servers and stores the data, keeps technical request logs for up to 7 days so problems can be fixed.</p>
+    <p>Our redirect server looks up where the code points and sends the scanner there. We don't record scans. Separately, our servers open each code's destination about once a day to check it still loads; that check has nothing to do with anyone who scans. Cloudflare, which runs our servers and stores the data, keeps technical request logs for up to 7 days so problems can be fixed.</p>
     <h2>Payments</h2>
     <p>Payments are handled by Dodo Payments, which sells on our behalf. They see your name, email and payment details under their own privacy policy. We receive only your email, what you bought and the amount.</p>
     <h2>Deleting your data</h2>
