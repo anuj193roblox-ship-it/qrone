@@ -18,25 +18,26 @@
       <div class="nav-links"><a href="/">Make</a><a href="/check">Check</a><a href="/faq.html">FAQ</a></div>
     </nav>
   </header>
-  <main id="main" class="page">
-    <div class="page-head"><h1 id="headline" class="hero-title"><span class="line">Sign in</span></h1>
-      <p class="hero-sub">Sign in to make and manage editable QR codes. Static codes on the <a href="/">home page</a> don't need an account.</p></div>
-    <form id="signin-form" class="card" novalidate>
+  <main id="main" class="signin-page">
+    <div class="page-head">
+      <h1 id="headline" class="hero-title"><span class="line">Sign in to</span> <span class="line accent">{{NAME}}.</span></h1>
+      <p class="hero-sub">Manage editable QR codes. Static codes on the <a href="/">home page</a> don't need an account.</p>
+    </div>
+    <form id="signin-form" class="card signin-card" novalidate>
       <label for="signin-email">Your email</label>
-      <div class="pair pair-tight">
-        <input id="signin-email" type="email" autocomplete="email" inputmode="email" required>
-        <button type="submit" class="btn btn-primary">Email me a link</button>
-      </div>
-      <p class="hint">No password. We email you a link that signs you in. It works once, for 15 minutes. We only email sign-in links: no newsletters, no marketing.</p>
+      <input id="signin-email" type="email" autocomplete="email" inputmode="email" required>
+      <button type="submit" class="btn btn-primary btn-block">Email me a sign-in link</button>
+      <p class="hint">No password to remember. The link signs you in once and works for 15 minutes. New here? The same link creates your account.</p>
     </form>
 
-    <div id="signin-finish" class="card" hidden>
+    <div id="signin-finish" class="card signin-card" hidden>
       <p>Press the button to finish signing in on this device.</p>
-      <div class="actions"><button type="button" id="signin-go" class="btn btn-primary">Sign in</button></div>
+      <button type="button" id="signin-go" class="btn btn-primary btn-block">Sign in</button>
     </div>
 
     <p id="signin-msg" class="status" role="status"></p>
     <p id="signin-error" class="msg-error" role="alert"></p>
+    <p class="hint signin-foot">We only use your email to sign you in: no newsletters, no marketing. <a href="/privacy.html">Privacy</a>.</p>
   </main>
   <footer class="foot">
     <p>{{NAME}} runs in your browser.</p>

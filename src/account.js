@@ -1,6 +1,7 @@
 // Sign-in page and dashboard. Talks only to our own /api/*; all text is set with textContent (via el()).
 import { setHeadline } from "./headline.js";
-import { quietZone, cleanLabel, downloadFramed, printStickers } from "./frame.js";
+import { BRAND } from "./config.js";
+import { quietZone, framedSvgBlob, downloadFramed, printStickers } from "./frame.js";
 
 const $ = (id) => document.getElementById(id);
 
@@ -64,7 +65,7 @@ export function initSignin() {
         error(r.data.error ?? "That didn't work. Ask for a new link.");
         $("signin-finish").hidden = true;
         $("signin-form").hidden = false;
-        setHeadline("Sign in");
+        setHeadline("Sign in to", `${BRAND.name}.`);
       }
     });
     return;
@@ -98,35 +99,91 @@ function stateText(code, now) {
   return { text: days === 1 ? "Expires tomorrow" : `Expires in ${days} days`, tone: days <= 3 ? "warn" : "" };
 }
 
-let qr = null; // one QR renderer, reused for every code
+const SIZE = 1200; // codes are drawn 1200px wide, like the home page
 let currentPlan = "free";
 const FREE_WARN = "Free codes stop working 14 days after you make them. Test them with your phone, but don't print them. Upgrade first: paid codes never expire.";
+
+// Make | Domains | Account tabs. Arrow keys move between them; #account opens the account tab directly.
+function initTabs() {
+  const tabs = [...document.querySelectorAll('.dash-tabs [role="tab"]')];
+  const select = (tab, focus = false) => {
+    for (const t of tabs) {
+      const on = t === tab;
+      t.setAttribute("aria-selected", String(on));
+      t.tabIndex = on ? 0 : -1;
+      $(t.getAttribute("aria-controls")).hidden = !on;
+    }
+    if (focus) tab.focus();
+  };
+  tabs.forEach((tab, i) => {
+    tab.addEventListener("click", () => select(tab));
+    tab.addEventListener("keydown", (e) => {
+      const step = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+      if (step) select(tabs[(i + step + tabs.length) % tabs.length], true);
+    });
+  });
+  if (location.hash === "#account") select($("tab-account"));
+  return select;
+}
+
+// The QR dialog shows the same framed SVG the download makes, on white paper.
+let qr = null;
+let qrCode = null;
+let previewUrl = null;
+const qrOpts = () => ({ frame: document.querySelector('input[name="qr-frame"]:checked').value, label: $("qr-label").value, fg: "#000000", bg: "#ffffff" });
+
+async function drawQr() {
+  $("qr-label-box").hidden = qrOpts().frame === "none";
+  const blob = await framedSvgBlob(qr, SIZE, qrOpts());
+  const url = URL.createObjectURL(blob);
+  $("qr-img").src = url;
+  if (previewUrl) URL.revokeObjectURL(previewUrl);
+  previewUrl = url;
+}
 
 async function showQr(code) {
   const { default: QRCodeStyling } = await import("qr-code-styling");
   if (!qr) {
-    qr = new QRCodeStyling({ width: 512, height: 512, type: "canvas", margin: quietZone(512), data: code.url, qrOptions: { errorCorrectionLevel: "M" } });
-    qr.append($("qr-canvas")); // its own box: the library empties it on every redraw
-    const label = $("qr-preview-label");
-    $("qr-label").addEventListener("input", () => {
-      label.textContent = cleanLabel($("qr-label").value);
-      label.hidden = !label.textContent;
-    });
-    // A label prints as a black pill under the code, the same "Bottom pill" frame as the home page.
-    const opts = () => ({ frame: "pill", label: $("qr-label").value, fg: "#000000", bg: "#ffffff" });
-    const name = () => `qrone-${$("qr-box").dataset.slug}`;
-    $("qr-png").addEventListener("click", () => downloadFramed(qr, 512, opts(), name(), "png"));
-    $("qr-svg").addEventListener("click", () => downloadFramed(qr, 512, opts(), name(), "svg"));
-    $("qr-stickers").addEventListener("click", () => printStickers(qr, 512, opts(), $("qr-sticker-size").value));
-    $("qr-close").addEventListener("click", () => { $("qr-panel").hidden = true; });
+    qr = new QRCodeStyling({ width: SIZE, height: SIZE, type: "svg", margin: quietZone(SIZE), data: code.url, qrOptions: { errorCorrectionLevel: "M" } });
+    const name = () => `qrone-${qrCode.slug}`;
+    document.querySelectorAll('input[name="qr-frame"]').forEach((r) => r.addEventListener("change", drawQr));
+    $("qr-label").addEventListener("input", drawQr);
+    $("qr-png").addEventListener("click", () => downloadFramed(qr, SIZE, qrOpts(), name(), "png"));
+    $("qr-svg").addEventListener("click", () => downloadFramed(qr, SIZE, qrOpts(), name(), "svg"));
+    $("qr-stickers").addEventListener("click", () => printStickers(qr, SIZE, qrOpts(), $("qr-sticker-size").value));
+    $("qr-close").addEventListener("click", () => $("qr-dialog").close());
   }
+  qrCode = code;
   qr.update({ data: code.url }); // the short link is plain ASCII, so no extra encoding is needed
-  $("qr-box").dataset.slug = code.slug;
   $("qr-title").textContent = code.label || "Your code";
   $("qr-url").textContent = code.url;
+  $("qr-img").alt = `QR code for ${code.url}`;
   $("qr-stickers-box").hidden = currentPlan === "free"; // free codes expire, so no sticker sheets for them
-  $("qr-panel").hidden = false;
-  $("qr-panel").scrollIntoView({ block: "nearest" });
+  $("qr-free-warn").textContent = currentPlan === "free" ? FREE_WARN : "";
+  await drawQr();
+  $("qr-dialog").showModal();
+}
+
+// Deleting asks first, in a dialog that says what happens to printed copies.
+function confirmDelete(code, reload) {
+  const dialog = $("delete-dialog");
+  $("del-name").textContent = code.label ? `${code.label} (${code.url})` : code.url;
+  $("del-error").textContent = "";
+  const confirmBtn = $("del-confirm").cloneNode(true); // drop any listener from a previous code
+  $("del-confirm").replaceWith(confirmBtn);
+  confirmBtn.addEventListener("click", async () => {
+    confirmBtn.disabled = true;
+    const r = await api(`/api/codes/${code.id}`, undefined, "DELETE");
+    confirmBtn.disabled = false;
+    if (!r.ok) {
+      $("del-error").textContent = r.data.error ?? "That didn't delete. Please try again.";
+      return;
+    }
+    dialog.close();
+    reload("Code deleted.");
+  });
+  dialog.showModal();
+  $("del-cancel").focus(); // the safe choice has focus
 }
 
 function renderRow(code, now, reload) {
@@ -149,18 +206,11 @@ function renderRow(code, now, reload) {
     input.focus();
   };
 
-  const remove = async () => {
-    if (!confirm(`Delete "${code.label || code.url}"? Anyone who scans it will see "No QR code here". This can't be undone.`)) return;
-    const r = await api(`/api/codes/${code.id}`, undefined, "DELETE");
-    if (r.ok) reload("Code deleted.");
-    else error.textContent = r.data.error ?? "That didn't delete. Please try again.";
-  };
-
   const copy = async (e) => {
     try {
       await navigator.clipboard.writeText(code.url);
       e.target.textContent = "Copied";
-      setTimeout(() => { e.target.textContent = "Copy link"; }, 1500);
+      setTimeout(() => { e.target.textContent = "Copy"; }, 1500);
     } catch {
       error.textContent = `Copy this link: ${code.url}`;
     }
@@ -169,16 +219,17 @@ function renderRow(code, now, reload) {
   return el("li", { class: "code-row" },
     el("div", { class: "code-main" },
       el("p", { class: "code-name" }, code.label || "Untitled code"),
-      el("p", { class: "mono code-link" }, code.url.replace(/^https?:\/\//, ""))), // shorter to read; Copy uses the full link
+      el("p", { class: "code-link-row" },
+        el("span", { class: "mono code-link" }, code.url.replace(/^https?:\/\//, "")), // shorter to read; Copy uses the full link
+        el("button", { type: "button", class: "btn btn-quiet btn-small", onclick: copy }, "Copy"))),
     dest,
     el("span", { class: `code-state pill pill-${state.tone || "neutral"}` }, state.text),
     el("div", { class: "code-actions" },
-      el("button", { type: "button", class: "btn", onclick: () => showQr(code) }, "QR code"),
-      el("button", { type: "button", class: "btn", onclick: copy }, "Copy link"),
+      el("button", { type: "button", class: "btn", onclick: () => showQr(code) }, "QR code and print"),
       // Opens the short link itself, so it tests the whole path a scan takes.
-      el("a", { class: "btn", href: code.url, target: "_blank", rel: "noopener noreferrer" }, "Open link"),
+      el("a", { class: "btn", href: code.url, target: "_blank", rel: "noopener noreferrer" }, "Open link ↗"),
       el("button", { type: "button", class: "btn", onclick: startEdit }, "Change destination"),
-      el("button", { type: "button", class: "btn btn-quiet", onclick: remove }, "Delete")),
+      el("button", { type: "button", class: "btn btn-quiet", onclick: () => confirmDelete(code, reload) }, "Delete")),
     error);
 }
 
@@ -189,6 +240,7 @@ export async function initDashboard() {
     $("dash-status").textContent = "We couldn't load your account. Please refresh the page.";
     return;
   }
+  const selectTab = initTabs();
   $("dash-email").textContent = r.data.email;
   $("delete-email-shown").textContent = r.data.email;
   $("dashboard").hidden = false;
@@ -205,6 +257,12 @@ export async function initDashboard() {
     await api("/api/auth/logout", {});
     location.assign("/signin.html");
   });
+  $("del-cancel").addEventListener("click", () => $("delete-dialog").close());
+  $("dash-upgrade").addEventListener("click", () => {
+    selectTab($("tab-account"));
+    $("plan-panel").focus();
+    $("plan-panel").scrollIntoView({ block: "start" });
+  });
 
   async function reload(message = "") {
     const list = await api("/api/codes");
@@ -215,16 +273,21 @@ export async function initDashboard() {
     }
     const { codes, used, limit, planName, plan, now, upgrades } = list.data;
     currentPlan = plan;
+    const paid = plan !== "free";
+    $("dash-plan").textContent = `${planName} plan`;
+    $("dash-plan").className = `pill ${paid ? "pill-ok" : "pill-neutral"}`;
+    $("dash-usage").textContent = `${used} of ${limit} codes`;
+    $("free-banner").hidden = paid;
+    $("dash-upgrade").hidden = upgrades.length === 0;
     $("plan-panel").hidden = upgrades.length === 0;
     $("plan-options").replaceChildren(...upgrades.map((u) =>
       el("button", { type: "button", class: "btn", onclick: (e) => upgrade(u.plan, e.currentTarget) },
-        `${u.name}: ${u.limit} codes, $${(u.price / 100).toFixed(u.price % 100 ? 2 : 0)}`)));
-    $("dash-usage").textContent = `${used} of ${limit} codes · ${planName} plan`;
-    $("code-note").textContent = plan === "free" ? "" : "Your codes never expire.";
-    $("code-free-warn").textContent = $("qr-free-warn").textContent = plan === "free" ? FREE_WARN : "";
+        `${u.name}: ${u.limit} codes, pay $${(u.price / 100).toFixed(u.price % 100 ? 2 : 0)}`)));
+    $("code-note").textContent = paid ? "Your codes never expire." : "";
     $("code-create").disabled = used >= limit;
-    if (used >= limit) $("code-error").textContent = `You've used all ${limit} codes on the ${planName} plan. Delete one to make another.`;
+    $("code-error").textContent = used >= limit ? `You've used all ${limit} codes on the ${planName} plan. Delete one to make another.` : "";
     $("code-empty").hidden = codes.length > 0;
+    $("code-list").hidden = codes.length === 0;
     $("code-list").replaceChildren(...codes.map((c) => renderRow(c, now, reload)));
     $("dash-status").textContent = message;
   }

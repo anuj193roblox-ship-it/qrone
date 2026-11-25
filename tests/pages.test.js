@@ -11,7 +11,8 @@ test("status pages never echo anything but fixed text", () => {
 
 test("the expired page links the owner to sign-in on the configured site only", () => {
   assert.match(page("expired", "https://site.example/ignored?x=1"), /href="https:\/\/site\.example\/signin"/);
-  assert.ok(!page("missing", "https://site.example").includes("href="), "only the expired page has the link");
+  assert.match(page("disabled", "https://site.example"), /href="https:\/\/site\.example\/terms#report"/);
+  assert.ok(!page("missing", "https://site.example").includes("href="), "the missing page has no link");
   for (const bad of [undefined, "", "javascript:alert(1)", "http://evil.example", "not a url"]) {
     assert.ok(!page("expired", bad).includes("href="), String(bad));
   }

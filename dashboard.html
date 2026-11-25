@@ -20,46 +20,121 @@
   </header>
 
   <main id="main" class="dash">
-    <div class="page-head"><h1 id="headline" class="hero-title"><span class="line">Your codes</span></h1></div>
     <div id="dashboard" hidden>
-      <div class="dash-bar">
-        <p><strong id="dash-usage"></strong> <span class="hint-inline">· <span id="dash-email"></span></span></p>
-        <button type="button" id="dash-logout" class="btn btn-quiet">Sign out</button>
+      <div class="workspace-bar">
+        <div>
+          <h1 class="dash-title">Your codes</h1>
+          <p class="dash-who"><span id="dash-plan" class="pill pill-neutral"></span> <span id="dash-usage"></span> <span class="hint-inline">· <span id="dash-email"></span></span></p>
+        </div>
+        <div class="dash-bar-actions">
+          <button type="button" id="dash-upgrade" class="btn" hidden>Upgrade, pay once</button>
+          <button type="button" id="dash-logout" class="btn btn-quiet">Sign out</button>
+        </div>
+      </div>
+      <p id="free-banner" class="free-banner" hidden><strong>Free plan:</strong> codes stop working 14 days after you make them. Test them with your phone, then upgrade before printing. Paid codes never expire.</p>
+
+      <div class="dash-tabs" role="tablist" aria-label="Dashboard sections">
+        <button type="button" role="tab" id="tab-codes" aria-controls="panel-codes" aria-selected="true">My codes</button>
+        <button type="button" role="tab" id="tab-domains" aria-controls="panel-domains" aria-selected="false" tabindex="-1">Custom domains</button>
+        <button type="button" role="tab" id="tab-account" aria-controls="panel-account" aria-selected="false" tabindex="-1">Export and account</button>
       </div>
 
-      <form id="code-form" class="code-form card" novalidate>
-        <div>
-          <label for="code-dest">Where should it go?</label>
-          <input id="code-dest" type="text" inputmode="url" placeholder="example.com/menu" spellcheck="false">
-        </div>
-        <div>
-          <label for="code-label">Name (optional)</label>
-          <input id="code-label" type="text" maxlength="80" placeholder="Table menu">
-        </div>
-        <button type="submit" id="code-create" class="btn btn-primary">Create code</button>
-        <p id="code-note" class="hint"></p>
-        <p id="code-free-warn" class="msg-warn"></p>
-        <p id="code-error" class="msg-error" role="alert"></p>
-      </form>
-
-      <h2 class="sr-only">Your codes</h2>
-      <p id="code-empty" class="hint" hidden>No codes yet. Create your first one above.</p>
-      <ul id="code-list" class="code-list card"></ul>
-
-      <section id="qr-panel" class="qr-panel card" hidden aria-labelledby="qr-title">
-        <h2 id="qr-title" class="stamp"></h2>
-        <div class="qr-panel-body">
-          <div id="qr-box" class="qr-box" aria-label="QR code preview"><div id="qr-canvas"></div><p id="qr-preview-label" class="preview-label" hidden></p></div>
+      <section id="panel-codes" role="tabpanel" aria-labelledby="tab-codes" class="dash-panel">
+        <form id="code-form" class="code-form card" novalidate>
           <div>
-            <p class="mono" id="qr-url"></p>
-            <div class="actions">
-              <button type="button" id="qr-png" class="btn">Download PNG</button>
-              <button type="button" id="qr-svg" class="btn">SVG</button>
-              <button type="button" id="qr-close" class="btn btn-quiet">Close</button>
+            <label for="code-dest">Where should it go?</label>
+            <input id="code-dest" type="text" inputmode="url" placeholder="yourshop.com/menu" spellcheck="false">
+          </div>
+          <div>
+            <label for="code-label">Name (optional)</label>
+            <input id="code-label" type="text" maxlength="80" placeholder="Table menu">
+          </div>
+          <button type="submit" id="code-create" class="btn btn-primary">Create code</button>
+          <p id="code-note" class="hint"></p>
+          <p id="code-error" class="msg-error" role="alert"></p>
+        </form>
+        <h2 class="sr-only">Your codes</h2>
+        <p id="code-empty" class="hint" hidden>No codes yet. Create your first one above.</p>
+        <ul id="code-list" class="code-list card"></ul>
+      </section>
+
+      <section id="panel-domains" role="tabpanel" aria-labelledby="tab-domains" class="dash-panel" hidden>
+        <div class="card">
+          <h2 class="stamp">Use your own domain</h2>
+          <p class="panel-text">Planned: connect a subdomain you own, like <span class="mono">go.yourshop.com</span>, so your printed codes don't depend on {{NAME}}'s address. You add one CNAME record at your domain provider, and we handle the security certificate.</p>
+          <p class="hint">It isn't available yet. Until then, your codes use {{NAME}}'s short-link address, and you can download every redirect under Export and account. <a href="/promise.html">Our promise</a> explains what protects them.</p>
+        </div>
+      </section>
+
+      <section id="panel-account" role="tabpanel" aria-labelledby="tab-account" class="dash-panel" hidden>
+        <section class="export card" aria-labelledby="export-title">
+          <h2 id="export-title" class="stamp">Take your codes with you</h2>
+          <p class="hint">Download a list of every code and where it goes, at any time, on every plan.</p>
+          <div class="actions">
+            <a class="btn btn-primary" href="/api/codes/export?format=csv" download>Download spreadsheet (CSV)</a>
+          </div>
+          <details class="more">
+            <summary>Web server formats, for whoever runs your website</summary>
+            <div class="more-body">
+              <p class="hint">If your codes use a domain you control, your web developer can load one of these files so the codes keep working without {{NAME}}. Codes on {{NAME}}'s own short-link address still need {{NAME}}.</p>
+              <div class="actions">
+                <a class="btn" href="/api/codes/export?format=cloudflare" download>Cloudflare</a>
+                <a class="btn" href="/api/codes/export?format=netlify" download>Netlify</a>
+                <a class="btn" href="/api/codes/export?format=htaccess" download>Apache .htaccess</a>
+                <a class="btn" href="/api/codes/export?format=nginx" download>nginx</a>
+              </div>
             </div>
-            <label for="qr-label">Label under the code (optional)</label>
-            <input id="qr-label" type="text" maxlength="24" placeholder="Scan for the menu">
-            <div id="qr-stickers-box">
+          </details>
+        </section>
+
+        <section id="plan-panel" class="plan card" hidden aria-labelledby="plan-title" tabindex="-1">
+          <h2 id="plan-title" class="stamp">Upgrade, pay once</h2>
+          <p class="hint">Pay only the difference. Paid codes never expire, and upgrading switches expired free codes back on. Refunds within 14 days.</p>
+          <div id="plan-options" class="actions"></div>
+          <p id="plan-error" class="msg-error" role="alert"></p>
+        </section>
+
+        <section class="delete-account card" aria-labelledby="delete-title">
+          <h2 id="delete-title" class="stamp">Delete your account</h2>
+          <p class="hint">This deletes your account, every code and your payment records. Anyone who scans your codes will see "No QR code here". It can't be undone, and it doesn't refund a payment. Download your codes above first if you want to keep them.</p>
+          <form id="delete-form" novalidate>
+            <label for="delete-email">Type <strong id="delete-email-shown"></strong> to confirm</label>
+            <div class="pair pair-tight code-edit">
+              <input id="delete-email" type="email" autocomplete="off" spellcheck="false">
+              <button type="submit" id="delete-go" class="btn btn-quiet">Delete my account</button>
+            </div>
+          </form>
+          <p id="delete-error" class="msg-error" role="alert"></p>
+        </section>
+      </section>
+    </div>
+    <p id="dash-status" class="status" role="status">Checking your sign-in…</p>
+
+    <dialog id="qr-dialog" class="dialog" aria-labelledby="qr-title">
+      <div class="dialog-head">
+        <h2 id="qr-title" class="stamp"></h2>
+        <button type="button" id="qr-close" class="btn btn-quiet">Close</button>
+      </div>
+      <div class="qr-dialog-body">
+        <div class="paper"><img id="qr-img" alt="" width="300" height="300"></div>
+        <div>
+          <p class="mono qr-url" id="qr-url"></p>
+          <fieldset class="frames frames-tight">
+            <legend>Print frame and label</legend>
+            <label><input type="radio" name="qr-frame" value="none" checked><span>None</span></label>
+            <label><input type="radio" name="qr-frame" value="pill"><span>Bottom pill</span></label>
+            <label><input type="radio" name="qr-frame" value="banner"><span>Top banner</span></label>
+            <label><input type="radio" name="qr-frame" value="box"><span>Box frame</span></label>
+          </fieldset>
+          <div id="qr-label-box" hidden>
+            <label for="qr-label">Label</label>
+            <input id="qr-label" type="text" maxlength="24" value="Scan for the menu">
+          </div>
+          <div class="actions">
+            <button type="button" id="qr-svg" class="btn btn-primary">Download SVG (best for print)</button>
+            <button type="button" id="qr-png" class="btn">Download PNG</button>
+          </div>
+          <div id="qr-stickers-box">
             <label for="qr-sticker-size">Sticker sheet</label>
             <div class="pair pair-tight code-edit">
               <select id="qr-sticker-size">
@@ -69,54 +144,23 @@
               </select>
               <button type="button" id="qr-stickers" class="btn">Print stickers</button>
             </div>
-            </div>
-            <p class="hint">Scan it with your phone before you print. You can change where it goes at any time without reprinting.</p>
-            <p id="qr-free-warn" class="msg-warn"></p>
           </div>
+          <p class="hint">Scan it with your phone before you print. You can change where it goes at any time without reprinting.</p>
+          <p id="qr-free-warn" class="msg-warn"></p>
         </div>
-      </section>
+      </div>
+    </dialog>
 
-      <section id="plan-panel" class="plan card" hidden aria-labelledby="plan-title">
-        <h2 id="plan-title" class="stamp">Upgrade, pay once</h2>
-        <p class="hint">Paid codes never expire. Upgrading also switches expired free codes back on. Refunds within 14 days.</p>
-        <div id="plan-options" class="actions"></div>
-        <p id="plan-error" class="msg-error" role="alert"></p>
-      </section>
-
-      <section class="export card" aria-labelledby="export-title">
-        <h2 id="export-title" class="stamp">Take your codes with you</h2>
-        <p class="hint">Download a list of every code and where it goes, at any time, on every plan.</p>
-        <div class="actions">
-          <a class="btn" href="/api/codes/export?format=csv" download>Download spreadsheet (CSV)</a>
-        </div>
-        <details class="more">
-          <summary>Web server formats, for whoever runs your website</summary>
-          <div class="more-body">
-            <p class="hint">If your codes use a domain you control, your web developer can load one of these files so the codes keep working without QrOne. Codes on QrOne's own short-link address still need QrOne.</p>
-            <div class="actions">
-              <a class="btn" href="/api/codes/export?format=cloudflare" download>Cloudflare</a>
-              <a class="btn" href="/api/codes/export?format=netlify" download>Netlify</a>
-              <a class="btn" href="/api/codes/export?format=htaccess" download>Apache .htaccess</a>
-              <a class="btn" href="/api/codes/export?format=nginx" download>nginx</a>
-            </div>
-          </div>
-        </details>
-      </section>
-
-      <section class="delete-account card" aria-labelledby="delete-title">
-        <h2 id="delete-title" class="stamp">Delete your account</h2>
-        <p class="hint">This deletes your account, every code and your payment records. Anyone who scans your codes will see "No QR code here". It can't be undone, and it doesn't refund a payment. Download your codes above first if you want to keep them.</p>
-        <form id="delete-form" novalidate>
-          <label for="delete-email">Type <strong id="delete-email-shown"></strong> to confirm</label>
-          <div class="pair pair-tight code-edit">
-            <input id="delete-email" type="email" autocomplete="off" spellcheck="false">
-            <button type="submit" id="delete-go" class="btn btn-quiet">Delete my account</button>
-          </div>
-        </form>
-        <p id="delete-error" class="msg-error" role="alert"></p>
-      </section>
-    </div>
-    <p id="dash-status" class="status" role="status">Checking your sign-in…</p>
+    <dialog id="delete-dialog" class="dialog dialog-small" aria-labelledby="del-title">
+      <h2 id="del-title" class="stamp">Delete this code?</h2>
+      <p id="del-name" class="mono del-name"></p>
+      <p class="hint">Anyone who scans a printed copy will see "No QR code here". This can't be undone.</p>
+      <p id="del-error" class="msg-error" role="alert"></p>
+      <div class="actions">
+        <button type="button" id="del-cancel" class="btn btn-primary">Keep it</button>
+        <button type="button" id="del-confirm" class="btn">Delete code</button>
+      </div>
+    </dialog>
   </main>
 
   <footer class="foot">

@@ -6,12 +6,14 @@
 const TEXT = {
   missing: ["No QR code here", "This link doesn't belong to any QR code. Check that the whole code was scanned."],
   expired: ["This QR code has expired", "It was a free 14-day code. Ask the business that printed it for a new one."],
-  disabled: ["This QR code is switched off", "It was turned off after a report. If it's your code and you think that's a mistake, contact QrOne."],
+  disabled: ["This QR code is switched off", "It was turned off after a report about where it led."],
   unavailable: ["Back in a moment", "QR codes on this service are briefly unavailable. Please scan again in a few minutes."],
 };
 
+// A fixed next step on our own site, per page. The path is ours; nothing comes from the request.
 const OWNER = {
-  expired: ["Is this your code?", "Sign in to QrOne and upgrade to switch it back on"],
+  expired: ["Is this your code?", "Sign in to QrOne and upgrade to switch it back on", "/signin"],
+  disabled: ["Think this is a mistake?", "Contact us through our terms page", "/terms#report"],
 };
 
 const safeOrigin = (origin) => {
@@ -27,7 +29,7 @@ export function page(kind, siteOrigin) {
   const [title, body] = TEXT[kind] ?? TEXT.missing;
   const site = safeOrigin(siteOrigin);
   const owner = OWNER[kind] && site
-    ? `<p class="owner">${OWNER[kind][0]} <a href="${site}/signin">${OWNER[kind][1]}</a>.</p>`
+    ? `<p class="owner">${OWNER[kind][0]} <a href="${site}${OWNER[kind][2]}">${OWNER[kind][1]}</a>.</p>`
     : "";
   return `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">

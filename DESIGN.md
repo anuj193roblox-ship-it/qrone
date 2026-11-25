@@ -355,6 +355,12 @@ Two cards side by side from 720px. Each opens with an uppercase Small 800 tag (G
 ### Story cards ("What happens after you print")
 Three cards in a row from 720px: a Faint Small 700 "when" line, a Title 800 heading and one Grey sentence. Claims about other vendors stay general ("many", "some") unless a vendor's own page is linked.
 
+### Dashboard workspace
+A top bar with the Display-size title, a plan pill (Green on paid plans, neutral on Free), usage in tabular numbers and the email, then an outlined "Upgrade, pay once" (hidden on Pro) and a quiet Sign out. On Free, an Amber-tint banner says codes stop after 14 days. Three tabs in a Night Ground pill track (My codes, Custom domains, Export and account); below 560px they become three equal columns whose labels may wrap. Create code is the one blue button on the codes tab.
+
+### Dialogs
+Native `<dialog>` with `showModal()`: Panel background, 1px Hairline Strong border, 20px corners, a dark 72% backdrop. The QR dialog (up to 760px) shows the framed code on white paper beside the frame choice, label and downloads; the delete dialog (up to 440px) names the code, says what happens to printed copies, and puts focus on the blue "Keep it".
+
 ### Dashboard rows
 The code list is one card (`ul.code-list.card`) with 20px (28px at 720px) side padding. Each row has 18px vertical padding and a 1px rule above it (except the first). Phone: stacked. From 720px: three columns: name (700) with the short link in mono Lamp Blue beneath it, the destination in Grey, and the status pill at the right; the row of ghost action buttons (QR code, Copy link, Change destination) and a quiet Delete runs full width below. Editing a destination swaps the destination text for an inline field with a ghost Save and quiet Cancel. Counts and prices use tabular numbers.
 

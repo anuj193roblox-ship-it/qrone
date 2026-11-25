@@ -382,6 +382,45 @@ details.more { margin-top: 8px; border-top: 1px solid var(--line); }
 .cta p { color: var(--muted); }
 .cta .btn { margin-top: 6px; }
 
+/* ---------- Dashboard workspace ---------- */
+.dash { padding-top: 32px; }
+.workspace-bar { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 14px 20px; }
+.dash-title { font-size: var(--t-hero); font-weight: 800; letter-spacing: -0.025em; line-height: 1.06; }
+.dash-who { margin-top: 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; font-variant-numeric: tabular-nums; }
+.dash-bar-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.free-banner { padding: 12px 16px; border-radius: var(--r-field); background: var(--warn-bg); color: var(--warn); font-size: var(--t-small); }
+.dash-tabs { display: flex; gap: 4px; padding: 4px; background: var(--bg); border: 1px solid var(--line); border-radius: var(--r-pill); overflow-x: auto; }
+.dash-tabs [role="tab"] { flex: 1 0 auto; min-height: 44px; padding: 0 16px; border: 0; border-radius: var(--r-pill); background: transparent; color: var(--muted); font: 700 var(--t-label)/1 var(--font); cursor: pointer; white-space: nowrap; }
+.dash-tabs [role="tab"]:hover { color: var(--text); }
+.dash-tabs [role="tab"][aria-selected="true"] { background: var(--surface-2); color: var(--text); box-shadow: inset 0 0 0 1px var(--line-strong); }
+@media (max-width: 559px) {
+  /* Phones: three equal tabs whose labels may wrap, so none hides off-screen. */
+  .dash-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-radius: 16px; }
+  .dash-tabs [role="tab"] { white-space: normal; padding: 6px 8px; line-height: 1.2; font-size: var(--t-small); border-radius: 12px; min-height: 48px; }
+}
+.dash-panel { display: grid; gap: 18px; }
+.panel-text { color: var(--muted); margin-top: 10px; max-width: 62ch; }
+.code-link-row { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.plan:focus { outline: none; }
+
+/* Dialogs: one quiet panel over a dimmed page. */
+.dialog { width: min(100% - 32px, 760px); max-height: calc(100vh - 32px); padding: 24px; color: var(--text); background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--r-card); }
+.dialog::backdrop { background: rgba(5, 6, 8, 0.72); }
+.dialog-small { width: min(100% - 32px, 440px); }
+.dialog-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+.qr-dialog-body { display: grid; gap: 20px; }
+.qr-dialog-body .paper { width: min(100%, 260px); }
+.qr-url { overflow-wrap: anywhere; color: var(--accent-text); }
+.frames-tight { margin-top: 4px; }
+.del-name { margin: 10px 0; overflow-wrap: anywhere; color: var(--accent-text); }
+
+/* ---------- Sign in ---------- */
+.signin-page { max-width: calc(440px + 2 * var(--gutter)); padding-bottom: 56px; }
+.signin-card { display: grid; gap: 12px; }
+.signin-card label { margin-top: 0; }
+.signin-card .hint { margin-top: 0; }
+.signin-foot { margin-top: 16px; }
+
 /* ---------- Pricing ---------- */
 .pricing { padding-bottom: 56px; }
 .tiers { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
@@ -470,6 +509,8 @@ details.more { margin-top: 8px; border-top: 1px solid var(--line); }
   .frames span { flex-direction: column; justify-content: center; gap: 6px; min-height: 76px; text-align: center; }
   .bridge-grid { grid-template-columns: 1fr 1fr; }
   .rules-grid { grid-template-columns: 1fr 1fr; }
+  .qr-dialog-body { grid-template-columns: 260px minmax(0, 1fr); align-items: start; }
+  .frames-tight span { min-height: var(--tap); flex-direction: row; }
   .anatomy { grid-template-columns: 1fr 1fr; }
   .flow-split { grid-template-columns: 1fr 1fr; }
   .calc { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 32px; align-items: start; }
