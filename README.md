@@ -1,12 +1,12 @@
-# APPNAME
+# QrOne
 
 Dynamic QR codes that keep working. Pay once, export every redirect any time, and your codes survive even if this service disappears.
 
-> Status: early development. The name `APPNAME` is a placeholder.
+> Status: early development. Free tools are live; the paid product is not built yet.
 
 ## Why
 
-Many "free QR code" sites make *dynamic* codes: the printed code points at the vendor's short link, and when the trial ends the vendor can switch the redirect off. APPNAME is built around one promise: you can always export your redirects and host them yourself.
+Many "free QR code" sites make *dynamic* codes: the printed code points at the vendor's short link, and when the trial ends the vendor can switch the redirect off. QrOne is built around one promise: you can always export your redirects and host them yourself.
 
 ## Plans (planned)
 
