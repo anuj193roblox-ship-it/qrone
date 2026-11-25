@@ -65,7 +65,8 @@ a:hover { text-decoration-thickness: 2px; }
 /* ---------- Top bar ---------- */
 .topbar { border-bottom: 1px solid var(--line); }
 .topbar-in { display: flex; align-items: center; justify-content: space-between; gap: 12px; max-width: 1200px; margin: 0 auto; padding: 8px var(--gutter); }
-.brand { color: var(--text); font-weight: 800; font-size: 1.25rem; letter-spacing: -0.01em; text-decoration: none; padding: 10px 0; }
+.brand { display: inline-flex; align-items: center; gap: 10px; color: var(--text); font-weight: 800; font-size: 1.25rem; letter-spacing: -0.01em; text-decoration: none; padding: 10px 0; }
+.brand-mark { display: block; flex: none; }
 .nav-links { display: flex; margin-right: -12px; }
 .nav-links a { color: var(--muted); text-decoration: none; font-weight: 600; font-size: var(--t-small); padding: 14px 12px; }
 .nav-links a:hover { color: var(--text); }
