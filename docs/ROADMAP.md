@@ -116,9 +116,9 @@ D1–D2 are built and tested end to end locally (the link is printed to the term
 
 | # | Step | Who | Done when |
 |---|------|-----|-----------|
-| H1 | "If we shut down" policy page (90 days notice, export reminder) | Claude | Linked in the footer |
-| H2 | Refund policy and terms (have them checked; Claude drafts only) | You | Published |
-| H3 | Report-abuse link on the expired/disabled pages | Claude | A report reaches you |
+| H1 | "If we shut down" promise page (12 months' notice, exports, open redirect code) ✅ `/promise` | Claude | Linked in the footer |
+| H2 | Refund policy and terms: drafted at `/terms` ✅; have them checked before live payments | You | Checked by someone qualified |
+| H3 | Report-abuse box on `/terms` ✅; set `abuseEmail` in `src/config.js` once the domain has email | Both | A report reaches you |
 | H4 | Move to the $5 Workers plan | You | The dashboard shows Workers Paid |
 | H5 | Switch payments from test mode to live | You | One real $29 purchase works, then you refund it |
 | H6 | Public launch: make the repo public (optional), post in communities | You | Done |

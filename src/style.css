@@ -301,7 +301,13 @@ details.more { margin-top: 8px; border-top: 1px solid var(--line); }
 .verdict .inline-form label { font-weight: 600; }
 
 /* ---------- Reading pages ---------- */
-.page { max-width: 46rem; padding-bottom: 48px; }
+.page { max-width: 47.5rem; padding-bottom: 48px; }
+.promise-list { padding-left: 22px; }
+.promise-list li + li { margin-top: 10px; }
+.report { margin-bottom: 8px; border-color: var(--warn); }
+.page .report h2 { margin-top: 0; }
+.faq-cta { margin-top: 24px; }
+.page .cta h2 { margin: 0; }
 .page p, .page li { font-size: var(--t-big); color: var(--muted); max-width: 65ch; }
 .page p + p { margin-top: 14px; }
 .page .hint { font-size: var(--t-small); }

@@ -3,6 +3,7 @@ import { resolve } from "node:path";
 import { BRAND } from "./src/config.js";
 import { PRICE, upgradePrice } from "./app/src/billing.js";
 import { PLANS, FREE_DAYS } from "./app/src/codes.js";
+import { contactTokens } from "./src/contact.js";
 
 // Prices and limits on the pricing page come from the same code that charges and enforces them.
 const dollars = (cents) => "$" + cents / 100;
@@ -14,6 +15,7 @@ const planTokens = {
     [`{{LIMIT_${p.toUpperCase()}}}`, String(PLANS[p].limit)],
   ])),
   "{{UP_STARTER_PLUS}}": dollars(upgradePrice("starter", "plus")),
+  ...contactTokens(BRAND),
 };
 
 // Replaces {{NAME}} and {{TAGLINE}} in every HTML page with the values from src/config.js.
@@ -33,7 +35,6 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: page("index.html"),
-        about: page("about.html"),
         privacy: page("privacy.html"),
         faq: page("faq.html"),
         signin: page("signin.html"),
@@ -42,6 +43,8 @@ export default defineConfig({
         check: page("check.html"),
         printGuide: page("print-guide.html"),
         whyCodesDie: page("why-codes-die.html"),
+        promise: page("promise.html"),
+        terms: page("terms.html"),
       },
     },
   },
