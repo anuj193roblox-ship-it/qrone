@@ -1,0 +1,34 @@
+[
+  {
+    "domain": "qrco.de",
+    "vendor": "QR Code Generator PRO",
+    "domain_url": "https://support.qr-code-generator.com/hc/en-us/articles/7665667969677",
+    "evidence_url": "https://support.qr-code-generator.com/hc/en-us/articles/7665046137613",
+    "behaviour": "qrco.de is the short-link domain of QR Code Generator PRO. Its help center says that after the trial, dynamic codes are deactivated and point to a service page.",
+    "verified": true
+  },
+  {
+    "domain": "l.ead.me",
+    "vendor": "QR Code Generator PRO",
+    "domain_url": "https://support.qr-code-generator.com/hc/en-us/articles/7665667969677",
+    "evidence_url": "https://support.qr-code-generator.com/hc/en-us/articles/7665046137613",
+    "behaviour": "l.ead.me is a short-link domain named on the help pages of QR Code Generator PRO. Its help center says that after the trial, dynamic codes are deactivated and point to a service page.",
+    "verified": true
+  },
+  {
+    "domain": "qr1.be",
+    "vendor": "QR TIGER",
+    "domain_url": "https://www.qrcode-tiger.com/short-url-generator",
+    "evidence_url": "https://www.qrcode-tiger.com/qr-code-generator-with-no-expiration-limit",
+    "behaviour": "qr1.be is the default short-link domain of QR TIGER. QR TIGER's page says its free dynamic codes are capped and require a subscription to stay active.",
+    "verified": true
+  },
+  {
+    "domain": "sqr.co",
+    "vendor": "SQR",
+    "domain_url": "https://appsumo.com/products/square-qr/questions/looks-like-they-shut-down-bummer-1444222/",
+    "evidence_url": "https://appsumo.com/products/square-qr/questions/looks-like-they-shut-down-bummer-1444222/",
+    "behaviour": "sqr.co is a short-link domain used by SQR. Users on AppSumo reported that their codes stopped working after the vendor appeared to shut down.",
+    "verified": true
+  }
+]

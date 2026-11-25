@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About {{NAME}}: QR codes that never expire</title>
+  <meta name="description" content="Why {{NAME}} exists: static QR codes that never expire, and a free checker that shows whether a printed QR code could be switched off.">
+  <meta name="theme-color" content="#ffffff">
+  <script type="module" src="/src/main.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="/">{{NAME}}</a>
+    <nav aria-label="Main"><a href="/#generator">Make a code</a><a href="/#checker">Check a code</a><a href="/faq.html">FAQ</a><a href="/about.html">About</a></nav>
+  </header>
+  <main id="main" class="page">
+    <h1>About {{NAME}}</h1>
+    <p>A QR code is only as permanent as the thing it points at. Some QR generators make <em>dynamic</em> codes: the printed pattern holds the vendor's short link, and the vendor's server forwards each scan to your page. That lets you edit the destination later, but it also means the vendor can stop the forwarding, for example when a trial or subscription ends.</p>
+    <p>{{NAME}} starts with two free tools:</p>
+    <ul>
+      <li><strong>A static QR generator.</strong> Your address is stored in the code itself. Nothing sits in the middle, so there is nothing to switch off.</li>
+      <li><strong>A checker.</strong> Drop in a QR code image and see whether it points straight at a website or through a vendor's short link. The image is read on your device and never uploaded.</li>
+    </ul>
+    <h2>Where this is going</h2>
+    <p>We are building dynamic codes on your own domain, paid once, with an export of every redirect so your codes keep working even if this service disappears. It is not available yet.</p>
+    <h2>How the checker decides</h2>
+    <p>It compares the code's domain with a list of known vendor short-link domains. Each entry on that list links to the vendor's own help or pricing page, so you can read what the vendor says for yourself. A domain is only added when there is a source for it. If a code isn't on the list, the checker says so and does not guess.</p>
+  </main>
+  <footer class="site-footer"><p>{{NAME}}: free tools that run in your browser. <a href="/privacy.html">Privacy</a> · <a href="/faq.html">FAQ</a> · <a href="/about.html">About</a></p></footer>
+</body>
+</html>

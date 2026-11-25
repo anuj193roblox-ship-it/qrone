@@ -26,7 +26,16 @@ Many "free QR code" sites make *dynamic* codes: the printed code points at the v
 
 ## Development
 
-Nothing to run yet. Copy `.env.example` to `.env` for local secrets. Never commit `.env`.
+Free tools (static QR generator and "will my QR code die?" checker) are built. They run entirely in the browser.
+
+```
+npm install
+npm run dev      # local site at http://localhost:5173
+npm test         # unit tests for the classifier and QR payload logic
+npm run build    # production build into dist/
+```
+
+The product name lives in one file, `src/config.js`. Vendor domains for the checker live in `src/data/vendor-domains.json`, each with a link to the vendor's own page. Copy `.env.example` to `.env` for local secrets. Never commit `.env`.
 
 ## Licence
 
