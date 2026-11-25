@@ -29,6 +29,13 @@
         <button type="button" id="dash-logout" class="btn btn-quiet">Sign out</button>
       </div>
 
+      <section id="plan-panel" class="plan" hidden aria-labelledby="plan-title">
+        <h2 id="plan-title" class="stamp">Upgrade, pay once</h2>
+        <p class="hint">Paid codes never expire. Upgrading also switches expired free codes back on. Refunds within 14 days.</p>
+        <div id="plan-options" class="actions"></div>
+        <p id="plan-error" class="msg-error" role="alert"></p>
+      </section>
+
       <form id="code-form" class="code-form" novalidate>
         <div>
           <label for="code-dest">Where should it go?</label>

@@ -21,6 +21,13 @@ Success for the free tools is that a first-time visitor makes a code within abou
 
 Planned (not built, not available): paid dynamic codes on the customer's own domain, paid once ($29 / $49 / $100 tiers), with an export of every redirect so the codes survive even if QrOne disappears. The free tier gets 10 codes that each redirect for 14 days.
 
+Payment decisions (confirmed 2026-11-25):
+- **Provider:** Dodo Payments, as merchant of record, paying out to an Indian bank account.
+- **Plans:** one-time only. Starter $29 (10 codes), Plus $49 (25), Pro $100 (75). No subscriptions.
+- **Upgrades:** pay the difference. Starter→Plus $20, Starter→Pro $71, Plus→Pro $51.
+- **Refunds:** within 14 days. The account goes back to Free, and its codes then expire 14 days after the refund. Codes are never switched off at the moment of a refund.
+- **Upgrading from Free** removes the expiry from every existing code, including ones that already expired.
+
 ## Positioning
 
 Pay once, and you can always take your redirects with you. Competitors' free dynamic codes are often deactivated when a trial ends. QrOne's free tools are honest about which kind of code you have and never hold a printed code hostage.

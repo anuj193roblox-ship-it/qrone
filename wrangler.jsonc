@@ -18,7 +18,14 @@
     }
   ],
   // Where short links live until customers connect their own domains (roadmap phase G).
-  "vars": { "REDIRECT_ORIGIN": "https://qrone-redirect.qr-tool-spike.workers.dev" }
+  "vars": {
+    "REDIRECT_ORIGIN": "https://qrone-redirect.qr-tool-spike.workers.dev",
+    // Dodo test mode. Switch to https://live.dodopayments.com only when going live (roadmap H5).
+    "DODO_API_BASE": "https://test.dodopayments.com",
+    // Product IDs from the Dodo dashboard (roadmap F1), one per purchase: "<current plan>-<new plan>".
+    // IDs are not secret. The API key and webhook secret are, so they're set with `wrangler secret put`.
+    "DODO_PRODUCTS": {}
+  }
   // When the domain exists, add real email sending here:
   //   "send_email": [{ "name": "EMAIL" }],
   //   and add "MAIL_FROM": "QrOne <hello@yourdomain.com>" to "vars" above.

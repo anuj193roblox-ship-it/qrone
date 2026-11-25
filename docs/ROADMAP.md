@@ -75,13 +75,32 @@ D1–D2 are built and tested end to end locally (the link is printed to the term
 
 ## Phase F: payments (test mode first)
 
+**Provider: Dodo Payments.** Upgrades pay the difference. Refunds within 14 days put the account back on Free, with codes kept working 14 more days (all in `PRODUCT.md`). F2–F5 are built and pass a 20-step local test against a fake Dodo.
+
+**Your F1 steps, in Dodo's TEST mode only:**
+1. Create **6 one-time products** (USD), named so you can tell them apart:
+
+   | Key | Price |
+   |---|---|
+   | `free-starter` | $29 |
+   | `free-plus` | $49 |
+   | `free-pro` | $100 |
+   | `starter-plus` | $20 |
+   | `starter-pro` | $71 |
+   | `plus-pro` | $51 |
+
+2. Send Claude the 6 product IDs (`pdt_…`). They aren't secret, and they go into `DODO_PRODUCTS` in `wrangler.jsonc`.
+3. **Developer → API Keys:** create a TEST key (`dodo_test_…`). **Don't paste it in chat.** Run `npx.cmd wrangler secret put DODO_API_KEY` and paste it there.
+4. **Developer → Webhooks:** add the endpoint `https://qr-tool-site.qr-tool-spike.workers.dev/api/billing/webhook` with the events `payment.succeeded` and `refund.succeeded`. Copy its signing secret (`whsec_…`) and run `npx.cmd wrangler secret put DODO_WEBHOOK_SECRET`.
+5. Before going live: update `privacy.html` to say that Dodo processes payments and sees the buyer's email.
+
 | # | Step | Who | Done when |
 |---|------|-----|-----------|
-| F1 | Create the 3 one-time products ($29 / $49 / $100) in the provider's test mode | You | Product IDs are copied into `.env` (never committed) |
-| F2 | Checkout button per plan | Claude | A test-mode purchase completes |
-| F3 | Webhook: verify the signature, then set the plan | Claude | A forged webhook is rejected, with a test |
-| F4 | Expired free codes come back to life on upgrade | Claude | A test covers it |
-| F5 | Refund handling (downgrade or keep, your decision) | Both | Written down in `PRODUCT.md`, with a test |
+| F1 | Create the 6 one-time products in Dodo TEST mode, plus the API key and webhook (see above) | You | Product IDs sent to Claude; both secrets set with `wrangler secret put` |
+| F2 | Checkout button per plan ✅ built | Claude | A test-mode purchase completes (needs F1) |
+| F3 | Webhook: verify the signature, then set the plan ✅ | Claude | A forged webhook is rejected, with a test |
+| F4 | Expired free codes come back to life on upgrade ✅ | Claude | A test covers it |
+| F5 | Refund handling ✅ (decided: 14 days, back to Free) | Both | Written down in `PRODUCT.md`, with a test |
 
 ## Phase G: custom domains
 

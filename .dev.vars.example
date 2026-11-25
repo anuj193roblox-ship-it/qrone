@@ -3,3 +3,8 @@
 DEV_LOG_LINKS=1
 # Where short links point during local development (the redirect Worker's local port).
 REDIRECT_ORIGIN=http://localhost:8790
+# Payments in local tests point at a fake Dodo. For real test mode, use your Dodo TEST key and webhook secret.
+DODO_API_BASE=http://localhost:8799
+DODO_API_KEY=dodo_test_replace-me
+DODO_WEBHOOK_SECRET=whsec_replace-me
+DODO_PRODUCTS={}

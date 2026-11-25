@@ -171,7 +171,11 @@ export async function initDashboard() {
       $("dash-status").textContent = "We couldn't load your codes. Please refresh the page.";
       return;
     }
-    const { codes, used, limit, planName, plan, now } = list.data;
+    const { codes, used, limit, planName, plan, now, upgrades } = list.data;
+    $("plan-panel").hidden = upgrades.length === 0;
+    $("plan-options").replaceChildren(...upgrades.map((u) =>
+      el("button", { type: "button", class: "btn", onclick: (e) => upgrade(u.plan, e.currentTarget) },
+        `${u.name}: ${u.limit} codes, $${(u.price / 100).toFixed(u.price % 100 ? 2 : 0)}`)));
     $("dash-usage").textContent = `${used} of ${limit} codes · ${planName} plan`;
     $("code-note").textContent = plan === "free" ? "Free codes work for 14 days. Paid plans never expire." : "Your codes never expire.";
     $("code-create").disabled = used >= limit;
@@ -179,6 +183,15 @@ export async function initDashboard() {
     $("code-empty").hidden = codes.length > 0;
     $("code-list").replaceChildren(...codes.map((c) => renderRow(c, now, reload)));
     $("dash-status").textContent = message;
+  }
+
+  async function upgrade(plan, button) {
+    $("plan-error").textContent = "";
+    button.disabled = true;
+    const r = await api("/api/billing/checkout", { plan });
+    if (r.ok && /^https:\/\//.test(r.data.checkout_url ?? "")) return location.assign(r.data.checkout_url);
+    button.disabled = false;
+    $("plan-error").textContent = r.data.error ?? "Checkout couldn't start. Please try again.";
   }
 
   $("code-form").addEventListener("submit", async (e) => {
@@ -198,5 +211,17 @@ export async function initDashboard() {
     showQr(created.data.code);
   });
 
+  // Back from Dodo's checkout: the plan changes when Dodo's notification arrives, usually within seconds.
+  if (new URLSearchParams(location.search).has("paid")) {
+    history.replaceState(null, "", location.pathname);
+    const before = (await api("/api/codes")).data.plan;
+    for (let i = 0; i < 5; i++) {
+      await reload("Payment received. Updating your plan…");
+      const after = (await api("/api/codes")).data.plan;
+      if (after !== before) return reload("Thank you. Your plan is upgraded and your codes no longer expire.");
+      await new Promise((r) => setTimeout(r, 3000));
+    }
+    return reload("Payment received. Your plan will update shortly; refresh this page in a minute.");
+  }
   await reload();
 }

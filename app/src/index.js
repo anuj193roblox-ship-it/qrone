@@ -10,13 +10,16 @@
 //   PATCH  /api/codes/:id             { destination, label } -> edit
 //   DELETE /api/codes/:id             -> delete (scans then get the 404 page)
 //   GET    /api/codes/export?format=csv|netlify|htaccess|nginx|cloudflare -> download every redirect
+//   POST   /api/billing/checkout      { plan } -> a Dodo checkout link for that upgrade
+//   POST   /api/billing/webhook       Dodo's signed payment notifications (no session; checked by signature)
 import {
   LINK_TTL, SESSION_TTL, LINKS_PER_WINDOW, normalizeEmail, isValidEmail, newToken, sha256Hex,
   sessionCookie, clearedCookie, readCookie, isSameOrigin,
 } from "./auth.js";
 import { canSend, sendSignInLink } from "./mail.js";
-import { limitFor, planName, expiresAtFor, normalizeDestination, cleanLabel, newSlug } from "./codes.js";
+import { limitFor, planName, expiresAtFor, normalizeDestination, cleanLabel, newSlug, FREE_DAYS } from "./codes.js";
 import { FORMATS, build } from "./export.js";
+import { upgradeKey, upgradeOptions, highestPlan, productsOf, verifyWebhook } from "./billing.js";
 
 const now = () => Math.floor(Date.now() / 1000);
 
@@ -141,6 +144,7 @@ const listCodes = (request, env) => withAccount(request, env, async (account) =>
   return json({
     ok: true, now: now(), plan: account.plan, planName: planName(account.plan),
     limit: limitFor(account.plan), used: results.length, codes: results.map((r) => publicCode(env, r)),
+    upgrades: upgradeOptions(account.plan).map((u) => ({ ...u, name: planName(u.plan), limit: limitFor(u.plan) })),
   });
 });
 
@@ -217,6 +221,112 @@ const exportCodes = (request, env) => withAccount(request, env, async (account) 
   });
 });
 
+// ---------- Payments (Dodo) ----------
+
+const dodo = (env, path, init = {}) =>
+  fetch(`${env.DODO_API_BASE}${path}`, {
+    ...init,
+    headers: { authorization: `Bearer ${env.DODO_API_KEY}`, "content-type": "application/json", ...init.headers },
+  });
+
+const checkout = (request, env) => withAccount(request, env, async (account) => {
+  const to = (await readJson(request))?.plan;
+  const key = upgradeKey(account.plan, to);
+  if (!key) return json({ ok: false, error: "That isn't an upgrade from your current plan." }, 400);
+  const productId = productsOf(env)[key];
+  if (!productId || !env.DODO_API_KEY) return json({ ok: false, error: "Payments aren't switched on yet." }, 503);
+
+  const res = await dodo(env, "/checkouts", {
+    method: "POST",
+    body: JSON.stringify({
+      product_cart: [{ product_id: productId, quantity: 1 }],
+      customer: { email: account.email },
+      return_url: `${new URL(request.url).origin}/dashboard?paid=1`,
+      metadata: { account_id: String(account.id), from_plan: account.plan, to_plan: to },
+    }),
+  });
+  if (!res.ok) {
+    console.error("checkout failed", res.status);
+    return json({ ok: false, error: "Checkout couldn't start. Please try again." }, 502);
+  }
+  const { checkout_url } = await res.json();
+  return json({ ok: true, checkout_url });
+});
+
+// We never trust what a notification says it contains: we look the payment up in Dodo's API ourselves.
+async function fetchPayment(env, paymentId) {
+  if (typeof paymentId !== "string" || !/^[A-Za-z0-9_]{1,64}$/.test(paymentId)) throw new Error("unexpected payment id");
+  const res = await dodo(env, `/payments/${paymentId}`);
+  if (!res.ok) throw new Error(`payment lookup failed: ${res.status}`); // a 500 makes Dodo retry later
+  return res.json();
+}
+
+async function applyPayment(env, paymentId) {
+  const p = await fetchPayment(env, paymentId);
+  if (p.status !== "succeeded") return;
+  const { account_id: accountId, from_plan: from, to_plan: to } = p.metadata ?? {};
+  const expectedProduct = productsOf(env)[upgradeKey(from, to)];
+  if (!expectedProduct || !(p.product_cart ?? []).some((item) => item.product_id === expectedProduct)) {
+    console.error("payment does not match a QrOne upgrade", paymentId);
+    return;
+  }
+  const account = await env.DB.prepare("SELECT id, plan FROM accounts WHERE id = ?1").bind(Number(accountId)).first();
+  if (!account) return console.error("payment for an unknown account", paymentId);
+  const existing = await env.DB.prepare("SELECT status FROM payments WHERE payment_id = ?1").bind(paymentId).first();
+  if (existing?.status === "refunded") return; // a late retry must never undo a refund
+
+  // One transaction, and every statement is safe to repeat, so Dodo's retries can't double-apply anything.
+  await env.DB.batch([
+    env.DB.prepare(
+      "INSERT OR IGNORE INTO payments (payment_id, account_id, from_plan, to_plan, amount, currency, status) VALUES (?1, ?2, ?3, ?4, ?5, ?6, 'paid')",
+    ).bind(paymentId, account.id, from, to, Number(p.total_amount) || 0, String(p.currency ?? "")),
+    env.DB.prepare("UPDATE accounts SET plan = ?1 WHERE id = ?2").bind(highestPlan([account.plan, to]), account.id),
+    env.DB.prepare("UPDATE codes SET expires_at = NULL WHERE account_id = ?1").bind(account.id), // paid codes never expire
+  ]);
+}
+
+async function applyRefund(env, paymentId) {
+  const row = await env.DB.prepare("SELECT account_id, status FROM payments WHERE payment_id = ?1").bind(paymentId).first();
+  if (!row || row.status === "refunded") return;
+  const p = await fetchPayment(env, paymentId);
+  // shortcut: any refund (even partial) counts as a full refund; fine while refunds are issued by hand in Dodo.
+  if (!(p.refunds ?? []).length) return;
+
+  const { results } = await env.DB
+    .prepare("SELECT to_plan FROM payments WHERE account_id = ?1 AND status = 'paid' AND payment_id != ?2")
+    .bind(row.account_id, paymentId)
+    .all();
+  const plan = highestPlan(results.map((r) => r.to_plan)); // usually "free"
+  const t = now();
+  const statements = [
+    env.DB.prepare("UPDATE payments SET status = 'refunded', refunded_at = ?2 WHERE payment_id = ?1").bind(paymentId, t),
+    env.DB.prepare("UPDATE accounts SET plan = ?1 WHERE id = ?2").bind(plan, row.account_id),
+  ];
+  // Back on Free: codes keep working for 14 more days (never switched off at the moment of a refund).
+  if (plan === "free") {
+    const until = t + FREE_DAYS * 86400;
+    statements.push(env.DB
+      .prepare("UPDATE codes SET expires_at = ?1 WHERE account_id = ?2 AND (expires_at IS NULL OR expires_at > ?1)")
+      .bind(until, row.account_id));
+  }
+  await env.DB.batch(statements);
+}
+
+async function webhook(request, env) {
+  const body = await request.text(); // the raw text: the signature covers it byte for byte
+  if (!(await verifyWebhook(env.DODO_WEBHOOK_SECRET, request.headers, body, now()))) return json({ ok: false }, 401);
+  let event;
+  try {
+    event = JSON.parse(body);
+  } catch {
+    return json({ ok: false }, 400);
+  }
+  const paymentId = event?.data?.payment_id;
+  if (event?.type === "payment.succeeded" && paymentId) await applyPayment(env, paymentId);
+  if (event?.type === "refund.succeeded" && paymentId) await applyRefund(env, paymentId);
+  return json({ ok: true }); // other event types are acknowledged and ignored
+}
+
 // ---------- Routing ----------
 
 const ROUTES = {
@@ -227,7 +337,10 @@ const ROUTES = {
   "GET /api/codes": listCodes,
   "POST /api/codes": createCode,
   "GET /api/codes/export": exportCodes,
+  "POST /api/billing/checkout": checkout,
+  "POST /api/billing/webhook": webhook,
 };
+const SIGNED_NOT_SAME_ORIGIN = new Set(["/api/billing/webhook"]); // Dodo's servers call this; the signature is the check
 
 function route(method, pathname) {
   const fixed = ROUTES[`${method} ${pathname}`];
@@ -246,7 +359,9 @@ export default {
     const handler = route(request.method, pathname);
     if (!handler) return json({ ok: false, error: "Not found" }, 404);
     // Anything that changes data must come from our own pages.
-    if (request.method !== "GET" && !isSameOrigin(request)) return json({ ok: false, error: "Forbidden" }, 403);
+    if (request.method !== "GET" && !SIGNED_NOT_SAME_ORIGIN.has(pathname) && !isSameOrigin(request)) {
+      return json({ ok: false, error: "Forbidden" }, 403);
+    }
     try {
       return await handler(request, env);
     } catch (err) {
