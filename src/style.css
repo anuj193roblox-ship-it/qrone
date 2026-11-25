@@ -122,7 +122,8 @@ label.check { display: flex; align-items: center; gap: 10px; font-weight: 500; m
 label.check input { width: 20px; height: 20px; }
 .pair { display: grid; gap: 0 12px; grid-template-columns: 1fr 1fr; }
 .pair-tight { grid-template-columns: 1fr auto; align-items: stretch; gap: 8px; }
-@media (max-width: 479px) { .pair-tight { grid-template-columns: 1fr; } .pair-tight .btn { justify-self: start; } }
+/* Only the rows with long or extra buttons stack on phones; a short "Check" stays beside its field. */
+@media (max-width: 479px) { .verdict .pair-tight, .code-edit { grid-template-columns: 1fr; } :is(.verdict .pair-tight, .code-edit) .btn { justify-self: start; } }
 
 /* Type chips (Link / Text / Wi-Fi / Email): real radio buttons styled as pills. */
 .segmented { border: 0; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }

@@ -1,64 +1,63 @@
 ---
 name: QrOne
-description: A felt letterboard says what is happening; below it, a quiet off-white working ground.
+description: One quiet dark room with a single blue light on the action that matters.
 colors:
-  felt: "#1d1d1b"
-  groove: "rgba(255, 255, 255, 0.055)"
-  oak: "#b98a5a"
-  oak-edge: "#9a6f44"
-  letter: "#f4f1ea"
-  letter-dim: "#c9c4b8"
-  board-seam: "#3a3936"
-  yellow: "#f2c230"
-  yellow-press: "#ddb01f"
-  red-letter: "#ff6b57"
-  orange-letter: "#ff9a5c"
-  green-letter: "#8fd19e"
-  ground: "#f7f6f2"
-  field: "#ffffff"
-  ink: "#1d1d1b"
-  muted: "#5e5b54"
-  seam: "#dcd8cf"
-  field-edge: "#8f8a7f"
-  tint: "#efede7"
-  ok: "#2f6f48"
-  bad: "#a8261c"
-  warn: "#8a4f00"
-  qr-black: "#000000"
+  bg: "#0b0c0f"
+  surface: "#14161b"
+  surface-2: "#1b1e25"
+  line: "#262a33"
+  line-strong: "#353a46"
+  line-hover: "#4a5160"
+  text: "#f4f5f7"
+  muted: "#a6acb8"
+  faint: "#868d9c"
+  accent: "#3563f0"
+  accent-hover: "#2f58e0"
+  accent-text: "#6b95ff"
+  on-accent: "#ffffff"
+  qr-white: "#ffffff"
+  ok: "#4ade80"
+  warn: "#fbbf24"
+  bad: "#f87171"
+  ok-bg: "rgba(74, 222, 128, 0.12)"
+  warn-bg: "rgba(251, 191, 36, 0.12)"
+  bad-bg: "rgba(248, 113, 113, 0.12)"
 typography:
-  board:
-    fontFamily: "Big Shoulders Display, Arial Narrow, sans-serif"
-    fontSize: "2.75rem"
-    fontWeight: 800
-    lineHeight: "42px"
-    letterSpacing: "0.12em"
-  brand:
-    fontFamily: "Big Shoulders Display, Arial Narrow, sans-serif"
-    fontSize: "1.5rem"
-    fontWeight: 800
-    lineHeight: 1
-    letterSpacing: "0.14em"
-  stamp:
-    fontFamily: "Big Shoulders Display, Arial Narrow, sans-serif"
-    fontSize: "1.75rem"
-    fontWeight: 800
-    lineHeight: 1
-    letterSpacing: "0.1em"
-  read:
+  display:
     fontFamily: "Figtree Variable, system-ui, sans-serif"
-    fontSize: "1.0625rem"
-    fontWeight: 400
-    lineHeight: 1.55
-  big:
+    fontSize: "2.5rem"
+    fontWeight: 800
+    lineHeight: 1.06
+    letterSpacing: "-0.025em"
+  headline:
+    fontFamily: "Figtree Variable, system-ui, sans-serif"
+    fontSize: "1.375rem"
+    fontWeight: 800
+    letterSpacing: "-0.015em"
+  title:
+    fontFamily: "Figtree Variable, system-ui, sans-serif"
+    fontSize: "1.125rem"
+    fontWeight: 700
+  brand:
     fontFamily: "Figtree Variable, system-ui, sans-serif"
     fontSize: "1.25rem"
-    fontWeight: 400
+    fontWeight: 800
+    letterSpacing: "-0.01em"
   body:
     fontFamily: "Figtree Variable, system-ui, sans-serif"
     fontSize: "1rem"
     fontWeight: 400
-    lineHeight: 1.55
+    lineHeight: 1.6
+  body-large:
+    fontFamily: "Figtree Variable, system-ui, sans-serif"
+    fontSize: "1.125rem"
+    fontWeight: 400
+    lineHeight: 1.6
   label:
+    fontFamily: "Figtree Variable, system-ui, sans-serif"
+    fontSize: "0.9375rem"
+    fontWeight: 600
+  button:
     fontFamily: "Figtree Variable, system-ui, sans-serif"
     fontSize: "0.9375rem"
     fontWeight: 700
@@ -70,288 +69,317 @@ typography:
   mono:
     fontFamily: "ui-monospace, Cascadia Mono, Consolas, monospace"
     fontSize: "0.9375rem"
-    fontWeight: 400
     lineHeight: 1.45
 rounded:
-  none: "0px"
+  card: "20px"
+  drop: "16px"
+  field: "12px"
+  pill: "999px"
 spacing:
-  groove: "14px"
-  gutter: "16px"
-  gutter-tablet: "40px"
-  gutter-wide: "64px"
+  gutter: "20px"
+  gutter-wide: "32px"
+  card-pad: "20px"
+  card-pad-wide: "28px"
   tap: "48px"
-  column-gap: "48px"
 components:
-  board:
-    backgroundColor: "{colors.felt}"
-    textColor: "{colors.letter}"
-    typography: "{typography.board}"
-    rounded: "{rounded.none}"
-  tab:
-    backgroundColor: "{colors.felt}"
-    textColor: "{colors.letter-dim}"
-    typography: "{typography.label}"
-    height: "52px"
-  tab-selected:
-    backgroundColor: "{colors.ground}"
-    textColor: "{colors.ink}"
   button-primary:
-    backgroundColor: "{colors.yellow}"
-    textColor: "{colors.ink}"
-    typography: "{typography.label}"
-    rounded: "{rounded.none}"
-    height: "48px"
-    padding: "0 20px"
+    backgroundColor: "{colors.accent}"
+    textColor: "{colors.on-accent}"
+    typography: "{typography.button}"
+    rounded: "{rounded.pill}"
+    padding: "0 22px"
+    height: "{spacing.tap}"
   button-primary-hover:
-    backgroundColor: "{colors.yellow-press}"
-  button-secondary:
-    backgroundColor: "{colors.ground}"
-    textColor: "{colors.ink}"
-    typography: "{typography.label}"
-    rounded: "{rounded.none}"
-    height: "48px"
-    padding: "0 20px"
-  button-secondary-hover:
-    backgroundColor: "{colors.tint}"
-  segment:
-    backgroundColor: "{colors.field}"
-    textColor: "{colors.ink}"
-    height: "44px"
-    padding: "0 16px"
-  segment-selected:
-    backgroundColor: "{colors.felt}"
-    textColor: "{colors.letter}"
+    backgroundColor: "{colors.accent-hover}"
+    textColor: "{colors.on-accent}"
+  button-ghost:
+    backgroundColor: "transparent"
+    textColor: "{colors.text}"
+    typography: "{typography.button}"
+    rounded: "{rounded.pill}"
+    padding: "0 22px"
+    height: "{spacing.tap}"
+  button-ghost-hover:
+    backgroundColor: "{colors.surface-2}"
+  button-quiet:
+    backgroundColor: "transparent"
+    textColor: "{colors.muted}"
+    typography: "{typography.button}"
+    rounded: "{rounded.pill}"
+    padding: "0 22px"
+    height: "{spacing.tap}"
+  button-quiet-hover:
+    textColor: "{colors.text}"
+  card:
+    backgroundColor: "{colors.surface}"
+    rounded: "{rounded.card}"
+    padding: "{spacing.card-pad}"
   input:
-    backgroundColor: "{colors.field}"
-    textColor: "{colors.ink}"
+    backgroundColor: "{colors.surface-2}"
+    textColor: "{colors.text}"
     typography: "{typography.body}"
-    rounded: "{rounded.none}"
-    height: "48px"
-    padding: "10px 12px"
+    rounded: "{rounded.field}"
+    padding: "11px 14px"
+    height: "{spacing.tap}"
   input-big:
-    typography: "{typography.big}"
-    height: "60px"
-  drop-zone:
-    backgroundColor: "{colors.field}"
-    textColor: "{colors.ink}"
-    padding: "22px 20px"
-  decoded:
-    backgroundColor: "{colors.field}"
-    textColor: "{colors.ink}"
-    typography: "{typography.mono}"
-    padding: "12px 14px"
+    typography: "{typography.body-large}"
+    height: "56px"
+  type-chip:
+    backgroundColor: "transparent"
+    textColor: "{colors.muted}"
+    typography: "{typography.label}"
+    rounded: "{rounded.pill}"
+    padding: "0 18px"
+    height: "44px"
+  type-chip-selected:
+    backgroundColor: "{colors.surface-2}"
+    textColor: "{colors.text}"
+  tab-track:
+    backgroundColor: "{colors.bg}"
+    rounded: "{rounded.pill}"
+    padding: "4px"
+  tab-selected:
+    backgroundColor: "{colors.surface-2}"
+    textColor: "{colors.text}"
+    typography: "{typography.button}"
+    rounded: "{rounded.pill}"
+    height: "44px"
+  pill-ok:
+    backgroundColor: "{colors.ok-bg}"
+    textColor: "{colors.ok}"
+    rounded: "{rounded.pill}"
+    padding: "5px 12px"
+  pill-warn:
+    backgroundColor: "{colors.warn-bg}"
+    textColor: "{colors.warn}"
+    rounded: "{rounded.pill}"
+    padding: "5px 12px"
+  pill-bad:
+    backgroundColor: "{colors.bad-bg}"
+    textColor: "{colors.bad}"
+    rounded: "{rounded.pill}"
+    padding: "5px 12px"
+  pill-neutral:
+    backgroundColor: "{colors.surface-2}"
+    textColor: "{colors.muted}"
+    rounded: "{rounded.pill}"
+    padding: "5px 12px"
+  qr-preview:
+    backgroundColor: "{colors.qr-white}"
+    rounded: "{rounded.field}"
+    padding: "6px"
+    width: "220px"
 ---
 
 # Design System: QrOne
 
+All values below come from `src/style.css` (the `:root` block and the component rules). If this file and the CSS ever disagree, the CSS is right and this file needs updating. Use the CSS custom properties (`var(--accent)`, `var(--r-card)` and so on) in new code; never paste the hex values.
+
 ## Overview
 
-**Creative North Star: "The Shop-Window Letterboard"**
+**Creative North Star: "The Quiet Room with One Blue Light"**
 
-Every page opens with a black felt letterboard in an oak frame. A few big, widely spaced capital letters on it say what is happening right now ("MAKE A CODE THAT NEVER EXPIRES", "THIS CODE CAN BE SWITCHED OFF"). The board is the page's status display, not a hero banner: when the job or the verdict changes, the board re-sets its words. Everything under the board is a quiet off-white working ground where the actual tool lives.
+QrOne is a calm, dark, single-column-on-phone interface for small business owners who are about to print a QR code, or who just found one that stopped working. The page should feel safe before it is read: a near-black ground, panels one step lighter with soft corners and hairline borders, off-white and grey text, and exactly one blue thing asking to be pressed. Nothing blinks, nothing counts down, nothing competes.
 
-The system is flat and square. Areas are separated by 1px hairline seams, never by shadows, floating cards or rounded boxes. Colour is rationed: yellow means "the one thing to press", coloured letters on the board mean "this is the verdict", and everything else is ink on off-white. Density is low and text is short; the visitor is a non-technical shop owner who wants a working code in about ten seconds.
+Density is low and targets are large (48px tall controls, 44px minimum). The tool comes first and the explanation sits beside or below it, never in front of it. The signature device is the "What happens after you print" timeline: the product's promise is shown as a sequence of drawn steps rather than claimed in a slogan.
 
-When you add a page (a dashboard, pricing, sign-in), start from the same skeleton: oak frame, board with the brand row and one short board sentence, then the working ground with seams. If the new page has nothing to say on the board, say what the page is ("Your codes", "Pricing", "Sign in"), in a few words.
+The design is dark only (`color-scheme: dark`). There is no light theme to support.
 
 **Key Characteristics:**
-- An oak-framed felt letterboard at the top of every page, carrying the brand, the nav and one short sentence.
-- Big Shoulders Display capitals on the board; Figtree for everything you read or type.
-- Square corners everywhere (0px radius).
-- 1px seams divide areas; no shadows, no cards.
-- One yellow primary action per screen.
-- Red, orange and green letters only for checker verdicts on the board.
+- Near-black ground, flat panels a step lighter, 1px lines for every division.
+- One accent hue (blue). Status colours exist only inside pills and verdicts.
+- One font, Figtree, at a handful of fixed sizes; weight does the hierarchy work.
+- Pills for every button, tab, chip and status; 20px cards; 12px fields.
+- A big two-line headline whose second line is blue.
+- One authored motion: a result "arrives".
 
 ## Colors
 
-A near-black felt and an off-white ground do almost all the work; yellow and the three verdict letters are rare and each has exactly one job.
+A cool near-black ladder for surfaces and lines, a three-step grey ladder for text, one blue, and three status colours that are kept on a short leash.
 
 ### Primary
-- **Letter Yellow** (`yellow`, #f2c230): the background of the one primary action on a screen (Download PNG on Make, Choose a photo on Check), the skip link and text selection. Nothing else.
-- **Pressed Yellow** (`yellow-press`, #ddb01f): hover state of the yellow button. Never used on its own.
+- **Signal Blue** (`accent`, #3563f0): the background of the one primary button on a screen, with white text (5:1). Also the skip-link background, text selection, and checkbox/radio tint.
+- **Signal Blue, Pressed** (`accent-hover`, #2f58e0): the primary button's hover. It is darker, not lighter, so white text stays readable.
+- **Lamp Blue** (`accent-text`, #6b95ff): blue used as text or a thin line on the dark ground (6.9:1). The second line of every headline, all links, the dashboard short-link, the focus ring, the text caret, the border of the selected type chip, the drop zone's hover border, and the icon of the "Today" timeline step.
 
-### Board (the letterboard world)
-- **Felt** (`felt`, #1d1d1b): the board surface, the selected segment in the segmented control, and the browser theme colour.
-- **Felt Groove** (`groove`, rgba(255,255,255,0.055)): the faint 1px horizontal groove line drawn every 14px across the felt.
-- **Oak** (`oak`, #b98a5a): the frame around the board (8px on phones, 12px from 720px).
-- **Oak Edge** (`oak-edge`, #9a6f44): the 1px line under the frame where it meets the working ground.
-- **Letter White** (`letter`, #f4f1ea): board letters, the brand, hovered nav links and tabs.
-- **Dim Letter** (`letter-dim`, #c9c4b8): nav links and unselected tabs at rest.
-- **Board Seam** (`board-seam`, #3a3936): the 1px seams between and above the tabs on the felt (`--board-seam`).
+### Neutral
+- **Night Ground** (`bg`, #0b0c0f): the page background. Also used for "wells" sunk into a card: the tab track and the drop zone.
+- **Panel** (`surface`, #14161b): every card.
+- **Raised Panel** (`surface-2`, #1b1e25): inputs, the selected tab, the selected chip, timeline icon circles, the decoded-content block, the neutral pill, and ghost-button hover.
+- **Hairline** (`line`, #262a33): card borders and every 1px rule inside a card, the top-bar and footer rules, the timeline connector.
+- **Hairline, Strong** (`line-strong`, #353a46): borders of things you can press or type in (inputs, ghost buttons, chips, the drop zone's dashed edge).
+- **Hairline, Hover** (`line-hover`, #4a5160): the border those controls take on hover. It is a repeated literal in the CSS, not yet a `:root` variable; add `--line-hover` if you touch it.
+- **Off-White** (`text`, #f4f5f7): headings, labels, body text you must read.
+- **Grey** (`muted`, #a6acb8): supporting text, hints, nav links, unselected tabs and chips, reading-page paragraphs.
+- **Faint Grey** (`faint`, #868d9c): input placeholders (4.6:1 on Raised Panel) and the footer sentence. Never for anything the user must read to act.
+- **White** (`on-accent` and `qr-white`, #ffffff): text on the blue button, and the background behind every QR code.
 
-### Verdict letters (board only)
-- **Red Letter** (`red-letter`, #ff6b57): board text when the checked code goes through a known QR vendor and can be switched off.
-- **Orange Letter** (`orange-letter`, #ff9a5c): board text when the code goes through an unknown short link.
-- **Green Letter** (`green-letter`, #8fd19e): board text when no vendor sits in the middle, or the code is not a link.
+### Status (code states and checker verdicts only)
+- **Green** (`ok`, #4ade80 on `ok-bg`): "Looks static", "Not a web link", "Never expires".
+- **Amber** (`warn`, #fbbf24 on `warn-bg`): "Unknown short link", "Expires in 3 days" or fewer. Also the colour-contrast warning text in the Make tool.
+- **Red** (`bad`, #f87171 on `bad-bg`): "Vendor-controlled", "Expired", "Switched off". Also form error text.
 
-### Neutral (the working ground)
-- **Ground** (`ground`, #f7f6f2): the page background below the board, and the selected tab (the tab is a piece of the ground reaching up into the board).
-- **Field** (`field`, #ffffff): the inside of inputs, segments, the drop zone, the decoded-text box and the QR preview's frame.
-- **Ink** (`ink`, #1d1d1b): all body text, button borders, the focus outline, the big address field's border. Same value as felt on purpose.
-- **Muted** (`muted`, #5e5b54): hints, status lines, the footer, the empty-preview message.
-- **Seam** (`seam`, #dcd8cf): every 1px dividing line on the ground: column splits, expander tops, segment borders, the footer rule, the QR preview frame.
-- **Field Edge** (`field-edge`, #8f8a7f): the resting border of ordinary inputs, selects and colour pickers; turns ink on hover (`--field-edge`).
-- **Tint** (`tint`, #efede7): hover background for secondary buttons, segments and the drop zone.
-
-### Messages (on the ground)
-- **OK Green** (`ok`, #2f6f48): reserved for success text on the ground. Defined in the build but not currently used.
-- **Error Red** (`bad`, #a8261c): form error messages and the decoded-text border when the verdict is "can be switched off".
-- **Warning Brown** (`warn`, #8a4f00): warnings (low colour contrast in the QR options) and the decoded-text border for an unknown link.
-
-### QR output
-- **QR Black** (`qr-black`, #000000): the default dark colour of the generated QR code. The visitor can change it in the options.
+The `*-bg` tints are the same hue at 12% opacity and exist only as pill backgrounds.
 
 ### Named Rules
-**The One Yellow Rule.** Each screen has at most one yellow button, and it is the action the visitor came to do. Secondary actions are ink-outlined. If you are about to add a second yellow thing, one of them is not primary.
+**The One Blue Button Rule.** Each screen has at most one solid blue (`btn-primary`) button: Download PNG on Make, Choose a photo on Check, Create code on the dashboard, Email me a link on sign-in. Every other action is a ghost or quiet button. On a pricing page, the plan buttons are ghost buttons too (the dashboard's Starter / Plus / Pro buttons already are).
 
-**The Verdict Letter Rule.** Red, orange and green letters appear only on the board, and only to state a checker verdict. They are never used for buttons, badges, charts, links or decoration. Ground-side messages use the darker `bad`, `warn` and `ok` instead, which pass contrast on off-white.
+**The Thin Blue Rule.** Outside that one button, blue only appears as text or a hairline: the headline's second line, links, focus rings and selection markers. Never as a filled panel, badge or background.
 
-**The Only Pure Black Rule.** Pure #000000 belongs to the QR code itself. Interface "black" is felt/ink #1d1d1b.
+**The Status Leash Rule.** Green, amber and red appear only inside a `.pill` (code states, checker verdicts) and in one-line form messages (`msg-error`, `msg-warn`). Never as a button, a heading colour, an icon colour or a decoration.
+
+**The White Paper Rule.** A QR code is always drawn on pure white (#ffffff) with a 6px white margin and 12px corners, whatever the page colour, because scanners and printers need it.
 
 ## Typography
 
-**Display Font:** Big Shoulders Display, weight 800 only (fallback Arial Narrow, sans-serif)
-**Body Font:** Figtree Variable (fallback system-ui, sans-serif)
-**Mono:** ui-monospace, Cascadia Mono, Consolas (only for decoded QR content)
+**Font:** Figtree Variable (self-hosted through the `@fontsource-variable/figtree` package, imported in `src/main.js`), falling back to `system-ui, sans-serif`. No other text font, and no font from a CDN.
+**Mono:** `ui-monospace, "Cascadia Mono", Consolas, monospace`, only for decoded QR content and short links.
 
-Both fonts are self-hosted through @fontsource and imported in `src/main.js`, so no visitor contacts a font company. Do not add a Google Fonts link.
-
-**Character:** Tall, condensed, widely tracked capitals read like plastic letters pressed into felt; Figtree is a calm, round workhorse that stays out of the way.
+**Character:** One friendly geometric sans. Hierarchy comes from weight (800 headings, 600 to 700 labels and buttons, 400 text) and a few fixed sizes, not from a second typeface.
 
 ### Hierarchy
-Display roles are always uppercase. Sizes listed as phone / from 720px / from 1200px.
+Each role has one size, set as a variable. Only the display size changes with the screen.
 
-- **Board** (800, 2.75rem / 4.75rem / 5.25rem; line-height 42px / 84px / 84px; tracking 0.12em; uppercase): the one board sentence per page, the `<h1>`. Keep it to about 2 lines; max width 14em, balanced wrapping.
-- **Brand** (800, 1.5rem all sizes, line-height 1, tracking 0.14em, uppercase): the wordmark in the board's nav row.
-- **Stamp** (800, 1.75rem / 2rem / 2rem, line-height 1, tracking 0.1em, uppercase): short statements on the ground, such as "Never expires" beside the code and "Drop a QR image". Reading-page `<h2>` uses the same size with tracking 0.08em and line-height 1.05.
-- **Read** (400, 1.0625rem, line-height 1.55): paragraphs and list items on reading pages (About, Privacy, FAQ), max 65ch; FAQ questions at 700.
-- **Big** (400, 1.25rem): only the large address field (60px tall).
-- **Body** (400, 1rem, line-height 1.55): default text in the tools.
-- **Label** (700, 0.9375rem): form labels, legends, buttons, tabs, expander titles.
-- **Small** (400, 0.875rem): hints, status, errors (600), nav links (600), footer.
-- **Mono** (400, 0.9375rem, line-height 1.45): the "The code says" box only.
+| Role | Variable | Phone (<720px) | 720px+ | 1024px+ | Weight / line-height / tracking | Used for |
+|---|---|---|---|---|---|---|
+| Display | `--t-hero` | 2.5rem | 3.5rem | 4rem | 800 / 1.06 / -0.025em, `text-wrap: balance` | The page headline (`.hero-title`), one per page |
+| Headline | `--t-h2` | 1.375rem | same | same | 800 / -0.015em | Section titles, card titles (`.stamp`), verdict titles, the timeline title |
+| Title / large body | `--t-big` | 1.125rem | same | same | 700 for titles, 400 for text | Headline subline, drop-zone title, FAQ questions, reading-page paragraphs, big URL input |
+| Brand | (literal) | 1.25rem | same | same | 800 / -0.01em | The "QrOne" wordmark in the top bar |
+| Body | `--t-body` | 1rem | same | same | 400 / 1.6 | Default text, inputs |
+| Label | `--t-label` | 0.9375rem | same | same | 600 (labels), 700 (buttons, tabs) | Form labels, legends, buttons |
+| Small | `--t-small` | 0.875rem | same | same | 400; 600 for nav; 700 for pills | Hints, status lines, nav links, pills, footer |
+| Mono | `--mono` | 0.9375rem | same | same | 400 / 1.45 | Decoded content, short links |
+
+Reading text is capped at `65ch` on reading pages and `60ch` in verdicts. The subline is capped at `34ch`.
 
 ### Named Rules
-**The Felt Groove Rule.** The felt has a 1px groove every 14px. Any line-height for text set on the board must be a multiple of 14px (the build uses 42px = 3 grooves on phones and 84px = 6 grooves from 720px) so letter rows sit in the grooves. If you introduce a new board size, pick its line-height from 28, 42, 56, 70, 84, 98...
+**The Two-Line Headline Rule.** Every page opens with one `h1#headline.hero-title`. Line one is off-white; an optional line two, wrapped in `<span class="line accent">`, is Lamp Blue and usually ends with a full stop ("QR codes that / never expire.", "How it / works."). Pages that change the headline at runtime call `setHeadline(line1, line2)` from `src/headline.js`; it sets text only, never HTML. A page with a one-word title ("Your codes", "Sign in") uses line one only.
 
-**The One Size Per Role Rule.** Each text role has one size per breakpoint, set by a variable in `:root` (`--t-board`, `--t-stamp`, `--t-read`, `--t-big`, `--t-body`, `--t-label`, `--t-small`). Use the variable; don't invent an in-between size.
-
-**The Display-Is-Caps Rule.** Big Shoulders Display is only ever 800, uppercase and tracked. Never use it for body text, lowercase, or long sentences.
+**The Weight Not Size Rule.** Do not add new font sizes. Pick the nearest role above and change weight if you need emphasis.
 
 ## Layout
 
-Mobile first: base styles target a 360px phone; wider screens are layered on at two breakpoints.
-
-- **Breakpoints:** 720px (two columns, bigger board) and 1200px (biggest board, max content width).
-- **Gutter** (`--gutter`): 16px on phones, 40px from 720px, 64px from 1200px. The board, main and footer all use it, so left edges line up.
-- **Max width:** from 1200px, main and footer cap at 1312px. Reading pages cap at 44rem with text at 65ch.
-- **Tap targets:** 48px minimum (`--tap`) for buttons, inputs, expander rows and nav; tabs 52px / 56px; segments 44px.
-- **Tool layout:** on phones, one column in source order (type switch, field, code and download, options), separated by seams. From 720px, two equal columns split by a vertical seam, with 48px of space on each side of it; the code sits in the right column. Keyboard order never changes with layout.
-- **Column padding:** 24px top and bottom on phones; 40px top, 48px bottom from 720px.
-- **Form rhythm:** labels sit 18px below the previous field and 6px above their own.
-- **Reading pages:** board with only the brand row and one sentence (no tabs), then a single text column.
+- **Mobile first.** Base styles target a 360px phone. Wider layouts are added at `min-width: 720px` and `min-width: 1024px`, at the bottom of `style.css`.
+- **Container:** `main` is centred, `max-width: 1200px`, with side padding `--gutter` (20px on phones, 32px from 720px). The top bar and footer use the same width, so their rules line up with the content.
+- **Reading pages** (`main.page`: about, privacy, FAQ, sign-in) narrow to `46rem`.
+- **Home** (`main.home`): one column on phones and tablets, in the order headline, tool card, timeline, 32px apart. From 1024px it becomes two columns, `minmax(0, 1fr)` and `minmax(0, 540px)`, with the headline and timeline on the left and the tool card on the right, gaps 36px by 64px.
+- **Page heading** (`.page-head`): 40px above, 28px below, on every non-home page.
+- **Dashboard** (`main.dash`): a vertical stack of cards 18px apart. The new-code form becomes a three-column row at 720px (destination, name, button).
+- **Tap targets:** every control is at least `--tap` (48px) tall; chips and tabs are 44px.
+- **Rhythm:** labels sit 18px above their field and 8px from it; button rows (`.actions`) have 10px gaps and 16px above.
 
 ## Elevation & Depth
 
-There is no elevation. The system is completely flat: no drop shadows, no floating cards, no blur, no layered panels. Depth comes from only two things: the board sitting inside its oak frame, and the selected tab being the ground colour, so the working area appears to reach up into the board.
+The system is flat. There are no drop shadows anywhere. Depth comes from tone: Night Ground at the bottom, Panel cards one step up, Raised Panel for inputs and selected states, and wells of Night Ground sunk back into a card for the tab track and drop zone. Every edge is a 1px line. The only `box-shadow` in the CSS is a 1px inset line on the selected tab, which is a border, not elevation.
 
 ### Named Rules
-**The Hairline Seam Rule.** Areas are divided by a single 1px line in `seam` (#dcd8cf) on the ground, or `board-seam` (#3a3936) on the felt. Never use `box-shadow` for depth, never put content in a raised card, never use a background block to separate sections. If two areas need separating, draw a seam between them.
+**The No Card In A Card Rule.** A card never contains another card. To divide a card into parts, draw a 1px `--line` rule (`border-top: 1px solid var(--line)`) and add padding, as the Make result, the "Colour, size and logo" expander, the checker verdict, the dashboard code rows and the FAQ items all do. Inputs, the tab track, the drop zone, the decoded block and the QR preview are controls or content, not cards, and may sit inside one.
 
 ## Shapes
 
-Everything is square: 0px radius on buttons, inputs, selects, segments, the drop zone, the QR preview frame and the board. Borders are always 1px. The only drawn icon is the plus/minus on expanders, built from two 14px by 2px bars in ink. The empty QR preview is a square with three seam-coloured corner blocks, hinting at finder patterns.
+Soft, friendly corners on a strict three-step scale, plus round for anything pressable.
+
+- **Cards:** 20px (`--r-card`).
+- **Drop zone:** 16px, dashed 1px border. It is the only 16px shape.
+- **Fields:** 12px (`--r-field`) for inputs, selects, textareas, the colour picker, the decoded block and the QR preview.
+- **Pills:** 999px (`--r-pill`) for every button, tab, tab track, type chip, status pill and the skip link.
+- **Circles:** timeline icons (44px) and the 8px dot inside each status pill.
+
+Borders are always 1px. Dashed borders mean "drop or fill something here" (drop zone, empty QR placeholder) and are used for nothing else.
 
 ## Components
 
-### Letterboard (signature)
-The header of every page: an oak frame (8px padding, 12px from 720px; no padding at the bottom) around the felt board.
-- **Felt:** `felt` with a repeating 14px groove; 14px top padding (10px from 720px); side padding = gutter.
-- **Nav row:** brand on the left; links in `letter-dim`, 600, small size, 14px by 10px padding, turning `letter` on hover. The last link's text aligns with the board edge.
-- **Board text:** the page's `<h1>`, `aria-live="polite"` on the home page. Set its words only through `setBoard(text, tone)` in `src/board.js`, which splits the sentence into per-letter spans (hidden from screen readers) and adds one plain copy for screen readers. Tone is `""`, `"ok"`, `"warn"` or `"bad"`.
-- **Focus on the board:** the focus outline turns yellow so it shows on felt.
+### Top bar
+Slim and quiet. A 1px `--line` rule along the bottom, content inside the 1200px container with 8px vertical padding. The 26px logo mark (`public/logo.svg`) and "QrOne" on the left, 10px apart (brand role, off-white). Two or three nav links on the right in Small 600, Grey, turning Off-White on hover, with 14px by 12px padding so each is a full tap target. The home page links to How it works and Privacy; other pages link to Make, Check and FAQ. No buttons, no blue, no sign-up call to action in the bar.
+
+### Headline
+`h1.hero-title` with one or two `span.line` children (see the Two-Line Headline Rule). On the home page it is followed by a `.hero-sub` subline in Title size, Grey, 14px below. Switching the Make | Check tab rewrites the headline ("QR codes that / never expire." and "Will my QR code / stop working?") through `setHeadline`, using the tab's `data-line1` and `data-line2`.
+
+### Card
+- **Background:** Panel, with a 1px Hairline border.
+- **Corner:** 20px.
+- **Padding:** 20px on phones, 28px from 720px.
+- **Shadow:** none.
+- **Inside:** divide with 1px rules, never nested cards. Lists inside a card (`.code-list`, `.faq-list`) put the padding on the sides only and let each row carry its own vertical padding and top rule.
 
 ### Tabs (Make | Check)
-ARIA tabs sitting on the board's bottom edge.
-- **Rest:** transparent on felt, `letter-dim`, label type, 1px `board-seam` on top and between.
-- **Selected:** `ground` background, `ink` text, so the tab merges into the working area.
-- **Phones:** full width, two equal halves, 52px tall. **From 720px:** sized to text (30px side padding), 56px tall, seams on both sides.
-- **Keyboard:** only the selected tab is in the tab order; Left/Right arrows move and select. Selecting Check sets `#check` in the URL.
+A pill-shaped track in Night Ground with a 1px Hairline border and 4px inner padding. Each tab fills half the width, 44px tall, Label 700, Grey. The selected tab is a Raised Panel pill with an inset 1px Hairline Strong edge and Off-White text. Real `role="tab"` buttons with `aria-selected`; arrow keys move between them.
 
-### Segmented control
-A row of radio buttons that looks like joined square keys (used for "The code holds: Link | Text | Wi-Fi | Email").
-- **Rest:** `field` background, 1px `seam` border, segments overlap by 1px so borders don't double; 44px tall, 16px side padding, 600 weight.
-- **Hover:** `tint`. **Selected:** `felt` background with `letter` text (a piece of the board).
-- **Focus:** 3px ink outline, 2px offset. The real radio input covers the segment invisibly, so it stays accessible.
+### Type chips (Link / Text / Wi-Fi / Email)
+Real radio buttons, visually hidden, with a `span` styled as a pill: 44px tall, 18px side padding, 1px Hairline Strong border, Grey text. Hover: Off-White text, Hairline Hover border. Selected: Raised Panel fill, Off-White text, Lamp Blue border. Keyboard focus draws the standard focus ring around the pill.
+
+### Inputs
+- **Style:** Raised Panel fill, 1px Hairline Strong border, 12px corners, 11px by 14px padding, at least 48px tall, Body text.
+- **Big variant** (`input.big`): 56px tall, Title size. Used for the one main field on a screen (the home URL field).
+- **Hover:** border goes to Hairline Hover.
+- **Focus:** the border disappears and a 2px Lamp Blue outline sits 1px outside.
+- **Placeholder:** Faint Grey.
+- **Labels:** always a visible `<label>` above the field, Label 600. Never use the placeholder as the label.
+- **Errors:** a `p.msg-error` under the field, Small 600, Red. Warnings use `p.msg-warn` in Amber. Empty message elements hide themselves.
+- **Side by side:** `.pair` for two equal columns; `.pair-tight` for field plus button, which stacks below 480px.
 
 ### Buttons
-Square, 1px border, 48px tall, 20px side padding, label type, no-wrap.
-- **Primary:** `yellow` fill and border, `ink` text; hover `yellow-press`. One per screen (see The One Yellow Rule).
-- **Secondary:** transparent with a 1px `ink` border; hover `tint`.
-- **Quiet:** like secondary with a `seam` border, for small undo actions such as "Remove logo".
-- **Pressed:** moves down 1px.
-- **Focus:** 3px `ink` outline, 2px offset (yellow on the board).
+All buttons are pills, 48px tall, 22px side padding, Label 700, with a 120ms colour transition and a 1px press-down on `:active`. Disabled buttons drop to 50% opacity.
+- **Primary** (`.btn .btn-primary`): solid Signal Blue, white text, no border. Hover darkens to Signal Blue Pressed. No gradient, no glow, no shadow. One per screen.
+- **Ghost** (`.btn`): transparent with a 1px Hairline Strong border and Off-White text. Hover fills Raised Panel and the border goes to Hairline Hover. The default for every secondary action (SVG, Check, QR code, Copy link, plan choices, export formats).
+- **Quiet** (`.btn .btn-quiet`): no border, Grey text, turning Off-White on hover. For low-stakes or backing-out actions: Sign out, Close, Cancel, Remove logo, Delete. A destructive action stays quiet and asks for confirmation; it does not turn red.
 
-### Inputs / Fields
-- **Style:** `field` background, 1px `field-edge` border, 0 radius, 48px tall, 10px by 12px padding, inherited font.
-- **Hover:** border turns `ink`. **Focus:** 3px `ink` outline with no offset, border `ink`.
-- **Big field:** the main address field is 60px tall, big type, and has an `ink` border at rest, because it is the first thing to fill in.
-- **Placeholder:** `--placeholder`, #6f6b63 (5.3:1 on white).
-- **Checkboxes and radios:** native, `accent-color: ink`; checkbox rows are 48px tall.
-- **Errors:** a line of `bad` text (600, small) under the field; warnings in `warn`. Empty message elements are hidden.
-- **Field + button pairs:** the input stretches, the button sits to its right at the same height, 8px apart.
-
-### Expanders (details)
-Used for "Colour, size and logo" in the tool and for questions on the FAQ.
-- A 1px `seam` line on top (FAQ items also close the list with a bottom seam).
-- Summary row at least 48px tall (56px on FAQ), title on the left in label weight (read size on FAQ), a drawn plus on the right that becomes a minus when open. No native marker.
-- Options stay collapsed by default; the tool must work without opening them.
+### Expanders
+Native `<details>`. The summary is a full-width 48px row in Label 600 with a drawn chevron (two 2px Grey borders rotated 45 degrees) on the right that flips in 160ms when open. The "Colour, size and logo" expander sits inside the tool card under a 1px top rule. FAQ items (`.faq`) use the same pattern at 60px tall with Title-size questions, separated by 1px rules inside one card.
 
 ### Drop zone
-The main input on Check: the whole block is a `<label>` for a hidden file input.
-- `field` background, 1px `ink` border, 22px by 20px padding, contents stacked on the left.
-- Holds a stamp-type title ("Drop a QR image"), the yellow primary button look ("Choose a photo"), and a hint.
-- **Hover / dragging over:** `tint`. **Focus:** 3px ink outline on the whole zone.
+A `<label>` wrapping a hidden file input, so the whole area opens the file picker. Night Ground well, 1px dashed Hairline Strong border, 16px corners, 22px padding, content stacked and left-aligned: a Title 700 line ("Drop a QR image"), the screen's primary button, and a Small hint. Hover or drag-over turns the border Lamp Blue; keyboard focus draws the focus ring around the whole zone.
 
-### Verdict panel
-Shown in Check's right column after a code is read. The verdict sentence itself goes on the board (in a verdict letter colour), so the panel does not repeat it.
-- "The code says" label, then the decoded content in a mono box (`field`, 1px `seam` border, wraps anywhere). The border turns `bad` for a vendor link and `warn` for an unknown link.
-- Explanation paragraphs up to 60ch; follow-up sections ("What you can do") start with a seam and a label-size heading.
-- Links found in the code are shown as text first and are never opened automatically.
+### Verdict (checker result)
+The verdict appears inside the tool card, separated from the input above by a 1px top rule and 20px of padding (not a separate card). From top to bottom: a status pill, a Headline-size title (12px above, 14px below), a Small 600 Grey "The code says" label, the decoded content in a mono block (Raised Panel, 1px Hairline, 12px corners, wraps anywhere), Grey explanation paragraphs capped at 60ch, then optional "What you can do" (Label-size `h4` and a bullet list) and a ghost-button form. It plays the arrive animation when it appears. Decoded content is always text, never a live link.
+
+### Pills (status)
+Inline pill, 5px by 12px padding, Small 700, with an 8px dot in the current colour before the text. Four tones, chosen in code (`tone` in `src/checker.js` and `src/account.js`):
+- `.pill-ok`: Green on its tint.
+- `.pill-warn`: Amber on its tint.
+- `.pill-bad`: Red on its tint.
+- `.pill-neutral`: Grey on Raised Panel, for neutral facts like "Expires in 14 days".
+Pills are labels, not buttons: they are never clickable.
 
 ### QR preview
-- The generated code sits on white inside a 1px `seam` frame, up to 240px wide on phones and 300px from 720px.
-- Before anything is typed, a 96px placeholder square with three corner blocks and a muted one-line hint holds the space.
-- Next to it: a stamp ("Never expires"), a one-line explanation, the yellow PNG button plus a secondary SVG button, and a hint.
+The QR image sits in a white box (`#gen-preview`, `.qr-box`): pure white, 6px padding, 12px corners, at most 220px wide, the canvas or SVG inside at 100% width with 6px corners. On the home page it sits in a two-column result (168px code, then the "Never expires" title, a Grey lede, the button row and a hint) from 720px. Before a code exists, a placeholder shows a 76px dashed square with three faint finder-square marks and one Grey sentence.
+
+### Timeline ("What happens after you print")
+An ordered list. Each step is a two-column grid: a 44px Raised Panel circle with a 1px Hairline border holding a 20px line icon, then a 700 title and a Grey sentence. A 2px Hairline connector runs down from each circle to the next. The first step ("Today") draws its icon and circle border in Lamp Blue; the rest are Grey. Icons are inline SVG on a 24px grid: `fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"`. Use this same icon recipe anywhere an icon is needed.
+
+### Dashboard rows
+The code list is one card (`ul.code-list.card`) with 20px (28px at 720px) side padding. Each row has 18px vertical padding and a 1px rule above it (except the first). Phone: stacked. From 720px: three columns: name (700) with the short link in mono Lamp Blue beneath it, the destination in Grey, and the status pill at the right; the row of ghost action buttons (QR code, Copy link, Change destination) and a quiet Delete runs full width below. Editing a destination swaps the destination text for an inline field with a ghost Save and quiet Cancel. Counts and prices use tabular numbers.
 
 ### Footer
-- A 1px `seam` rule on top, 24px above it, then a row: a one-line note on the left, links on the right; wraps on phones.
-- `muted`, small type; links are underlined (1px, 3px offset) and turn `ink` on hover. Same gutter and max width as main.
-
-### Links
-Ink, underlined at 1px with a 3px offset; the underline thickens to 2px on hover. Board nav links are the exception (no underline, dim letters).
+Same width as the content, a 1px Hairline rule on top, 22px above and 36px below. Left: one Faint Grey sentence ("QrOne runs in your browser."). Right: FAQ, About, Privacy as Grey links without underlines, turning Off-White on hover. Small size throughout.
 
 ### Motion
-There is exactly one designed animation: the **push-in**. When the board's words change, each letter drops 0.32em into place and fades from 20% to full, over 380ms with `cubic-bezier(0.16, 1, 0.3, 1)`, staggered 16ms per letter. Under `prefers-reduced-motion: reduce` the animation is removed and letters appear instantly. On first load the board text is set without animation. Do not add other entrance, scroll or hover animations; buttons only shift 1px when pressed.
+There is one authored animation, `arrive`: 320ms, `cubic-bezier(0.16, 1, 0.3, 1)`, from 40% opacity and 6px lower to rest. It plays when the Make result first shows and when a verdict renders. It starts mostly visible, so content is never hidden if the animation fails. Everything else is a short state transition: 120ms on button colours, 160ms on the expander chevron. Under `prefers-reduced-motion: reduce`, all animations and transitions are switched off. Do not add a second animation; reuse `arrive` for "a result has appeared".
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** start every new page with the oak frame, felt board, brand row and one short board sentence set in Big Shoulders Display caps.
-- **Do** use the CSS variables in `:root` of `src/style.css` for every colour and text size; add a new variable rather than a raw hex.
-- **Do** keep board line-heights at multiples of 14px (42px, 84px).
-- **Do** divide areas with a 1px `seam` line (#dcd8cf) and white space.
-- **Do** give each screen exactly one yellow (#f2c230) primary button; make every other button ink-outlined.
-- **Do** keep corners square (0px) and targets at least 48px tall.
-- **Do** change the board through `setBoard()` so the push-in and the screen-reader copy stay correct.
-- **Do** keep the 3px ink focus outline (yellow on the board).
+- **Do** start every new page from an existing one: copy the skip link, top bar, `main`, `.page-head` with `h1#headline.hero-title`, and footer from `about.html` (reading page) or `dashboard.html` (tool page).
+- **Do** use the `:root` variables (`var(--surface)`, `var(--r-card)`, `var(--t-h2)`) instead of hex or pixel values.
+- **Do** give each screen exactly one `btn-primary`. On a pricing page, every plan button is a ghost `.btn`; on an account settings page, Save is the primary and everything else is ghost or quiet.
+- **Do** put related content in a 20px card and split it with 1px `--line` rules.
+- **Do** show any QR code on pure white (#ffffff) with 6px padding.
+- **Do** show a code's state or a check result as a `.pill` with the right tone, and name the state in words ("Expired", not just red).
+- **Do** keep every control at least 48px tall with a visible label above it.
+- **Do** draw icons as inline SVG at 1.75 stroke with round caps and joins, coloured by `currentColor`.
+- **Do** keep reading text at 65ch or narrower and in Grey, with Off-White for emphasis.
 
 ### Don't:
-- **Don't** use `box-shadow` for depth, floating cards, rounded boxes or grey panels.
-- **Don't** use red, orange or green letters anywhere except a checker verdict on the board.
-- **Don't** use yellow for highlights, badges, links, icons or a second button.
-- **Don't** use pure black (#000000) in the interface; it belongs to the QR code.
-- **Don't** put Big Shoulders Display in lowercase, in a lighter weight, or in paragraphs.
-- **Don't** add a centred hero, blue tabs, gradient buttons or stock illustrations.
-- **Don't** add animations beyond the push-in, and never one that ignores reduced motion.
-- **Don't** load fonts or scripts from a third-party server.
+- **Don't** put a card inside a card.
+- **Don't** use blue as a fill anywhere except the one primary button; don't make a second button blue "because it's also important".
+- **Don't** use green, amber or red for buttons, headings, icons or decoration.
+- **Don't** add gradients, glows, shadows or shine to buttons, or drop shadows to cards.
+- **Don't** use the logo's blue-to-mint gradient anywhere else. It belongs to the mark (`public/logo.svg`, also the favicon) and nothing else on the page.
+- **Don't** add countdown timers, "only today" offers or any other fake urgency.
+- **Don't** add testimonials, user counts, ratings or customer logos; none exist yet, and none may be invented.
+- **Don't** use emoji as icons.
+- **Don't** add a second typeface, load fonts from a CDN, or invent new font sizes.
+- **Don't** add a light theme or light sections; the system is dark only.
+- **Don't** add new animations; reuse `arrive`, and keep it off under reduced motion.
+- **Don't** name or disparage competitors in UI copy; state vendor behaviour only with a link to the vendor's own page.

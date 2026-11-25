@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Privacy: your QR images never leave your browser | {{NAME}}</title>
-  <meta name="description" content="{{NAME}} reads QR code images on your own device. Nothing is uploaded, and no personal data is collected.">
+  <title>Privacy: what we keep and what we don't | {{NAME}}</title>
+  <meta name="description" content="{{NAME}} reads QR images on your device and uploads nothing. If you sign in, we keep your email, your codes and your plan, and nothing for tracking.">
   <meta name="theme-color" content="#0b0c0f">
   <link rel="icon" type="image/svg+xml" href="/logo.svg">
   <script type="module" src="/src/main.js"></script>
@@ -18,13 +18,25 @@
     </nav>
   </header>
   <main id="main" class="page">
-    <div class="page-head"><h1 id="headline" class="hero-title"><span class="line">Nothing leaves</span> <span class="line accent">your device.</span></h1></div>
-    <h2>Images</h2>
+    <div class="page-head"><h1 id="headline" class="hero-title"><span class="line">What we keep,</span> <span class="line accent">and what we don't.</span></h1></div>
+    <h2>The free tools: nothing leaves your device</h2>
     <p>When you check a QR code, the image is read by code running on your own device. It is not uploaded, stored or sent anywhere. To see for yourself, open your browser's developer tools, go to the Network tab and run a check: no upload appears.</p>
-    <h2>What you type</h2>
-    <p>Addresses, Wi-Fi details and logos are used on your device to draw the code. They are not sent to us.</p>
-    <h2>What we collect</h2>
-    <p>Nothing personal. No account and no cookies. Fonts are served from this site, not a third party. If we add privacy-friendly visit counts or a waiting list, this page will say exactly what is collected before it starts.</p>
+    <p>When you make a static code, the address, Wi-Fi details or text are used on your device to draw it. They are not sent to us. The free tools need no account and set no cookies.</p>
+    <h2>If you sign in</h2>
+    <p>Dynamic codes need an account. For that we keep:</p>
+    <ul>
+      <li>Your email address, to send you sign-in links and tell your account apart.</li>
+      <li>Your codes: their name, where they point, and when they were made or expire.</li>
+      <li>Your plan, and a record of each payment: the amount, the date and the payment provider's reference. Never your card details.</li>
+    </ul>
+    <p>One cookie keeps you signed in for up to 30 days. It is needed for the account to work and is not used for tracking or ads. Sign-in links work once and expire after 15 minutes. We store only a scrambled fingerprint of each link and cookie, never the link or cookie itself.</p>
+    <p>You can change or delete any code from your dashboard at any time.</p>
+    <h2>When someone scans a code</h2>
+    <p>Our redirect server looks up where the code points and sends the scanner there. We don't record scans. Cloudflare, which runs our servers and stores the data, handles each request and may keep standard short-term logs.</p>
+    <h2>Payments</h2>
+    <p>Payments are handled by Dodo Payments, which sells on our behalf. They see your name, email and payment details under their own privacy policy. We receive only your email, what you bought and the amount.</p>
+    <h2>No tracking</h2>
+    <p>No analytics, ad pixels or third-party scripts. Fonts are served from this site. If we ever add privacy-friendly visit counts, this page will say so before it starts.</p>
     <h2>Links in codes</h2>
     <p>The checker shows the address in a code as plain text. It never opens it for you.</p>
   </main>

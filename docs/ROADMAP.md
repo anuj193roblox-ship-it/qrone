@@ -12,7 +12,7 @@ Who does it: **You** = Anuj (accounts, money, phone, decisions). **Claude** = co
 | # | Step | Who | Done when |
 |---|------|-----|-----------|
 | A1 | Apply the design review fixes | Claude | The reviewer's verdict is "ship" |
-| A2 | Write `DESIGN.md` (colours, fonts, rules of the letterboard look) | Claude | The file exists and lists every colour and font used |
+| A2 | Write `DESIGN.md` (now the calm dark look, logo included) ✅ | Claude | The file exists and lists every colour and font used |
 | A3 | Add security headers (`public/_headers`) | Claude | `curl -I` on the live site shows the headers |
 | A4 | Add the extra tests from the test review | Claude | `npm test` passes with the new tests |
 | A5 | Deploy (`npm run deploy`) | Claude | The live site shows the letterboard design |
@@ -50,7 +50,7 @@ D1–D2 are built and tested end to end locally (the link is printed to the term
 1. Buy the domain (B2).
 2. Onboard it in Cloudflare → Email Service → Email Sending.
 3. Add the `send_email` binding and `MAIL_FROM` in `wrangler.jsonc`.
-4. **Update `privacy.html`**, because sign-in collects an email address.
+4. ~~Update `privacy.html`~~ ✅ done: it now covers the email, codes, cookie and payments.
 
 | # | Step | Who | Done when |
 |---|------|-----|-----------|
@@ -92,7 +92,7 @@ D1–D2 are built and tested end to end locally (the link is printed to the term
 2. Send Claude the 6 product IDs (`pdt_…`). They aren't secret, and they go into `DODO_PRODUCTS` in `wrangler.jsonc`.
 3. **Developer → API Keys:** create a TEST key (`dodo_test_…`). **Don't paste it in chat.** Run `npx.cmd wrangler secret put DODO_API_KEY` and paste it there.
 4. **Developer → Webhooks:** add the endpoint `https://qr-tool-site.qr-tool-spike.workers.dev/api/billing/webhook` with the events `payment.succeeded` and `refund.succeeded`. Copy its signing secret (`whsec_…`) and run `npx.cmd wrangler secret put DODO_WEBHOOK_SECRET`.
-5. Before going live: update `privacy.html` to say that Dodo processes payments and sees the buyer's email.
+5. ✅ `privacy.html` already says Dodo processes payments and sees the buyer's email.
 
 | # | Step | Who | Done when |
 |---|------|-----|-----------|
