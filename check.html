@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Will my QR code stop working? Free QR code checker | {{NAME}}</title>
-  <meta name="description" content="Check whether a QR code you printed goes through a QR company's short link that could be switched off. Read on your device, nothing uploaded.">
+  <meta name="description" content="Check whether a QR code you printed goes through a QR company's short link that could be switched off. Read in your browser, nothing uploaded.">
   <meta property="og:title" content="Will my QR code stop working? | {{NAME}}">
   <meta property="og:description" content="Check whether a printed QR code could be switched off by the company behind it.">
   <meta property="og:type" content="website">
@@ -21,35 +21,45 @@
     </nav>
   </header>
 
-  <main id="main" class="page check-page">
+  <main id="main" class="check-page">
     <div class="page-head">
       <h1 class="hero-title"><span class="line">Will my QR code</span> <span class="line accent">stop working?</span></h1>
-      <p class="hero-sub">Drop a photo or screenshot of the code. We read it on your device and tell you who controls it.</p>
+      <p class="hero-sub">Check any QR image or link in your browser. Nothing is uploaded.</p>
     </div>
 
-    <section class="card" aria-label="QR code checker">
-      <label id="chk-drop" class="drop" for="chk-file">
-        <span class="drop-title">Drop a QR image</span>
-        <span class="btn btn-primary" aria-hidden="true">Choose a photo</span>
-        <span class="hint">or paste a screenshot</span>
-        <input id="chk-file" type="file" accept="image/*">
-      </label>
-      <form id="chk-url-form" class="inline-form">
-        <label for="chk-url">Or type what the code says</label>
-        <div class="pair pair-tight">
-          <input id="chk-url" type="text" inputmode="url" placeholder="qrco.de/abc123" spellcheck="false">
-          <button type="submit" class="btn">Check</button>
-        </div>
-      </form>
-      <p class="hint">Read on your device. Nothing is uploaded.</p>
-      <div id="chk-status" class="status" role="status"></div>
-      <div id="chk-result" tabindex="-1">
+    <div class="workspace">
+      <section class="card check-input" aria-label="Check a code">
+        <label id="chk-drop" class="drop drop-big" for="chk-file">
+          <span class="drop-title">Drop a QR image, take a photo, or paste a screenshot</span>
+          <span class="btn btn-primary" aria-hidden="true">Choose image</span>
+          <span class="hint">Pasting works anywhere on this page (Ctrl+V, or Cmd+V on a Mac).</span>
+          <input id="chk-file" type="file" accept="image/*">
+        </label>
+        <p class="divider"><span>Or paste the link inside the code</span></p>
+        <form id="chk-url-form" action="/check" method="get">
+          <label for="chk-url" class="sr-only">Link or text inside the code</label>
+          <div class="pair pair-tight">
+            <input id="chk-url" name="q" class="mono-input" type="text" inputmode="url" placeholder="qrco.de/abc123" spellcheck="false">
+            <button type="submit" class="btn">Check link</button>
+          </div>
+        </form>
+        <div id="chk-status" class="status" role="status"></div>
         <div class="explain">
-          <p><strong>Static codes</strong> hold your address. Nobody can switch them off.</p>
-          <p><strong>Dynamic codes</strong> go through a QR company's link. If the trial or plan ends, that company can turn it off.</p>
+          <p><strong>Static code:</strong> holds your real destination. Nobody can switch it off.</p>
+          <p><strong>Vendor-controlled:</strong> holds a middleman's short link. If the trial or plan ends, that company can turn it off.</p>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <section id="chk-result" class="card verdict-panel" tabindex="-1" aria-live="polite" aria-label="Result">
+        <h2 class="panel-title">What the check can tell you</h2>
+        <ul class="outcomes">
+          <li><span class="pill pill-ok">Looks static</span><p>The code points straight at a website. No QR company sits in the middle.</p></li>
+          <li><span class="pill pill-bad">Vendor-controlled</span><p>The code goes through a QR company's short link that it can switch off. We show that company's own page as the source.</p></li>
+          <li><span class="pill pill-warn">Unknown short link</span><p>A short link we haven't verified. Someone else controls it, but we can't say who.</p></li>
+          <li><span class="pill pill-neutral">Not a web link</span><p>Text, Wi-Fi or contact details. Nothing is redirected, so nothing can expire.</p></li>
+        </ul>
+      </section>
+    </div>
 
     <p class="hint check-foot">Every vendor we name links to that vendor's own help or pricing page. <a href="/about.html">How the checker decides</a>.</p>
   </main>

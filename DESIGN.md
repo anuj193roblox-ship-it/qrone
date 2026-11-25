@@ -264,7 +264,7 @@ Reading text is capped at `65ch` on reading pages and `60ch` in verdicts. The su
 - **Container:** `main` is centred, `max-width: 1200px`, with side padding `--gutter` (20px on phones, 32px from 720px). The top bar and footer use the same width, so their rules line up with the content.
 - **Reading pages** (`main.page`: about, privacy, FAQ, sign-in) narrow to `46rem`.
 - **Home** (`main.home`): a compact hero (40px top, 28px below), then the studio, then the bridge cards and the story cards, 56px apart. The studio is one column on phones; from 960px it is two columns, 58% controls and 42% preview, 24px apart, with the preview sticky 20px from the top. The home headline is compact on purpose: 2rem on phones, 2.75rem from 720px, so the tool is the first thing to use.
-- **Check** (`/check`, `main.page.check-page`): the reading-page column with the checker in one card. Old `/#check` links redirect here.
+- **Check** (`/check`, `main.check-page`): two cards, input on the left and the verdict on the right (50/50 from 960px, stacked below). Before a check, the verdict card lists the four outcomes with their pills. Vendor and unknown-short-link verdicts end with a "Rescue your printed stock" block that makes a static replacement in place and opens a sticker drawer. `/check?q=<link>` checks a link on load; old `/#check` links redirect here.
 - **Page heading** (`.page-head`): 40px above, 28px below, on every non-home page.
 - **Dashboard** (`main.dash`): a vertical stack of cards 18px apart. The new-code form becomes a three-column row at 720px (destination, name, button).
 - **Tap targets:** every control is at least `--tap` (48px) tall; chips and tabs are 44px.
