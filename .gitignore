@@ -158,3 +158,6 @@ vite.config.ts.timestamp-*
 
 # Keep the fake-values template tracked
 !.env.example
+
+# Wrangler local dev state
+.wrangler/
