@@ -24,12 +24,13 @@
     "DODO_API_BASE": "https://test.dodopayments.com",
     // Product IDs from the Dodo dashboard (roadmap F1), one per purchase: "<current plan>-<new plan>".
     // IDs are not secret. The API key and webhook secret are, so they're set with `wrangler secret put`.
-    "DODO_PRODUCTS": {}
+    "DODO_PRODUCTS": {},
+    // Continue with Google (Google Cloud project qr-one). Public; the secret is set with wrangler secret put.
+    "GOOGLE_CLIENT_ID": "890646414736-pn1flfsb72fj4tr987t11f8okcfa62c7.apps.googleusercontent.com"
   }
   // Real sign-in email (Resend), once the domain is verified there:
   //   add "MAIL_FROM": "QrOne <signin@yourdomain.com>" to "vars" above,
   //   and set the key as a secret, never here: npx.cmd wrangler secret put RESEND_API_KEY
   // It also needs the sign-in bot check (Cloudflare Turnstile): add "TURNSTILE_SITE_KEY" (public) to "vars",
   //   and npx.cmd wrangler secret put TURNSTILE_SECRET
-  // Continue with Google: add "GOOGLE_CLIENT_ID" (public) to "vars", and npx.cmd wrangler secret put GOOGLE_CLIENT_SECRET
 }
