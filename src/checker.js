@@ -3,7 +3,6 @@
 // Security rule: decoded text can contain anything, so it is only ever shown with textContent
 // (via el() below). Never use innerHTML here.
 import { classify } from "./classify.js";
-import { setBoard } from "./board.js";
 import vendors from "./data/vendor-domains.json";
 
 const $ = (id) => document.getElementById(id);
@@ -54,7 +53,8 @@ const ADVICE = {
 function replacementForm() {
   const input = el("input", { id: "repl-url", type: "text", inputmode: "url", placeholder: "example.com/menu", spellcheck: "false" });
   const form = el("form", { class: "inline-form" },
-    el("label", { for: "repl-url" }, "Where should the new code point? Enter the final page address (we can't follow the redirect for you)."),
+    el("label", { for: "repl-url" }, "New code's destination"),
+    el("p", { class: "hint repl-hint" }, "Enter the final page address. We can't follow the vendor's redirect for you."),
     el("div", { class: "pair pair-tight" }, input, el("button", { type: "submit", class: "btn" }, "Make a static code")));
   form.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -67,20 +67,16 @@ function render(result) {
   const out = $("chk-result");
   out.replaceChildren();
 
-  // The verdict is set on the letterboard (the page's status display), so it isn't repeated here.
   const view = {
-    static: { tone: "ok", board: "No vendor in the middle" },
-    vendor: { tone: "bad", board: "This code can be switched off" },
-    "unknown-short": { tone: "warn", board: "Unknown link. It could be switched off" },
-    "not-url": { tone: "ok", board: "Not a link. Nothing to switch off" },
+    static: { tone: "ok", pill: "Looks static", title: "No vendor in the middle" },
+    vendor: { tone: "bad", pill: "Vendor-controlled", title: "This code can be switched off" },
+    "unknown-short": { tone: "warn", pill: "Unknown short link", title: "It could be switched off" },
+    "not-url": { tone: "ok", pill: "Not a web link", title: "Nothing to switch off" },
   }[result.kind];
 
-  const tab = $("tab-check");
-  tab.dataset.board = view.board;
-  tab.dataset.tone = view.tone;
-  setBoard(view.board, view.tone);
-
   const card = el("div", { class: `verdict verdict-${view.tone}` },
+    el("span", { class: `pill pill-${view.tone}` }, view.pill),
+    el("h3", {}, view.title),
     el("p", { class: "label" }, "The code says"),
     // For links, show the parsed URL: it escapes invisible direction-flipping characters
     // that could make "evil.com" display as something trustworthy.

@@ -1,13 +1,12 @@
 // Fonts are bundled and served from this site, so no visitor's browser contacts a font company.
-import "@fontsource/big-shoulders-display/800";
 import "@fontsource-variable/figtree";
 import "./style.css";
-import { setBoard } from "./board.js";
+import { setHeadline } from "./headline.js";
 
 // Make | Check switch: one tool on screen at a time. Arrow keys move between tabs.
 const tabs = [...document.querySelectorAll('[role="tab"]')];
 
-function select(tab, { focus = false, animate = true } = {}) {
+function select(tab, { focus = false } = {}) {
   for (const t of tabs) {
     const on = t === tab;
     t.setAttribute("aria-selected", String(on));
@@ -15,22 +14,19 @@ function select(tab, { focus = false, animate = true } = {}) {
     document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
   }
   if (focus) tab.focus();
-  if (animate) setBoard(tab.dataset.board, tab.dataset.tone ?? "");
+  setHeadline(tab.dataset.line1, tab.dataset.line2);
   const hash = tab.id === "tab-check" ? "#check" : "";
   history.replaceState(null, "", location.pathname + location.search + hash);
 }
 
-if (tabs.length) {
-  tabs.forEach((tab, i) => {
-    tab.addEventListener("click", () => { if (tab.getAttribute("aria-selected") !== "true") select(tab); });
-    tab.addEventListener("keydown", (e) => {
-      const step = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
-      if (step) select(tabs[(i + step + tabs.length) % tabs.length], { focus: true });
-    });
+tabs.forEach((tab, i) => {
+  tab.addEventListener("click", () => { if (tab.getAttribute("aria-selected") !== "true") select(tab); });
+  tab.addEventListener("keydown", (e) => {
+    const step = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+    if (step) select(tabs[(i + step + tabs.length) % tabs.length], { focus: true });
   });
-  if (location.hash === "#check") select(document.getElementById("tab-check"), { animate: false });
-  document.getElementById("board").textContent = document.querySelector('[role="tab"][aria-selected="true"]').dataset.board;
-}
+});
+if (tabs.length && location.hash === "#check") select(document.getElementById("tab-check"));
 
 // Each tool is only loaded on the page that has it, so the other pages stay small.
 if (document.getElementById("gen-form")) import("./generator.js").then((m) => m.initGenerator());

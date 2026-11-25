@@ -6,40 +6,31 @@
   <title>Your codes | {{NAME}}</title>
   <meta name="description" content="Your {{NAME}} dynamic QR codes.">
   <meta name="robots" content="noindex">
-  <meta name="theme-color" content="#1d1d1b">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231d1d1b'/%3E%3Cpath fill='%23f2c230' d='M6 6h8v8H6zM18 6h8v8h-8zM6 18h8v8H6zM18 18h4v4h-4zM24 24h2v2h-2z'/%3E%3C/svg%3E">
+  <meta name="theme-color" content="#0b0c0f">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b0c0f'/%3E%3Cpath fill='%236b95ff' d='M6 6h8v8H6zM18 6h8v8h-8zM6 18h8v8H6zM18 18h4v4h-4zM24 24h2v2h-2z'/%3E%3C/svg%3E">
   <script type="module" src="/src/main.js"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
-  <header class="frame">
-    <div class="board">
-      <nav class="topnav" aria-label="Main">
-        <a class="brand" href="/">{{NAME}}</a>
-        <div class="topnav-links"><a href="/">Make</a><a href="/#check">Check</a><a href="/faq.html">FAQ</a></div>
-      </nav>
-      <h1 id="board" class="board-text" aria-live="polite">Your codes</h1>
-    </div>
+  <header class="topbar">
+    <nav class="topbar-in" aria-label="Main">
+      <a class="brand" href="/">{{NAME}}</a>
+      <div class="nav-links"><a href="/">Make</a><a href="/#check">Check</a><a href="/faq.html">FAQ</a></div>
+    </nav>
   </header>
 
   <main id="main" class="dash">
+    <div class="page-head"><h1 id="headline" class="hero-title"><span class="line">Your codes</span></h1></div>
     <div id="dashboard" hidden>
       <div class="dash-bar">
         <p><strong id="dash-usage"></strong> <span class="hint-inline">· <span id="dash-email"></span></span></p>
         <button type="button" id="dash-logout" class="btn btn-quiet">Sign out</button>
       </div>
 
-      <section id="plan-panel" class="plan" hidden aria-labelledby="plan-title">
-        <h2 id="plan-title" class="stamp">Upgrade, pay once</h2>
-        <p class="hint">Paid codes never expire. Upgrading also switches expired free codes back on. Refunds within 14 days.</p>
-        <div id="plan-options" class="actions"></div>
-        <p id="plan-error" class="msg-error" role="alert"></p>
-      </section>
-
-      <form id="code-form" class="code-form" novalidate>
+      <form id="code-form" class="code-form card" novalidate>
         <div>
           <label for="code-dest">Where should it go?</label>
-          <input id="code-dest" class="big" type="text" inputmode="url" placeholder="example.com/menu" spellcheck="false">
+          <input id="code-dest" type="text" inputmode="url" placeholder="example.com/menu" spellcheck="false">
         </div>
         <div>
           <label for="code-label">Name (optional)</label>
@@ -52,21 +43,9 @@
 
       <h2 class="sr-only">Your codes</h2>
       <p id="code-empty" class="hint" hidden>No codes yet. Create your first one above.</p>
-      <ul id="code-list" class="code-list"></ul>
+      <ul id="code-list" class="code-list card"></ul>
 
-      <section class="export" aria-labelledby="export-title">
-        <h2 id="export-title" class="stamp">Take your codes with you</h2>
-        <p class="hint">Download every redirect at any time, on every plan. If your codes use a domain you control, these files keep them working even without QrOne.</p>
-        <div class="actions">
-          <a class="btn" href="/api/codes/export?format=csv" download>Spreadsheet (CSV)</a>
-          <a class="btn" href="/api/codes/export?format=netlify" download>Netlify</a>
-          <a class="btn" href="/api/codes/export?format=htaccess" download>Apache .htaccess</a>
-          <a class="btn" href="/api/codes/export?format=nginx" download>nginx</a>
-          <a class="btn" href="/api/codes/export?format=cloudflare" download>Cloudflare</a>
-        </div>
-      </section>
-
-      <section id="qr-panel" class="qr-panel" hidden aria-labelledby="qr-title">
+      <section id="qr-panel" class="qr-panel card" hidden aria-labelledby="qr-title">
         <h2 id="qr-title" class="stamp"></h2>
         <div class="qr-panel-body">
           <div id="qr-box" class="qr-box" aria-label="QR code preview"></div>
@@ -79,6 +58,25 @@
             </div>
             <p class="hint">Scan it with your phone before you print. You can change where it goes at any time without reprinting.</p>
           </div>
+        </div>
+      </section>
+
+      <section id="plan-panel" class="plan card" hidden aria-labelledby="plan-title">
+        <h2 id="plan-title" class="stamp">Upgrade, pay once</h2>
+        <p class="hint">Paid codes never expire. Upgrading also switches expired free codes back on. Refunds within 14 days.</p>
+        <div id="plan-options" class="actions"></div>
+        <p id="plan-error" class="msg-error" role="alert"></p>
+      </section>
+
+      <section class="export card" aria-labelledby="export-title">
+        <h2 id="export-title" class="stamp">Take your codes with you</h2>
+        <p class="hint">Download every redirect at any time, on every plan. If your codes use a domain you control, these files keep them working even without QrOne.</p>
+        <div class="actions">
+          <a class="btn" href="/api/codes/export?format=csv" download>Spreadsheet (CSV)</a>
+          <a class="btn" href="/api/codes/export?format=netlify" download>Netlify</a>
+          <a class="btn" href="/api/codes/export?format=htaccess" download>Apache .htaccess</a>
+          <a class="btn" href="/api/codes/export?format=nginx" download>nginx</a>
+          <a class="btn" href="/api/codes/export?format=cloudflare" download>Cloudflare</a>
         </div>
       </section>
     </div>

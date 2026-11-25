@@ -1,5 +1,5 @@
 // Sign-in page and dashboard. Talks only to our own /api/*; all text is set with textContent (via el()).
-import { setBoard } from "./board.js";
+import { setHeadline } from "./headline.js";
 
 const $ = (id) => document.getElementById(id);
 
@@ -36,7 +36,7 @@ export function initSignin() {
     history.replaceState(null, "", location.pathname);
     $("signin-form").hidden = true;
     $("signin-finish").hidden = false;
-    setBoard("Finish signing in");
+    setHeadline("Finish", "signing in");
     $("signin-go").addEventListener("click", async () => {
       $("signin-go").disabled = true;
       error("");
@@ -46,7 +46,7 @@ export function initSignin() {
         error(r.data.error ?? "That didn't work. Ask for a new link.");
         $("signin-finish").hidden = true;
         $("signin-form").hidden = false;
-        setBoard("Sign in");
+        setHeadline("Sign in");
       }
     });
     return;
@@ -63,7 +63,7 @@ export function initSignin() {
     $("signin-msg").textContent = "";
     if (r.ok) {
       $("signin-msg").textContent = r.data.message;
-      setBoard("Check your inbox");
+      setHeadline("Check your", "inbox.");
     } else {
       error(r.data.error ?? "That didn't work. Please try again.");
     }
@@ -141,7 +141,7 @@ function renderRow(code, now, reload) {
       el("p", { class: "code-name" }, code.label || "Untitled code"),
       el("p", { class: "mono code-link" }, code.url.replace(/^https?:\/\//, ""))), // shorter to read; Copy uses the full link
     dest,
-    el("p", { class: `code-state${state.tone ? ` tone-${state.tone}` : ""}` }, state.text),
+    el("span", { class: `code-state pill pill-${state.tone || "neutral"}` }, state.text),
     el("div", { class: "code-actions" },
       el("button", { type: "button", class: "btn", onclick: () => showQr(code) }, "QR code"),
       el("button", { type: "button", class: "btn", onclick: copy }, "Copy link"),
@@ -206,7 +206,6 @@ export async function initDashboard() {
     }
     $("code-dest").value = "";
     $("code-label").value = "";
-    setBoard("Code ready");
     await reload(`Created ${created.data.code.url}`);
     showQr(created.data.code);
   });
