@@ -1,5 +1,6 @@
 // Sign-in page and dashboard. Talks only to our own /api/*; all text is set with textContent (via el()).
 import { setHeadline } from "./headline.js";
+import { quietZone, cleanLabel, downloadFramed, printStickers } from "./frame.js";
 
 const $ = (id) => document.getElementById(id);
 
@@ -81,21 +82,31 @@ function stateText(code, now) {
 }
 
 let qr = null; // one QR renderer, reused for every code
+let currentPlan = "free";
 const FREE_WARN = "Free codes stop working 14 days after you make them. Test them with your phone, but don't print them. Upgrade first: paid codes never expire.";
 
 async function showQr(code) {
   const { default: QRCodeStyling } = await import("qr-code-styling");
   if (!qr) {
-    qr = new QRCodeStyling({ width: 512, height: 512, type: "canvas", margin: 16, data: code.url, qrOptions: { errorCorrectionLevel: "M" } });
-    qr.append($("qr-box"));
-    $("qr-png").addEventListener("click", () => qr.download({ name: `qrone-${$("qr-box").dataset.slug}`, extension: "png" }));
-    $("qr-svg").addEventListener("click", () => qr.download({ name: `qrone-${$("qr-box").dataset.slug}`, extension: "svg" }));
+    qr = new QRCodeStyling({ width: 512, height: 512, type: "canvas", margin: quietZone(512), data: code.url, qrOptions: { errorCorrectionLevel: "M" } });
+    qr.append($("qr-canvas")); // its own box: the library empties it on every redraw
+    const label = $("qr-preview-label");
+    $("qr-label").addEventListener("input", () => {
+      label.textContent = cleanLabel($("qr-label").value);
+      label.hidden = !label.textContent;
+    });
+    const opts = () => ({ label: $("qr-label").value, fg: "#000000", bg: "#ffffff" });
+    const name = () => `qrone-${$("qr-box").dataset.slug}`;
+    $("qr-png").addEventListener("click", () => downloadFramed(qr, 512, opts(), name(), "png"));
+    $("qr-svg").addEventListener("click", () => downloadFramed(qr, 512, opts(), name(), "svg"));
+    $("qr-stickers").addEventListener("click", () => printStickers(qr, 512, opts(), $("qr-sticker-size").value));
     $("qr-close").addEventListener("click", () => { $("qr-panel").hidden = true; });
   }
   qr.update({ data: code.url }); // the short link is plain ASCII, so no extra encoding is needed
   $("qr-box").dataset.slug = code.slug;
   $("qr-title").textContent = code.label || "Your code";
   $("qr-url").textContent = code.url;
+  $("qr-stickers-box").hidden = currentPlan === "free"; // free codes expire, so no sticker sheets for them
   $("qr-panel").hidden = false;
   $("qr-panel").scrollIntoView({ block: "nearest" });
 }
@@ -185,6 +196,7 @@ export async function initDashboard() {
       return;
     }
     const { codes, used, limit, planName, plan, now, upgrades } = list.data;
+    currentPlan = plan;
     $("plan-panel").hidden = upgrades.length === 0;
     $("plan-options").replaceChildren(...upgrades.map((u) =>
       el("button", { type: "button", class: "btn", onclick: (e) => upgrade(u.plan, e.currentTarget) },

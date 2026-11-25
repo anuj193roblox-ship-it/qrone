@@ -1,6 +1,7 @@
 // Tool A: static QR generator. Everything runs in the browser.
 import QRCodeStyling from "qr-code-styling";
 import { buildData, qrText } from "./payload.js";
+import { quietZone, cleanLabel, downloadFramed, printStickers } from "./frame.js";
 
 const $ = (id) => document.getElementById(id);
 
@@ -19,11 +20,14 @@ export function initGenerator() {
     height: 512,
     type: "canvas",
     data: "https://example.com",
-    margin: 16, // the quiet zone scanners need around the code
+    margin: quietZone(512), // the blank border scanners need around the code
     // saveAsBlob: false stops the library loading the logo over XHR, which the site's security policy blocks.
     imageOptions: { saveAsBlob: false, hideBackgroundDots: true, imageSize: 0.3, margin: 4 },
   });
-  qr.append($("gen-preview"));
+  qr.append($("gen-qr")); // its own box: the library empties it on every redraw
+  const previewLabel = $("gen-preview-label"); // shown under the code, like the downloaded file
+  let size = 512;
+  const printOpts = () => ({ label: $("gen-label").value, fg: $("gen-fg").value, bg: $("gen-bg").value });
 
   const values = () => ({
     url: $("gen-url").value,
@@ -63,12 +67,19 @@ export function initGenerator() {
     $("gen-logo-clear").hidden = !logo;
     $("gen-logo-note").textContent = logo ? "Logo added. Using High error correction so the code still scans." : "";
 
+    const label = cleanLabel($("gen-label").value);
+    previewLabel.textContent = label;
+    previewLabel.hidden = !label;
+    previewLabel.style.color = fg;
+    previewLabel.style.backgroundColor = bg;
+
     if (!ok) return;
-    const size = Math.min(1000, Math.max(200, Number($("gen-size").value) || 512));
+    size = Math.min(1000, Math.max(200, Number($("gen-size").value) || 512));
     qr.update({
       data: qrText(result.data), // UTF-8, so accents and other scripts scan correctly
       width: size,
       height: size,
+      margin: quietZone(size),
       image: logo,
       qrOptions: { errorCorrectionLevel: logo ? "H" : $("gen-ec").value },
       dotsOptions: { color: fg },
@@ -89,8 +100,9 @@ export function initGenerator() {
   });
   $("gen-logo-clear").addEventListener("click", () => { logo = ""; $("gen-logo").value = ""; refresh(); });
 
-  $("gen-png").addEventListener("click", () => qr.download({ name: "qr-code", extension: "png" }));
-  $("gen-svg").addEventListener("click", () => qr.download({ name: "qr-code", extension: "svg" }));
+  $("gen-png").addEventListener("click", () => downloadFramed(qr, size, printOpts(), "qr-code", "png"));
+  $("gen-svg").addEventListener("click", () => downloadFramed(qr, size, printOpts(), "qr-code", "svg"));
+  $("gen-stickers").addEventListener("click", () => printStickers(qr, size, printOpts(), $("gen-sticker-size").value));
 
   // The checker can send a final destination here ("make a static replacement").
   function prefill(url) {

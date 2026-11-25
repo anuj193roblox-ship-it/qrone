@@ -197,6 +197,8 @@ details.more { margin-top: 8px; border-top: 1px solid var(--line); }
 }
 .result { display: grid; gap: 18px; }
 #gen-preview, .qr-box { background: #fff; border-radius: 12px; padding: 6px; width: 100%; max-width: 220px; }
+.qr-box .preview-label { color: #000; }
+.preview-label { margin: 0; padding: 0 4px 6px; text-align: center; font-weight: 700; font-size: var(--t-small); line-height: 1.3; overflow-wrap: anywhere; border-radius: 0 0 6px 6px; }
 #gen-preview canvas, #gen-preview svg, .qr-box canvas, .qr-box svg { display: block; width: 100% !important; height: auto !important; border-radius: 6px; }
 .stamp { font-size: var(--t-h2); font-weight: 800; letter-spacing: -0.015em; }
 .lede { color: var(--muted); margin-top: 6px; max-width: 32ch; }
@@ -331,4 +333,18 @@ details.more { margin-top: 8px; border-top: 1px solid var(--line); }
   :root { --t-hero: 4rem; }
   .home { grid-template-columns: minmax(0, 1fr) minmax(0, 540px); grid-template-areas: "copy tool" "timeline tool"; grid-template-rows: auto 1fr; gap: 36px 64px; padding-top: 64px; }
   .tool { align-self: start; }
+}
+
+/* ---------- Sticker sheet (print only) ----------
+   Filled by src/frame.js just before the print dialog opens. Sizes match STICKER_SIZES there. */
+#print-sheet { display: none; }
+@media print {
+  @page { margin: 0.5in; }
+  body { background: #fff !important; }
+  body > :not(#print-sheet) { display: none !important; }
+  #print-sheet { display: grid; gap: 0.125in; justify-content: start; align-items: start; }
+  #print-sheet img { display: block; width: 100%; height: auto; break-inside: avoid; }
+  .sheet-1 { grid-template-columns: repeat(6, 1in); }
+  .sheet-15 { grid-template-columns: repeat(4, 1.5in); }
+  .sheet-2 { grid-template-columns: repeat(3, 2in); }
 }

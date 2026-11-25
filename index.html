@@ -88,7 +88,7 @@
               <p>Type an address and your code appears here.</p>
             </div>
             <div id="gen-result" class="result" hidden>
-              <div id="gen-preview" aria-label="QR code preview"></div>
+              <div id="gen-preview" aria-label="QR code preview"><div id="gen-qr"></div><p id="gen-preview-label" class="preview-label" hidden></p></div>
               <div class="result-side">
                 <p class="stamp">Never expires</p>
                 <p class="lede">The address is in the pattern itself. No account, nothing to switch off.</p>
@@ -102,7 +102,7 @@
           </div>
 
           <details class="more">
-            <summary>Colour, size and logo</summary>
+            <summary>Colour, size, logo and label</summary>
             <div class="more-body">
               <div class="pair">
                 <div>
@@ -134,6 +134,26 @@
               <input id="gen-logo" type="file" accept="image/*">
               <button type="button" id="gen-logo-clear" class="btn btn-quiet" hidden>Remove logo</button>
               <p id="gen-logo-note" class="hint" role="status"></p>
+              <label for="gen-label">Label under the code (optional)</label>
+              <input id="gen-label" type="text" maxlength="24" placeholder="Scan for the menu">
+              <p class="hint">Printed under the code in the code's colour. Up to 24 characters.</p>
+            </div>
+          </details>
+
+          <details class="more">
+            <summary>Print a sheet of stickers</summary>
+            <div class="more-body">
+              <p class="hint">Cover old codes a vendor could switch off, or label tables and doors. Fits US Letter and A4. To keep a file, choose "Save as PDF" in the print window.</p>
+              <label for="gen-sticker-size">Sticker size</label>
+              <div class="pair pair-tight">
+                <select id="gen-sticker-size">
+                  <option value="1">1 inch (2.5 cm)</option>
+                  <option value="1.5" selected>1.5 inches (3.8 cm)</option>
+                  <option value="2">2 inches (5 cm)</option>
+                </select>
+                <button type="button" id="gen-stickers" class="btn">Print stickers</button>
+              </div>
+              <p class="hint">Print one sheet on plain paper first, and scan a sticker with your phone.</p>
             </div>
           </details>
         </form>

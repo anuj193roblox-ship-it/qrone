@@ -49,13 +49,26 @@
       <section id="qr-panel" class="qr-panel card" hidden aria-labelledby="qr-title">
         <h2 id="qr-title" class="stamp"></h2>
         <div class="qr-panel-body">
-          <div id="qr-box" class="qr-box" aria-label="QR code preview"></div>
+          <div id="qr-box" class="qr-box" aria-label="QR code preview"><div id="qr-canvas"></div><p id="qr-preview-label" class="preview-label" hidden></p></div>
           <div>
             <p class="mono" id="qr-url"></p>
             <div class="actions">
               <button type="button" id="qr-png" class="btn">Download PNG</button>
               <button type="button" id="qr-svg" class="btn">SVG</button>
               <button type="button" id="qr-close" class="btn btn-quiet">Close</button>
+            </div>
+            <label for="qr-label">Label under the code (optional)</label>
+            <input id="qr-label" type="text" maxlength="24" placeholder="Scan for the menu">
+            <div id="qr-stickers-box">
+            <label for="qr-sticker-size">Sticker sheet</label>
+            <div class="pair pair-tight code-edit">
+              <select id="qr-sticker-size">
+                <option value="1">1 inch (2.5 cm)</option>
+                <option value="1.5" selected>1.5 inches (3.8 cm)</option>
+                <option value="2">2 inches (5 cm)</option>
+              </select>
+              <button type="button" id="qr-stickers" class="btn">Print stickers</button>
+            </div>
             </div>
             <p class="hint">Scan it with your phone before you print. You can change where it goes at any time without reprinting.</p>
             <p id="qr-free-warn" class="msg-warn"></p>
