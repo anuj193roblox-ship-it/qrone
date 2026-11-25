@@ -134,3 +134,19 @@ The code side is built and tested (`app/src/mail.js`, `app/src/human.js`): sign-
 | H4 | Move to the $5 Workers plan | You | The dashboard shows Workers Paid |
 | H5 | Switch payments from test mode to live | You | One real $29 purchase works, then you refund it |
 | H6 | Public launch: make the repo public (optional), post in communities | You | Done |
+
+## If you ever restore the database
+
+Cloudflare keeps a restore history of the database (30 days on the paid plan, 7 on free). A restore rolls everything back, so accounts people deleted after that point come back to life, codes and all. The privacy page promises deletion, so follow these steps every time.
+
+1. **Before restoring**, save the current account IDs:
+   `npx.cmd wrangler d1 execute qrone --remote --json --command "SELECT id FROM accounts" > accounts-before.json`
+2. Restore: `npx.cmd wrangler d1 time-travel restore qrone --timestamp=<unix time>`
+3. **Delete again** every account that exists now but is not in `accounts-before.json`. Those are exactly the accounts deleted since the restore point. With their IDs in place of `<ids>`, run these in order (the same steps as the delete button):
+   `DELETE FROM codes WHERE account_id IN (<ids>);`
+   `DELETE FROM sessions WHERE account_id IN (<ids>);`
+   `DELETE FROM payments WHERE account_id IN (<ids>);`
+   `DELETE FROM login_tokens WHERE email IN (SELECT email FROM accounts WHERE id IN (<ids>));`
+   `DELETE FROM accounts WHERE id IN (<ids>);`
+4. Anything created after the restore point is gone. In particular, payments: re-apply any that Dodo shows after that time.
+5. Delete `accounts-before.json`. It lists customer IDs.
