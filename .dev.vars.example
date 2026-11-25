@@ -15,3 +15,7 @@ DODO_PRODUCTS={}
 # Bot check on the sign-in form. These are Cloudflare's public TEST keys: they always pass (use 2x0000000000000000000000000000000AA as the secret to see a failure).
 TURNSTILE_SITE_KEY=1x00000000000000000000AA
 TURNSTILE_SECRET=1x0000000000000000000000000000000AA
+
+# Continue with Google: your OAuth client from Google Cloud (redirect URI http://localhost:8791/api/auth/google/callback).
+# GOOGLE_CLIENT_ID=replace-me.apps.googleusercontent.com
+# GOOGLE_CLIENT_SECRET=replace-me

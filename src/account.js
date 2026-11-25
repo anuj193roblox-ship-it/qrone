@@ -50,6 +50,16 @@ export function initSignin() {
   }
   const error = (text) => { $("signin-error").textContent = text; };
 
+  // Back from Google: the server already signed you in (or didn't).
+  if (params.get("signed") === "1") {
+    location.replace(nextPage());
+    return;
+  }
+  if (params.get("error") === "google") {
+    history.replaceState(null, "", location.pathname);
+    error("Google sign-in didn't finish. Try again, or use your email.");
+  }
+
   if (token) {
     // Remove the token from the address bar and history straight away.
     history.replaceState(null, "", location.pathname);
@@ -74,6 +84,7 @@ export function initSignin() {
   // The "are you a person?" check (Cloudflare Turnstile), shown only when the server has it switched on.
   let checkId = null;
   api("/api/session").then(({ data }) => {
+    $("signin-google").hidden = data.google !== true;
     if (typeof data.checkKey !== "string") return;
     const script = el("script", { src: "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" });
     script.onload = () => {

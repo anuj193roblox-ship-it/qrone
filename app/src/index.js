@@ -3,8 +3,10 @@
 //
 //   POST /api/auth/start   { email }  -> emails a one-time sign-in link
 //   POST /api/auth/verify  { token }  -> uses the link once, starts a session (cookie)
+//   GET  /api/auth/google             -> off to Google's sign-in page
+//   GET  /api/auth/google/callback    -> back from Google: starts a session, then /signin?signed=1
 //   GET  /api/me                      -> who is signed in (or 401)
-//   GET  /api/session                 -> { signedIn, checkKey } for the header and sign-in page, always 200
+//   GET  /api/session                 -> { signedIn, checkKey, google } for the header and sign-in page, always 200
 //   POST /api/auth/logout             -> ends the session
 //   DELETE /api/account               { email } -> deletes the account and everything in it (email typed to confirm)
 //   GET    /api/codes                 -> your codes, plan and limit
@@ -20,6 +22,7 @@ import {
 } from "./auth.js";
 import { canSend, sendSignInLink, showLinkOnPage } from "./mail.js";
 import { humanCheckOn, isHuman } from "./human.js";
+import { googleOn, authUrl, challengeOf, flowCookie, FLOW_COOKIE, emailFromCode } from "./google.js";
 import { limitFor, planName, expiresAtFor, normalizeDestination, cleanLabel, cleanEndsAt, newSlug, FREE_DAYS } from "./codes.js";
 import { FORMATS, build } from "./export.js";
 import { upgradeKey, upgradeOptions, highestPlan, productsOf, verifyWebhook } from "./billing.js";
@@ -91,16 +94,53 @@ async function verify(request, env) {
     .bind(await sha256Hex(token), now())
     .first();
   if (!used) return json({ ok: false, error: "This link has expired or was already used. Ask for a new one." }, 400);
+  return json({ ok: true }, 200, { "set-cookie": await startSession(env, used.email) });
+}
 
-  await env.DB.prepare("INSERT INTO accounts (email) VALUES (?1) ON CONFLICT(email) DO NOTHING").bind(used.email).run();
-  const account = await env.DB.prepare("SELECT id FROM accounts WHERE email = ?1").bind(used.email).first();
+// Signs in the account for this (already proven) email, creating it the first time. Returns the cookie.
+async function startSession(env, email) {
+  await env.DB.prepare("INSERT INTO accounts (email) VALUES (?1) ON CONFLICT(email) DO NOTHING").bind(email).run();
+  const account = await env.DB.prepare("SELECT id FROM accounts WHERE email = ?1").bind(email).first();
 
   const session = newToken();
   await env.DB
     .prepare("INSERT INTO sessions (id_hash, account_id, expires_at) VALUES (?1, ?2, ?3)")
     .bind(await sha256Hex(session), account.id, now() + SESSION_TTL)
     .run();
-  return json({ ok: true }, 200, { "set-cookie": sessionCookie(session) });
+  return sessionCookie(session);
+}
+
+// ---------- Continue with Google ----------
+
+const redirect = (location, cookies = []) => {
+  const headers = new Headers({ location, "cache-control": "no-store" });
+  for (const cookie of cookies) headers.append("set-cookie", cookie);
+  return new Response(null, { status: 302, headers });
+};
+const GOOGLE_FAILED = "/signin?error=google";
+
+async function googleStart(request, env) {
+  if (!googleOn(env)) return redirect(GOOGLE_FAILED);
+  const [state, nonce, verifier] = [newToken(), newToken(), newToken()];
+  const url = authUrl(env, new URL(request.url).origin, { state, nonce, challenge: await challengeOf(verifier) });
+  return redirect(url, [flowCookie(`${state}.${nonce}.${verifier}`)]);
+}
+
+async function googleCallback(request, env) {
+  const url = new URL(request.url);
+  const [state, nonce, verifier] = (readCookie(request.headers.get("Cookie"), FLOW_COOKIE) ?? "").split(".");
+  const code = url.searchParams.get("code");
+  const failed = () => redirect(GOOGLE_FAILED, [flowCookie("", 0)]);
+  // The state must match the cookie set when this browser left for Google, so nobody can push their sign-in onto you.
+  if (!googleOn(env) || !state || !nonce || !verifier || url.searchParams.get("state") !== state || !code) return failed();
+  let email = null;
+  try {
+    email = await emailFromCode(env, url.origin, code, verifier, nonce, now());
+  } catch (err) {
+    console.error("google", err?.message); // Google slow or down: back to the sign-in page, not a JSON error
+  }
+  if (!email) return failed();
+  return redirect("/signin?signed=1", [flowCookie("", 0), await startSession(env, email)]);
 }
 
 async function currentAccount(request, env) {
@@ -116,7 +156,11 @@ async function currentAccount(request, env) {
 // Says only whether you are signed in; no email or plan.
 async function session(request, env) {
   // checkKey: the public key the sign-in page needs to show the bot check (null while it's off).
-  return json({ ok: true, signedIn: Boolean(await currentAccount(request, env)), checkKey: humanCheckOn(env) ? env.TURNSTILE_SITE_KEY : null });
+  // google: whether to show "Continue with Google".
+  return json({
+    ok: true, signedIn: Boolean(await currentAccount(request, env)),
+    checkKey: humanCheckOn(env) ? env.TURNSTILE_SITE_KEY : null, google: googleOn(env),
+  });
 }
 
 async function me(request, env) {
@@ -382,6 +426,8 @@ async function webhook(request, env) {
 const ROUTES = {
   "POST /api/auth/start": start,
   "POST /api/auth/verify": verify,
+  "GET /api/auth/google": googleStart,
+  "GET /api/auth/google/callback": googleCallback,
   "GET /api/me": me,
   "GET /api/session": session,
   "POST /api/auth/logout": logout,

@@ -46,6 +46,15 @@ Live at `https://qrone-redirect.qr-tool-spike.workers.dev` with an empty databas
 
 ## Phase D: accounts and dashboard
 
+**Continue with Google ✅ built** (`app/src/google.js`). It works before the domain exists, because no email is sent. To switch it on (free, about 10 minutes):
+1. console.cloud.google.com → create a project called QrOne.
+2. Google Auth Platform → Get started: app name QrOne, your support email, audience **External**.
+3. Clients → Create client → **Web application**. Authorized redirect URIs, both exactly:
+   `https://qr-tool-site.qr-tool-spike.workers.dev/api/auth/google/callback` and `http://localhost:8791/api/auth/google/callback`
+4. Audience → **Publish app**. Until then only the test users you list can sign in. We ask only for the basic email scope.
+5. Put the **client ID** in `wrangler.jsonc` → `vars` as `GOOGLE_CLIENT_ID` (it's public). Never paste the **client secret** in chat: run `npx.cmd wrangler secret put GOOGLE_CLIENT_SECRET`. Deploy. The button appears by itself.
+6. When the domain exists, add `https://yourdomain/api/auth/google/callback` to the same list.
+
 D1–D2 are built and tested end to end locally (the link is printed to the terminal). Live sign-in answers "not available yet" until real email is switched on:
 1. Buy the domain (B2).
 2. In Resend (free: 3,000 emails a month, 100 a day), add the domain and put the DNS records it shows into Cloudflare DNS. Wait until Resend says "Verified".
