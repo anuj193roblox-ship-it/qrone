@@ -49,7 +49,8 @@ test("no secret files are tracked by git (.env, .dev.vars)", async () => {
   const { spawnSync } = await import("node:child_process");
   const r = spawnSync("git", ["ls-files"], { cwd: new URL("..", import.meta.url), encoding: "utf8" });
   if (r.status !== 0) return; // not a git checkout (for example a downloaded zip): nothing to check
-  const leaked = r.stdout.split("\n").filter((f) => /(^|\/)\.env(\.|$)(?!example$)|(^|\/)\.dev\.vars/.test(f) && !f.endsWith(".env.example"));
+  // Real secret files are .env, .env.local, .dev.vars ...; the shared *.example templates are fine.
+  const leaked = r.stdout.split("\n").filter((f) => /(^|\/)(\.env|\.dev\.vars)(\.|$)/.test(f) && !f.endsWith(".example"));
   assert.deepEqual(leaked, [], "remove these from git: git rm --cached <file>");
 });
 

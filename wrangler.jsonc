@@ -16,8 +16,10 @@
       "database_id": "76fec044-889a-40d7-9274-13b4a8e446d8",
       "migrations_dir": "worker/migrations"
     }
-  ]
+  ],
+  // Where short links live until customers connect their own domains (roadmap phase G).
+  "vars": { "REDIRECT_ORIGIN": "https://qrone-redirect.qr-tool-spike.workers.dev" }
   // When the domain exists, add real email sending here:
   //   "send_email": [{ "name": "EMAIL" }],
-  //   "vars": { "MAIL_FROM": "QrOne <hello@yourdomain.com>" }
+  //   and add "MAIL_FROM": "QrOne <hello@yourdomain.com>" to "vars" above.
 }

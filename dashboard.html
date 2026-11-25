@@ -18,17 +18,54 @@
         <a class="brand" href="/">{{NAME}}</a>
         <div class="topnav-links"><a href="/">Make</a><a href="/#check">Check</a><a href="/faq.html">FAQ</a></div>
       </nav>
-      <h1 class="board-text">Your codes</h1>
+      <h1 id="board" class="board-text" aria-live="polite">Your codes</h1>
     </div>
   </header>
-  <main id="main" class="page">
+
+  <main id="main" class="dash">
     <div id="dashboard" hidden>
-      <p>Signed in as <strong id="dash-email"></strong> · <span id="dash-plan"></span> plan</p>
-      <p class="hint">Creating and editing codes comes next.</p>
-      <div class="actions"><button type="button" id="dash-logout" class="btn">Sign out</button></div>
+      <div class="dash-bar">
+        <p><strong id="dash-usage"></strong> <span class="hint-inline">· <span id="dash-email"></span></span></p>
+        <button type="button" id="dash-logout" class="btn btn-quiet">Sign out</button>
+      </div>
+
+      <form id="code-form" class="code-form" novalidate>
+        <div>
+          <label for="code-dest">Where should it go?</label>
+          <input id="code-dest" class="big" type="text" inputmode="url" placeholder="example.com/menu" spellcheck="false">
+        </div>
+        <div>
+          <label for="code-label">Name (optional)</label>
+          <input id="code-label" type="text" maxlength="80" placeholder="Table menu">
+        </div>
+        <button type="submit" id="code-create" class="btn btn-primary">Create code</button>
+        <p id="code-note" class="hint"></p>
+        <p id="code-error" class="msg-error" role="alert"></p>
+      </form>
+
+      <h2 class="sr-only">Your codes</h2>
+      <p id="code-empty" class="hint" hidden>No codes yet. Create your first one above.</p>
+      <ul id="code-list" class="code-list"></ul>
+
+      <section id="qr-panel" class="qr-panel" hidden aria-labelledby="qr-title">
+        <h2 id="qr-title" class="stamp"></h2>
+        <div class="qr-panel-body">
+          <div id="qr-box" class="qr-box" aria-label="QR code preview"></div>
+          <div>
+            <p class="mono" id="qr-url"></p>
+            <div class="actions">
+              <button type="button" id="qr-png" class="btn">Download PNG</button>
+              <button type="button" id="qr-svg" class="btn">SVG</button>
+              <button type="button" id="qr-close" class="btn btn-quiet">Close</button>
+            </div>
+            <p class="hint">Scan it with your phone before you print. You can change where it goes at any time without reprinting.</p>
+          </div>
+        </div>
+      </section>
     </div>
     <p id="dash-status" class="status" role="status">Checking your sign-in…</p>
   </main>
+
   <footer class="foot">
     <p>{{NAME}} runs in your browser.</p>
     <p><a href="/faq.html">FAQ</a><a href="/about.html">About</a><a href="/privacy.html">Privacy</a></p>

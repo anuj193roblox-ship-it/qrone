@@ -56,11 +56,11 @@ D1–D2 are built and tested end to end locally (the link is printed to the term
 |---|------|-----|-----------|
 | D1 | Sign-in page: enter email, get a link ✅ built | Claude | The link arrives in your inbox (needs the domain) |
 | D2 | Session after clicking the link (secure cookie) ✅ built | Claude | Refreshing the page keeps you signed in |
-| D3 | Dashboard: list your codes | Claude | Shows codes from D1 |
-| D4 | Create a code (respecting plan limits: 10 / 25 / 75) | Claude | The 11th free code is refused with a clear message |
-| D5 | Edit a destination | Claude | A scan goes to the new address within a minute |
-| D6 | Delete a code | Claude | A scan returns the 404 page |
-| D7 | Download the QR for a code (reuse the generator) | Claude | The PNG scans to the right slug |
+| D3 | Dashboard: list your codes ✅ | Claude | Shows codes from D1 |
+| D4 | Create a code (respecting plan limits: 10 / 25 / 75) ✅ | Claude | The 11th free code is refused with a clear message |
+| D5 | Edit a destination ✅ (takes effect on the very next scan) | Claude | A scan goes to the new address within a minute |
+| D6 | Delete a code ✅ | Claude | A scan returns the 404 page |
+| D7 | Download the QR for a code ✅ (phone scan still to do) | Both | The PNG scans to the right slug |
 
 ## Phase E: export (the "works even if we disappear" promise)
 

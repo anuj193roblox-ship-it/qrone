@@ -1,3 +1,5 @@
 ﻿# Copy to .dev.vars for local development. Never commit .dev.vars.
 # Prints sign-in links to the terminal instead of emailing them (local only).
 DEV_LOG_LINKS=1
+# Where short links point during local development (the redirect Worker's local port).
+REDIRECT_ORIGIN=http://localhost:8790

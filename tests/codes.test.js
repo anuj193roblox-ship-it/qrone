@@ -1,0 +1,42 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { limitFor, planName, expiresAtFor, normalizeDestination, cleanLabel, newSlug, FREE_DAYS } from "../app/src/codes.js";
+import { slugFrom } from "../worker/src/resolve.js";
+
+test("plan limits match the pricing: 10 / 10 / 25 / 75", () => {
+  assert.deepEqual(["free", "starter", "plus", "pro"].map(limitFor), [10, 10, 25, 75]);
+  assert.equal(limitFor("unknown"), 0, "an unknown plan can create nothing");
+  assert.equal(planName("plus"), "Plus");
+});
+
+test("free codes expire after 14 days; paid codes never do", () => {
+  const now = 1_800_000_000;
+  assert.equal(expiresAtFor("free", now), now + FREE_DAYS * 86400);
+  for (const plan of ["starter", "plus", "pro"]) assert.equal(expiresAtFor(plan, now), null, plan);
+});
+
+test("destinations: scheme added when missing, unsafe ones refused", () => {
+  assert.equal(normalizeDestination(" example.com/menu "), "https://example.com/menu");
+  assert.equal(normalizeDestination("http://example.com"), "http://example.com");
+  for (const bad of ["", "   ", "javascript:alert(1)", "JAVASCRIPT:alert(1)", "localhost", "data:text/html,x", "a b", null]) {
+    assert.equal(normalizeDestination(bad), null, String(bad));
+  }
+  assert.equal(normalizeDestination("https://go.qrone.test/x", ["go.qrone.test"]), null, "no loops back to our own links");
+});
+
+test("names are tidied and capped at 80 characters", () => {
+  assert.equal(cleanLabel("  Table   menu "), "Table menu");
+  assert.equal(cleanLabel(undefined), "");
+  assert.equal(cleanLabel("x".repeat(81)), null);
+});
+
+test("short-link names are 7 easy-to-read characters the redirect Worker accepts", () => {
+  const seen = new Set();
+  for (let i = 0; i < 500; i++) {
+    const s = newSlug();
+    assert.match(s, /^[a-km-zA-HJ-NP-Z2-9]{7}$/);
+    assert.equal(slugFrom("/" + s), s);
+    seen.add(s);
+  }
+  assert.ok(seen.size > 495, "names should practically never repeat");
+});
