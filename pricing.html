@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pricing: editable QR codes, paid once | {{NAME}}</title>
+  <meta name="description" content="Editable QR codes that never expire, paid once: {{LIMIT_STARTER}} codes for {{PRICE_STARTER}}, {{LIMIT_PLUS}} for {{PRICE_PLUS}}, {{LIMIT_PRO}} for {{PRICE_PRO}}. No subscription.">
+  <!-- shortcut: hidden from search until sign-in is live; remove this line and link the page in the top bar at launch -->
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0b0c0f">
+  <link rel="icon" type="image/svg+xml" href="/logo.svg">
+  <script type="module" src="/src/main.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="topbar">
+    <nav class="topbar-in" aria-label="Main">
+      <a class="brand" href="/"><img class="brand-mark" src="/logo.svg" alt="" width="26" height="26">{{NAME}}</a>
+      <div class="nav-links"><a href="/">Make</a><a href="/#check">Check</a><a href="/faq.html">FAQ</a></div>
+    </nav>
+  </header>
+
+  <main id="main" class="pricing">
+    <div class="page-head">
+      <h1 id="headline" class="hero-title"><span class="line">Pay once.</span> <span class="line accent">Your codes never expire.</span></h1>
+      <p class="hero-sub">Editable QR codes for menus, signs and flyers. Change where they go at any time. No monthly bill.</p>
+    </div>
+
+    <ul class="tiers">
+      <li class="card tier">
+        <h2>Free</h2>
+        <p class="tier-price">$0</p>
+        <p class="tier-codes">{{LIMIT_FREE}} codes</p>
+        <p class="msg-warn">Each code stops after {{FREE_DAYS}} days. For testing, not for printing.</p>
+        <a class="btn" href="/signin.html">Start free</a>
+      </li>
+      <li class="card tier">
+        <h2>Starter</h2>
+        <p class="tier-price">{{PRICE_STARTER}} <span>once</span></p>
+        <p class="tier-codes">{{LIMIT_STARTER}} codes</p>
+        <p class="tier-note">Never expire</p>
+        <a class="btn" href="/signin.html">Get Starter</a>
+      </li>
+      <li class="card tier">
+        <h2>Plus</h2>
+        <p class="tier-price">{{PRICE_PLUS}} <span>once</span></p>
+        <p class="tier-codes">{{LIMIT_PLUS}} codes</p>
+        <p class="tier-note">Never expire</p>
+        <a class="btn" href="/signin.html">Get Plus</a>
+      </li>
+      <li class="card tier">
+        <h2>Pro</h2>
+        <p class="tier-price">{{PRICE_PRO}} <span>once</span></p>
+        <p class="tier-codes">{{LIMIT_PRO}} codes</p>
+        <p class="tier-note">Never expire</p>
+        <a class="btn" href="/signin.html">Get Pro</a>
+      </li>
+    </ul>
+
+    <ul class="card tier-facts">
+      <li><strong>Upgrade for the difference.</strong> Starter to Plus costs {{UP_STARTER_PLUS}}, not the full price.</li>
+      <li><strong>Refund within 14 days.</strong> Your codes keep working for {{FREE_DAYS}} more days, so nothing you printed breaks overnight.</li>
+      <li><strong>Download every code at any time,</strong> on every plan.</li>
+      <li><strong>Payments by Dodo Payments.</strong> We never see your card.</li>
+    </ul>
+
+    <p class="hint pricing-foot">Only need a code that never changes? <a href="/">Static codes are free</a> and never expire. Questions? <a href="/faq.html">Read the FAQ</a>.</p>
+  </main>
+
+  <footer class="foot">
+    <p>{{NAME}} runs in your browser.</p>
+    <p><a href="/faq.html">FAQ</a><a href="/about.html">About</a><a href="/privacy.html">Privacy</a></p>
+  </footer>
+</body>
+</html>

@@ -81,6 +81,7 @@ function stateText(code, now) {
 }
 
 let qr = null; // one QR renderer, reused for every code
+const FREE_WARN = "Free codes stop working 14 days after you make them. Test them with your phone, but don't print them. Upgrade first: paid codes never expire.";
 
 async function showQr(code) {
   const { default: QRCodeStyling } = await import("qr-code-styling");
@@ -145,6 +146,8 @@ function renderRow(code, now, reload) {
     el("div", { class: "code-actions" },
       el("button", { type: "button", class: "btn", onclick: () => showQr(code) }, "QR code"),
       el("button", { type: "button", class: "btn", onclick: copy }, "Copy link"),
+      // Opens the short link itself, so it tests the whole path a scan takes.
+      el("a", { class: "btn", href: code.url, target: "_blank", rel: "noopener noreferrer" }, "Open link"),
       el("button", { type: "button", class: "btn", onclick: startEdit }, "Change destination"),
       el("button", { type: "button", class: "btn btn-quiet", onclick: remove }, "Delete")),
     error);
@@ -187,7 +190,8 @@ export async function initDashboard() {
       el("button", { type: "button", class: "btn", onclick: (e) => upgrade(u.plan, e.currentTarget) },
         `${u.name}: ${u.limit} codes, $${(u.price / 100).toFixed(u.price % 100 ? 2 : 0)}`)));
     $("dash-usage").textContent = `${used} of ${limit} codes · ${planName} plan`;
-    $("code-note").textContent = plan === "free" ? "Free codes work for 14 days. Paid plans never expire." : "Your codes never expire.";
+    $("code-note").textContent = plan === "free" ? "" : "Your codes never expire.";
+    $("code-free-warn").textContent = $("qr-free-warn").textContent = plan === "free" ? FREE_WARN : "";
     $("code-create").disabled = used >= limit;
     if (used >= limit) $("code-error").textContent = `You've used all ${limit} codes on the ${planName} plan. Delete one to make another.`;
     $("code-empty").hidden = codes.length > 0;

@@ -1,8 +1,8 @@
 # QrOne
 
-Dynamic QR codes that keep working. Pay once, export every redirect any time, and your codes survive even if this service disappears.
+Dynamic QR codes that keep working. Pay once, and download every redirect any time. Codes on a domain you own can keep working even without this service.
 
-> Status: early development. Free tools are live; the paid product is not built yet.
+> Status: early development. Free tools are live. The paid product is built and tested, and switches on once the domain and payments are set up.
 
 ## Why
 

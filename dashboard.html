@@ -38,6 +38,7 @@
         </div>
         <button type="submit" id="code-create" class="btn btn-primary">Create code</button>
         <p id="code-note" class="hint"></p>
+        <p id="code-free-warn" class="msg-warn"></p>
         <p id="code-error" class="msg-error" role="alert"></p>
       </form>
 
@@ -57,6 +58,7 @@
               <button type="button" id="qr-close" class="btn btn-quiet">Close</button>
             </div>
             <p class="hint">Scan it with your phone before you print. You can change where it goes at any time without reprinting.</p>
+            <p id="qr-free-warn" class="msg-warn"></p>
           </div>
         </div>
       </section>
@@ -70,14 +72,22 @@
 
       <section class="export card" aria-labelledby="export-title">
         <h2 id="export-title" class="stamp">Take your codes with you</h2>
-        <p class="hint">Download every redirect at any time, on every plan. If your codes use a domain you control, these files keep them working even without QrOne.</p>
+        <p class="hint">Download a list of every code and where it goes, at any time, on every plan.</p>
         <div class="actions">
-          <a class="btn" href="/api/codes/export?format=csv" download>Spreadsheet (CSV)</a>
-          <a class="btn" href="/api/codes/export?format=netlify" download>Netlify</a>
-          <a class="btn" href="/api/codes/export?format=htaccess" download>Apache .htaccess</a>
-          <a class="btn" href="/api/codes/export?format=nginx" download>nginx</a>
-          <a class="btn" href="/api/codes/export?format=cloudflare" download>Cloudflare</a>
+          <a class="btn" href="/api/codes/export?format=csv" download>Download spreadsheet (CSV)</a>
         </div>
+        <details class="more">
+          <summary>Web server formats, for whoever runs your website</summary>
+          <div class="more-body">
+            <p class="hint">If your codes use a domain you control, your web developer can load one of these files so the codes keep working without QrOne. Codes on QrOne's own short-link address still need QrOne.</p>
+            <div class="actions">
+              <a class="btn" href="/api/codes/export?format=cloudflare" download>Cloudflare</a>
+              <a class="btn" href="/api/codes/export?format=netlify" download>Netlify</a>
+              <a class="btn" href="/api/codes/export?format=htaccess" download>Apache .htaccess</a>
+              <a class="btn" href="/api/codes/export?format=nginx" download>nginx</a>
+            </div>
+          </div>
+        </details>
       </section>
 
       <section class="delete-account card" aria-labelledby="delete-title">

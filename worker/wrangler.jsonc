@@ -4,6 +4,8 @@
   "main": "src/index.js",
   "compatibility_date": "2026-11-24",
   "observability": { "enabled": true },
+  // The main site, linked from the "expired" page so an owner can sign in. Never taken from the request.
+  "vars": { "SITE_ORIGIN": "https://qr-tool-site.qr-tool-spike.workers.dev" },
   "d1_databases": [
     {
       "binding": "DB",

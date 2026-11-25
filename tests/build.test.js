@@ -42,3 +42,14 @@ for (const page of pages) {
     assert.match(html, /<meta name="description" content="[^"]*\S[^"]*">/);
   });
 }
+
+test("pricing page shows the same prices and limits the server charges and enforces", async () => {
+  const { PRICE, upgradePrice } = await import("../app/src/billing.js");
+  const { PLANS } = await import("../app/src/codes.js");
+  const html = built("pricing.html");
+  for (const p of ["starter", "plus", "pro"]) {
+    assert.ok(html.includes(`>$${PRICE[p] / 100} <span>once`), `${p} price`);
+    assert.ok(html.includes(`>${PLANS[p].limit} codes<`), `${p} limit`);
+  }
+  assert.ok(html.includes(`costs $${upgradePrice("starter", "plus") / 100},`), "upgrade price");
+});

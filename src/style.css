@@ -246,6 +246,7 @@ details.more { margin-top: 8px; border-top: 1px solid var(--line); }
 .page { max-width: 46rem; padding-bottom: 48px; }
 .page p, .page li { font-size: var(--t-big); color: var(--muted); max-width: 65ch; }
 .page p + p { margin-top: 14px; }
+.page .hint { font-size: var(--t-small); }
 .page h2 { font-size: var(--t-h2); font-weight: 800; letter-spacing: -0.015em; margin: 36px 0 10px; }
 .page ul { padding-left: 20px; margin: 14px 0; }
 .page li + li { margin-top: 8px; }
@@ -256,6 +257,22 @@ details.more { margin-top: 8px; border-top: 1px solid var(--line); }
 .faq p { padding-bottom: 18px; }
 
 /* ---------- Dashboard ---------- */
+/* ---------- Pricing ---------- */
+.pricing { padding-bottom: 48px; }
+.tiers { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
+.tier { display: flex; flex-direction: column; gap: 6px; }
+.tier h2 { font-size: var(--t-big); font-weight: 700; color: var(--muted); }
+.tier-price { font-size: var(--t-hero); font-weight: 800; letter-spacing: -0.025em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.tier-price span { font-size: var(--t-big); font-weight: 600; color: var(--muted); letter-spacing: 0; }
+.tier-codes { font-weight: 700; }
+.tier-note { color: var(--ok); font-size: var(--t-small); font-weight: 600; }
+.tier .msg-warn { margin-top: 0; }
+.tier .btn { margin-top: auto; align-self: flex-start; }
+.tier .tier-note, .tier .msg-warn { margin-bottom: 14px; }
+.tier-facts { list-style: none; margin-top: 14px; display: grid; gap: 12px; color: var(--muted); }
+.tier-facts strong { color: var(--text); }
+.pricing-foot { margin-top: 20px; font-size: var(--t-big); }
+
 .dash { padding-bottom: 48px; }
 .dash > #dashboard { display: grid; gap: 18px; }
 .dash-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; }

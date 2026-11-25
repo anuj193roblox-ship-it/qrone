@@ -19,7 +19,7 @@ QrOne makes QR codes that never stop working. Today it offers two free tools tha
 
 Success for the free tools is that a first-time visitor makes a code within about 10 seconds. Making a code is the primary action and checking is secondary.
 
-Planned (not built, not available): paid dynamic codes on the customer's own domain, paid once ($29 / $49 / $100 tiers), with an export of every redirect so the codes survive even if QrOne disappears. The free tier gets 10 codes that each redirect for 14 days.
+Built, switched on once the domain and payments exist: paid dynamic codes, paid once ($29 / $49 / $100 tiers), with a download of every redirect at any time. Only codes on a domain the customer controls can survive without QrOne (custom domains are planned); codes on QrOne's own short-link domain depend on QrOne. The free tier gets 10 codes that each redirect for 14 days.
 
 Payment decisions (confirmed 2026-11-25):
 - **Provider:** Dodo Payments, as merchant of record, paying out to an Indian bank account.

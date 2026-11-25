@@ -11,8 +11,8 @@ const SAFE = {
   "referrer-policy": "strict-origin-when-cross-origin",
 };
 
-const html = (kind, status) =>
-  new Response(page(kind), {
+const html = (kind, status, env) =>
+  new Response(page(kind, env?.SITE_ORIGIN), {
     status,
     headers: {
       ...SAFE,
@@ -42,7 +42,7 @@ export default {
       } catch (err) {
         // For example the free plan's daily database limit. Never show the error itself to scanners.
         console.error("lookup failed", err?.message);
-        return html("unavailable", 503);
+        return html("unavailable", 503, env);
       }
     }
 
@@ -54,6 +54,6 @@ export default {
         headers: { ...SAFE, location: result.location, "cache-control": "private, max-age=0" },
       });
     }
-    return html(result.page, result.status);
+    return html(result.page, result.status, env);
   },
 };
