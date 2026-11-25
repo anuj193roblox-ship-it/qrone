@@ -1,0 +1,544 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-25T08:08:29.537Z",
+  "title": "Design System: QrOne",
+  "extensions": {
+    "colorMeta": {
+      "felt": {
+        "role": "board",
+        "displayName": "Felt",
+        "canonical": "#1d1d1b",
+        "tonalRamp": [
+          "#272725",
+          "#444441",
+          "#61615c",
+          "#7e7e76",
+          "#9a9a93",
+          "#b5b5b0",
+          "#d5d5d2",
+          "#f3f3f2"
+        ]
+      },
+      "groove": {
+        "role": "board",
+        "displayName": "Felt Groove",
+        "canonical": "rgba(255, 255, 255, 0.055)"
+      },
+      "oak": {
+        "role": "board",
+        "displayName": "Oak",
+        "canonical": "#b98a5a",
+        "tonalRamp": [
+          "#30261c",
+          "#56432e",
+          "#7e5f3e",
+          "#a97b4c",
+          "#bf976e",
+          "#cdb398",
+          "#e1d4c7",
+          "#f6f2ef"
+        ]
+      },
+      "oak-edge": {
+        "role": "board",
+        "displayName": "Oak Edge",
+        "canonical": "#9a6f44",
+        "tonalRamp": [
+          "#30261d",
+          "#55422f",
+          "#7d5e40",
+          "#a77a4e",
+          "#bd966f",
+          "#ccb399",
+          "#e0d4c7",
+          "#f5f2ef"
+        ]
+      },
+      "letter": {
+        "role": "board",
+        "displayName": "Letter White",
+        "canonical": "#f4f1ea",
+        "tonalRamp": [
+          "#2e291f",
+          "#524833",
+          "#776846",
+          "#9e8957",
+          "#b6a377",
+          "#c7bb9e",
+          "#ded8ca",
+          "#f5f3f0"
+        ]
+      },
+      "letter-dim": {
+        "role": "board",
+        "displayName": "Dim Letter",
+        "canonical": "#c9c4b8",
+        "tonalRamp": [
+          "#2a2823",
+          "#49453c",
+          "#696354",
+          "#8a816b",
+          "#a49c89",
+          "#bbb6aa",
+          "#d8d5cf",
+          "#f3f3f1"
+        ]
+      },
+      "board-seam": {
+        "role": "board",
+        "displayName": "Board Seam",
+        "canonical": "#3a3936",
+        "tonalRamp": [
+          "#272725",
+          "#444341",
+          "#61605c",
+          "#7e7c76",
+          "#9a9893",
+          "#b5b4b0",
+          "#d5d4d2",
+          "#f3f2f2"
+        ]
+      },
+      "yellow": {
+        "role": "primary",
+        "displayName": "Letter Yellow",
+        "canonical": "#f2c230",
+        "tonalRamp": [
+          "#3c3111",
+          "#6e5817",
+          "#a48219",
+          "#e0ad15",
+          "#efc33e",
+          "#edd078",
+          "#f0e2b7",
+          "#f9f6eb"
+        ]
+      },
+      "yellow-press": {
+        "role": "primary",
+        "displayName": "Pressed Yellow",
+        "canonical": "#ddb01f",
+        "tonalRamp": [
+          "#393014",
+          "#67561d",
+          "#9a7e23",
+          "#d1a824",
+          "#e2be4a",
+          "#e4cd81",
+          "#ece1bb",
+          "#f8f5ec"
+        ]
+      },
+      "red-letter": {
+        "role": "verdict",
+        "displayName": "Red Letter",
+        "canonical": "#ff6b57",
+        "tonalRamp": [
+          "#3f140e",
+          "#731d11",
+          "#ad220f",
+          "#ed2308",
+          "#fb4a32",
+          "#f58070",
+          "#f4bbb3",
+          "#faecea"
+        ]
+      },
+      "orange-letter": {
+        "role": "verdict",
+        "displayName": "Orange Letter",
+        "canonical": "#ff9a5c",
+        "tonalRamp": [
+          "#3f200e",
+          "#733711",
+          "#ad4b0f",
+          "#ed5f08",
+          "#fb7e32",
+          "#f5a370",
+          "#f4ccb3",
+          "#faf0ea"
+        ]
+      },
+      "green-letter": {
+        "role": "verdict",
+        "displayName": "Green Letter",
+        "canonical": "#8fd19e",
+        "tonalRamp": [
+          "#1c3021",
+          "#2e5737",
+          "#3d7f4c",
+          "#4aaa60",
+          "#6cc17f",
+          "#97cea3",
+          "#c6e1cc",
+          "#eff6f0"
+        ]
+      },
+      "ground": {
+        "role": "neutral",
+        "displayName": "Ground",
+        "canonical": "#f7f6f2",
+        "tonalRamp": [
+          "#2c2a20",
+          "#4e4937",
+          "#716a4c",
+          "#968b5f",
+          "#aea57e",
+          "#c2bca3",
+          "#dbd8cc",
+          "#f4f3f0"
+        ]
+      },
+      "field": {
+        "role": "neutral",
+        "displayName": "Field",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5e5e5e",
+          "#7a7a7a",
+          "#969696",
+          "#b3b3b3",
+          "#d4d4d4",
+          "#f2f2f2"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#1d1d1b",
+        "tonalRamp": [
+          "#272725",
+          "#444441",
+          "#61615c",
+          "#7e7e76",
+          "#9a9a93",
+          "#b5b5b0",
+          "#d5d5d2",
+          "#f3f3f2"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted",
+        "canonical": "#5e5b54",
+        "tonalRamp": [
+          "#282725",
+          "#454340",
+          "#63605a",
+          "#817d74",
+          "#9c9991",
+          "#b6b4af",
+          "#d5d4d2",
+          "#f3f2f2"
+        ]
+      },
+      "seam": {
+        "role": "neutral",
+        "displayName": "Seam",
+        "canonical": "#dcd8cf",
+        "tonalRamp": [
+          "#2a2822",
+          "#4a453b",
+          "#6b6352",
+          "#8c8168",
+          "#a69d87",
+          "#bdb6a8",
+          "#d9d6cf",
+          "#f4f3f1"
+        ]
+      },
+      "field-edge": {
+        "role": "neutral",
+        "displayName": "Field Edge",
+        "canonical": "#8f8a7f",
+        "tonalRamp": [
+          "#282725",
+          "#46443f",
+          "#646059",
+          "#827d73",
+          "#9d9990",
+          "#b7b4ae",
+          "#d6d4d1",
+          "#f3f2f2"
+        ]
+      },
+      "tint": {
+        "role": "neutral",
+        "displayName": "Tint",
+        "canonical": "#efede7",
+        "tonalRamp": [
+          "#2b2921",
+          "#4c4739",
+          "#6e664f",
+          "#918663",
+          "#aba182",
+          "#c0b9a5",
+          "#dad7cd",
+          "#f4f3f1"
+        ]
+      },
+      "ok": {
+        "role": "message",
+        "displayName": "OK Green",
+        "canonical": "#2f6f48",
+        "tonalRamp": [
+          "#1c3024",
+          "#2e563e",
+          "#3e7e57",
+          "#4ca970",
+          "#6ebf8e",
+          "#98cdad",
+          "#c7e1d1",
+          "#eff6f2"
+        ]
+      },
+      "bad": {
+        "role": "message",
+        "displayName": "Error Red",
+        "canonical": "#a8261c",
+        "tonalRamp": [
+          "#381715",
+          "#65241f",
+          "#972e26",
+          "#cc3428",
+          "#de594e",
+          "#e28a83",
+          "#ebc0bc",
+          "#f8edec"
+        ]
+      },
+      "warn": {
+        "role": "message",
+        "displayName": "Warning Brown",
+        "canonical": "#8a4f00",
+        "tonalRamp": [
+          "#3f2a0e",
+          "#734911",
+          "#ad6a0f",
+          "#ed8b08",
+          "#fba532",
+          "#f5bc70",
+          "#f4d8b3",
+          "#faf3ea"
+        ]
+      },
+      "qr-black": {
+        "role": "output",
+        "displayName": "QR Black",
+        "canonical": "#000000",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5e5e5e",
+          "#7a7a7a",
+          "#969696",
+          "#b3b3b3",
+          "#d4d4d4",
+          "#f2f2f2"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "board": {
+        "displayName": "Board",
+        "purpose": "The one board sentence per page (h1). 2.75rem/42px phone, 4.75rem/84px from 720px, 5.25rem/84px from 1200px. Uppercase."
+      },
+      "brand": {
+        "displayName": "Brand",
+        "purpose": "Wordmark in the board's nav row."
+      },
+      "stamp": {
+        "displayName": "Stamp",
+        "purpose": "Short uppercase statements on the ground and reading-page h2. 1.75rem phone, 2rem from 720px."
+      },
+      "read": {
+        "displayName": "Read",
+        "purpose": "Paragraphs on About, Privacy and FAQ, max 65ch."
+      },
+      "big": {
+        "displayName": "Big",
+        "purpose": "Only the large address field."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Default text in the tools."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Form labels, legends, buttons, tabs, expander titles."
+      },
+      "small": {
+        "displayName": "Small",
+        "purpose": "Hints, status, errors, nav links, footer."
+      },
+      "mono": {
+        "displayName": "Mono",
+        "purpose": "Decoded QR content only."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "push-in",
+        "value": "380ms cubic-bezier(0.16, 1, 0.3, 1), stagger 16ms per letter, from translateY(-0.32em) opacity 0.2",
+        "purpose": "Board letters dropping into the felt when the board's words change. Removed under prefers-reduced-motion."
+      },
+      {
+        "name": "press",
+        "value": "translateY(1px) on :active",
+        "purpose": "Button press feedback."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "phone",
+        "value": "0px"
+      },
+      {
+        "name": "tablet",
+        "value": "720px"
+      },
+      {
+        "name": "wide",
+        "value": "1200px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Letterboard",
+      "kind": "custom",
+      "refersTo": "board",
+      "description": "Oak-framed felt board at the top of every page; carries brand, nav and the one status sentence.",
+      "html": "<div class=\"ds-frame\"><div class=\"ds-board\"><div class=\"ds-nav\"><span class=\"ds-brand\">QrOne</span><span class=\"ds-links\">How it works</span></div><p class=\"ds-board-text\">Make a code that never expires</p></div></div>",
+      "css": ".ds-frame { background: #b98a5a; padding: 8px 8px 0; border-bottom: 1px solid #9a6f44; } .ds-board { background-color: #1d1d1b; background-image: repeating-linear-gradient(180deg, transparent 0 13px, rgba(255,255,255,0.055) 13px 14px); color: #f4f1ea; padding: 14px 16px 1px; } .ds-nav { display: flex; justify-content: space-between; align-items: center; min-height: 48px; } .ds-brand { font-family: 'Big Shoulders Display', 'Arial Narrow', sans-serif; font-weight: 800; text-transform: uppercase; font-size: 1.5rem; letter-spacing: 0.14em; } .ds-links { font-family: 'Figtree Variable', system-ui, sans-serif; color: #c9c4b8; font-weight: 600; font-size: 0.875rem; } .ds-board-text { font-family: 'Big Shoulders Display', 'Arial Narrow', sans-serif; font-weight: 800; text-transform: uppercase; font-size: 2.75rem; line-height: 42px; letter-spacing: 0.12em; margin: 22px 0 26px; }"
+    },
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one yellow action per screen.",
+      "html": "<button class=\"ds-btn-primary\">Download PNG</button>",
+      "css": ".ds-btn-primary { font-family: 'Figtree Variable', system-ui, sans-serif; font-weight: 700; font-size: 0.9375rem; min-height: 48px; padding: 0 20px; color: #1d1d1b; background: #f2c230; border: 1px solid #f2c230; border-radius: 0; cursor: pointer; } .ds-btn-primary:hover { background: #ddb01f; border-color: #ddb01f; } .ds-btn-primary:active { transform: translateY(1px); } .ds-btn-primary:focus-visible { outline: 3px solid #1d1d1b; outline-offset: 2px; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Every non-primary action: ink outline, tint on hover.",
+      "html": "<button class=\"ds-btn\">SVG</button>",
+      "css": ".ds-btn { font-family: 'Figtree Variable', system-ui, sans-serif; font-weight: 700; font-size: 0.9375rem; min-height: 48px; padding: 0 20px; color: #1d1d1b; background: transparent; border: 1px solid #1d1d1b; border-radius: 0; cursor: pointer; } .ds-btn:hover { background: #efede7; } .ds-btn:active { transform: translateY(1px); } .ds-btn:focus-visible { outline: 3px solid #1d1d1b; outline-offset: 2px; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Square white field, field-edge border, ink on hover and focus.",
+      "html": "<label class=\"ds-label\" for=\"ds-in\">Where should it go?</label><input id=\"ds-in\" class=\"ds-input\" placeholder=\"example.com/menu\">",
+      "css": ".ds-label { font-family: 'Figtree Variable', system-ui, sans-serif; display: block; font-weight: 700; font-size: 0.9375rem; margin: 0 0 6px; } .ds-input { font-family: 'Figtree Variable', system-ui, sans-serif; font-size: 1rem; width: 100%; min-height: 48px; padding: 10px 12px; color: #1d1d1b; background: #fff; border: 1px solid #8f8a7f; border-radius: 0; } .ds-input::placeholder { color: #6f6b63; } .ds-input:hover { border-color: #1d1d1b; } .ds-input:focus-visible { outline: 3px solid #1d1d1b; outline-offset: 0; border-color: #1d1d1b; }"
+    },
+    {
+      "name": "Make | Check Tabs",
+      "kind": "nav",
+      "refersTo": "tab",
+      "description": "ARIA tabs on the board's bottom edge; the selected tab is a piece of the ground.",
+      "html": "<div class=\"ds-tabs\" role=\"tablist\"><button role=\"tab\" aria-selected=\"true\" class=\"ds-tab\">Make a code</button><button role=\"tab\" aria-selected=\"false\" class=\"ds-tab\">Check a code</button></div>",
+      "css": ".ds-tabs { display: inline-flex; background: #1d1d1b; padding-top: 12px; } .ds-tab { font-family: 'Figtree Variable', system-ui, sans-serif; font-weight: 700; font-size: 0.9375rem; min-height: 52px; padding: 0 30px; border: 0; border-top: 1px solid #3a3936; border-left: 1px solid #3a3936; background: transparent; color: #c9c4b8; cursor: pointer; } .ds-tab:last-child { border-right: 1px solid #3a3936; } .ds-tab:hover { color: #f4f1ea; } .ds-tab[aria-selected=\"true\"] { background: #f7f6f2; color: #1d1d1b; border-top-color: #f7f6f2; } .ds-tab:focus-visible { outline: 3px solid #f2c230; outline-offset: 2px; }"
+    },
+    {
+      "name": "Segmented Control",
+      "kind": "chip",
+      "refersTo": "segment",
+      "description": "Joined square radio keys; the selected one turns felt.",
+      "html": "<div class=\"ds-seg\"><label><input type=\"radio\" name=\"ds-s\" checked><span>Link</span></label><label><input type=\"radio\" name=\"ds-s\"><span>Text</span></label><label><input type=\"radio\" name=\"ds-s\"><span>Wi-Fi</span></label></div>",
+      "css": ".ds-seg { display: flex; font-family: 'Figtree Variable', system-ui, sans-serif; font-weight: 600; } .ds-seg label { position: relative; } .ds-seg input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; } .ds-seg span { display: flex; align-items: center; min-height: 44px; padding: 0 16px; border: 1px solid #dcd8cf; margin-right: -1px; background: #fff; color: #1d1d1b; } .ds-seg label:hover span { background: #efede7; } .ds-seg input:checked + span { background: #1d1d1b; color: #f4f1ea; border-color: #1d1d1b; } .ds-seg input:focus-visible + span { outline: 3px solid #1d1d1b; outline-offset: 2px; position: relative; z-index: 1; }"
+    },
+    {
+      "name": "Expander",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "details/summary row under a seam, drawn plus that becomes a minus.",
+      "html": "<details class=\"ds-more\"><summary>Colour, size and logo</summary><p>Options go here.</p></details>",
+      "css": ".ds-more { font-family: 'Figtree Variable', system-ui, sans-serif; border-top: 1px solid #dcd8cf; color: #1d1d1b; } .ds-more summary { list-style: none; cursor: pointer; min-height: 48px; display: flex; align-items: center; justify-content: space-between; font-weight: 700; font-size: 0.9375rem; } .ds-more summary::-webkit-details-marker { display: none; } .ds-more summary::after { content: \"\"; width: 14px; height: 14px; background: linear-gradient(#1d1d1b, #1d1d1b) center / 14px 2px no-repeat, linear-gradient(#1d1d1b, #1d1d1b) center / 2px 14px no-repeat; } .ds-more[open] summary::after { background: linear-gradient(#1d1d1b, #1d1d1b) center / 14px 2px no-repeat; } .ds-more summary:focus-visible { outline: 3px solid #1d1d1b; outline-offset: 2px; }"
+    },
+    {
+      "name": "Drop Zone",
+      "kind": "custom",
+      "refersTo": "drop-zone",
+      "description": "Whole-block label for the file input on Check.",
+      "html": "<label class=\"ds-drop\"><span class=\"ds-drop-title\">Drop a QR image</span><span class=\"ds-drop-btn\">Choose a photo</span><span class=\"ds-hint\">or paste a screenshot</span><input type=\"file\" accept=\"image/*\"></label>",
+      "css": ".ds-drop { font-family: 'Figtree Variable', system-ui, sans-serif; display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding: 22px 20px; border: 1px solid #1d1d1b; background: #fff; color: #1d1d1b; cursor: pointer; position: relative; } .ds-drop:hover { background: #efede7; } .ds-drop:focus-within { outline: 3px solid #1d1d1b; outline-offset: 2px; } .ds-drop input { position: absolute; width: 1px; height: 1px; opacity: 0; } .ds-drop-title { font-family: 'Big Shoulders Display', 'Arial Narrow', sans-serif; font-weight: 800; text-transform: uppercase; font-size: 1.75rem; line-height: 1; letter-spacing: 0.1em; } .ds-drop-btn { font-weight: 700; font-size: 0.9375rem; min-height: 48px; padding: 0 20px; display: inline-flex; align-items: center; background: #f2c230; } .ds-hint { color: #5e5b54; font-size: 0.875rem; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Shop-Window Letterboard",
+    "overview": "Every page opens with a black felt letterboard in an oak frame. A few big, widely spaced capital letters on it say what is happening right now (\"MAKE A CODE THAT NEVER EXPIRES\", \"THIS CODE CAN BE SWITCHED OFF\"). The board is the page's status display, not a hero banner: when the job or the verdict changes, the board re-sets its words. Everything under the board is a quiet off-white working ground where the actual tool lives.\n\nThe system is flat and square. Areas are separated by 1px hairline seams, never by shadows, floating cards or rounded boxes. Colour is rationed: yellow means \"the one thing to press\", coloured letters on the board mean \"this is the verdict\", and everything else is ink on off-white. Density is low and text is short; the visitor is a non-technical shop owner who wants a working code in about ten seconds.\n\nWhen you add a page (a dashboard, pricing, sign-in), start from the same skeleton: oak frame, board with the brand row and one short board sentence, then the working ground with seams. If the new page has nothing to say on the board, say what the page is (\"Your codes\", \"Pricing\", \"Sign in\"), in a few words.",
+    "keyCharacteristics": [
+      "An oak-framed felt letterboard at the top of every page, carrying the brand, the nav and one short sentence.",
+      "Big Shoulders Display capitals on the board; Figtree for everything you read or type.",
+      "Square corners everywhere (0px radius).",
+      "1px seams divide areas; no shadows, no cards.",
+      "One yellow primary action per screen.",
+      "Red, orange and green letters only for checker verdicts on the board."
+    ],
+    "rules": [
+      {
+        "name": "The One Yellow Rule",
+        "body": "Each screen has at most one yellow button, and it is the action the visitor came to do. Secondary actions are ink-outlined. If you are about to add a second yellow thing, one of them is not primary.",
+        "section": "colors"
+      },
+      {
+        "name": "The Verdict Letter Rule",
+        "body": "Red, orange and green letters appear only on the board, and only to state a checker verdict. They are never used for buttons, badges, charts, links or decoration. Ground-side messages use the darker `bad`, `warn` and `ok` instead, which pass contrast on off-white.",
+        "section": "colors"
+      },
+      {
+        "name": "The Only Pure Black Rule",
+        "body": "Pure #000000 belongs to the QR code itself. Interface \"black\" is felt/ink #1d1d1b.",
+        "section": "colors"
+      },
+      {
+        "name": "The Felt Groove Rule",
+        "body": "The felt has a 1px groove every 14px. Any line-height for text set on the board must be a multiple of 14px (the build uses 42px = 3 grooves on phones and 84px = 6 grooves from 720px) so letter rows sit in the grooves. If you introduce a new board size, pick its line-height from 28, 42, 56, 70, 84, 98...",
+        "section": "typography"
+      },
+      {
+        "name": "The One Size Per Role Rule",
+        "body": "Each text role has one size per breakpoint, set by a variable in `:root` (`--t-board`, `--t-stamp`, `--t-read`, `--t-big`, `--t-body`, `--t-label`, `--t-small`). Use the variable; don't invent an in-between size.",
+        "section": "typography"
+      },
+      {
+        "name": "The Display-Is-Caps Rule",
+        "body": "Big Shoulders Display is only ever 800, uppercase and tracked. Never use it for body text, lowercase, or long sentences.",
+        "section": "typography"
+      },
+      {
+        "name": "The Hairline Seam Rule",
+        "body": "Areas are divided by a single 1px line in `seam` (#dcd8cf) on the ground, or `board-seam` (#3a3936) on the felt. Never use `box-shadow` for depth, never put content in a raised card, never use a background block to separate sections. If two areas need separating, draw a seam between them.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do start every new page with the oak frame, felt board, brand row and one short board sentence set in Big Shoulders Display caps.",
+      "Do use the CSS variables in `:root` of `src/style.css` for every colour and text size; add a new variable rather than a raw hex.",
+      "Do keep board line-heights at multiples of 14px (42px, 84px).",
+      "Do divide areas with a 1px `seam` line (#dcd8cf) and white space.",
+      "Do give each screen exactly one yellow (#f2c230) primary button; make every other button ink-outlined.",
+      "Do keep corners square (0px) and targets at least 48px tall.",
+      "Do change the board through `setBoard()` so the push-in and the screen-reader copy stay correct.",
+      "Do keep the 3px ink focus outline (yellow on the board)."
+    ],
+    "donts": [
+      "Don't use `box-shadow` for depth, floating cards, rounded boxes or grey panels.",
+      "Don't use red, orange or green letters anywhere except a checker verdict on the board.",
+      "Don't use yellow for highlights, badges, links, icons or a second button.",
+      "Don't use pure black (#000000) in the interface; it belongs to the QR code.",
+      "Don't put Big Shoulders Display in lowercase, in a lighter weight, or in paragraphs.",
+      "Don't add a centred hero, blue tabs, gradient buttons or stock illustrations.",
+      "Don't add animations beyond the push-in, and never one that ignores reduced motion.",
+      "Don't load fonts or scripts from a third-party server."
+    ]
+  }
+}

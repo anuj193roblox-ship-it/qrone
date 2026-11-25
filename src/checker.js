@@ -3,6 +3,7 @@
 // Security rule: decoded text can contain anything, so it is only ever shown with textContent
 // (via el() below). Never use innerHTML here.
 import { classify } from "./classify.js";
+import { setBoard } from "./board.js";
 import vendors from "./data/vendor-domains.json";
 
 const $ = (id) => document.getElementById(id);
@@ -46,7 +47,7 @@ async function decodeImage(file) {
 
 const ADVICE = {
   paid: "Already paying? Keep the subscription active, and ask the vendor whether your codes can be exported.",
-  notPrinted: "Haven't printed yet? Make a static code instead (the generator above). It can't be switched off.",
+  notPrinted: "Haven't printed yet? Make a static code instead, on the Make a code tab. It can't be switched off.",
   printed: "Already printed? Plan a sticker or a reprint, and make a static replacement code first.",
 };
 
@@ -54,7 +55,7 @@ function replacementForm() {
   const input = el("input", { id: "repl-url", type: "text", inputmode: "url", placeholder: "example.com/menu", spellcheck: "false" });
   const form = el("form", { class: "inline-form" },
     el("label", { for: "repl-url" }, "Where should the new code point? Enter the final page address (we can't follow the redirect for you)."),
-    el("div", { class: "row" }, input, el("button", { type: "submit" }, "Make a static code")));
+    el("div", { class: "pair pair-tight" }, input, el("button", { type: "submit", class: "btn" }, "Make a static code")));
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     if (input.value.trim()) document.dispatchEvent(new CustomEvent("prefill-url", { detail: input.value.trim() }));
@@ -66,19 +67,24 @@ function render(result) {
   const out = $("chk-result");
   out.replaceChildren();
 
+  // The verdict is set on the letterboard (the page's status display), so it isn't repeated here.
   const view = {
-    static: { cls: "ok", title: "Looks static and safe" },
-    vendor: { cls: "bad", title: "Vendor-controlled: it could be switched off" },
-    "unknown-short": { cls: "warn-card", title: "Unknown short link: it could be switched off" },
-    "not-url": { cls: "ok", title: "Not a web link" },
+    static: { tone: "ok", board: "No vendor in the middle" },
+    vendor: { tone: "bad", board: "This code can be switched off" },
+    "unknown-short": { tone: "warn", board: "Unknown link. It could be switched off" },
+    "not-url": { tone: "ok", board: "Not a link. Nothing to switch off" },
   }[result.kind];
 
-  const heading = el("h3", { tabindex: "-1" }, view.title);
-  const card = el("div", { class: `verdict ${view.cls}` }, heading);
+  const tab = $("tab-check");
+  tab.dataset.board = view.board;
+  tab.dataset.tone = view.tone;
+  setBoard(view.board, view.tone);
 
-  const what = el("p", { class: "muted" }, "The code says:");
-  const content = el("pre", { class: "decoded" }, result.content || "(empty)");
-  card.append(what, content);
+  const card = el("div", { class: `verdict verdict-${view.tone}` },
+    el("p", { class: "label" }, "The code says"),
+    // For links, show the parsed URL: it escapes invisible direction-flipping characters
+    // that could make "evil.com" display as something trustworthy.
+    el("pre", { class: "decoded" }, result.url ?? (result.content || "(empty)")));
 
   if (result.kind === "static") {
     card.append(el("p", {}, `This code points straight at ${result.host}. We don't recognise it as a QR-vendor short link, so no QR company appears to sit in the middle. We can't see what the page itself does once it opens.`));
@@ -113,12 +119,16 @@ function render(result) {
 
   // The link is shown as text first. We never open it automatically.
   if (result.url) {
-    card.append(el("p", { class: "muted" }, "Open it only if you trust it: ",
+    card.append(el("p", { class: "hint" }, "Open it only if you trust it: ",
       el("a", { href: result.url, target: "_blank", rel: "noopener noreferrer" }, "open this link (leaves this site)")));
   }
 
   out.append(card);
-  heading.focus();
+  out.focus({ preventScroll: true });
+  if (window.matchMedia("(max-width: 719px)").matches) {
+    const smooth = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    out.scrollIntoView({ behavior: smooth ? "smooth" : "auto", block: "start" });
+  }
 }
 
 async function handleFile(file) {

@@ -5,53 +5,54 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>QR code FAQ: do QR codes expire? Static vs dynamic | {{NAME}}</title>
   <meta name="description" content="Do QR codes expire? What is the difference between static and dynamic QR codes, and how can you tell which one you have?">
-  <meta name="theme-color" content="#ffffff">
+  <meta name="theme-color" content="#1d1d1b">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231d1d1b'/%3E%3Cpath fill='%23f2c230' d='M6 6h8v8H6zM18 6h8v8h-8zM6 18h8v8H6zM18 18h4v4h-4zM24 24h2v2h-2z'/%3E%3C/svg%3E">
   <script type="module" src="/src/main.js"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
-  <header class="site-header">
-    <a class="brand" href="/">{{NAME}}</a>
-    <nav aria-label="Main"><a href="/#generator">Make a code</a><a href="/#checker">Check a code</a><a href="/faq.html">FAQ</a><a href="/about.html">About</a></nav>
+  <header class="frame">
+    <div class="board">
+      <nav class="topnav" aria-label="Main">
+        <a class="brand" href="/">{{NAME}}</a>
+        <div class="topnav-links"><a href="/">Make</a><a href="/#check">Check</a><a href="/privacy.html">Privacy</a></div>
+      </nav>
+      <h1 class="board-text">How it works</h1>
+    </div>
   </header>
   <main id="main" class="page">
-    <h1>QR code FAQ</h1>
-
     <details class="faq" open>
       <summary>Do QR codes expire?</summary>
-      <p>A static QR code never expires. It is just your address drawn as a picture. A dynamic QR code can stop working, because it depends on a company's server forwarding each scan to your page. If that company turns the forwarding off, the printed code stops reaching your page.</p>
+      <p>A static code never expires. It is your address drawn as a pattern. A dynamic code can stop working, because a company's server forwards each scan, and that company can turn the forwarding off.</p>
     </details>
-
     <details class="faq">
-      <summary>What is the difference between static and dynamic?</summary>
-      <p>A static code stores your real web address inside the pattern. A dynamic code stores a short link owned by the QR service, and that service redirects to your page. Dynamic codes let you change the destination later and count scans, but you depend on the service staying active.</p>
+      <summary>Static or dynamic: what's the difference?</summary>
+      <p>Static stores your real address in the pattern. Dynamic stores a short link owned by the QR service, which redirects to your page. Dynamic lets you change the destination later, but you depend on the service staying active.</p>
     </details>
-
     <details class="faq">
-      <summary>How can I tell which kind I have?</summary>
-      <p>Use the <a href="/#checker">checker</a>. It reads the code and shows whether it points straight at a website or at a known QR-vendor short link. You can also scan the code with your phone and look at the address it shows before opening it.</p>
+      <summary>How do I tell which one I have?</summary>
+      <p>Use the <a href="/#check">checker</a>. It shows whether a code points straight at a website or at a known QR-vendor short link.</p>
     </details>
-
     <details class="faq">
       <summary>Why would a dynamic code stop working?</summary>
-      <p>Common reasons are a trial or subscription ending, a vendor changing its plans, or a vendor closing down. Several vendors say on their own help pages that codes are deactivated after a trial. The checker links to the vendor's page for each domain it recognises.</p>
+      <p>Usually a trial or plan ending, a vendor changing its plans, or a vendor closing. Several vendors say on their own help pages that codes are deactivated after a trial. The checker links to that page for each vendor it recognises.</p>
     </details>
-
     <details class="faq">
       <summary>Can I change where a static code points?</summary>
-      <p>No. The address is part of the picture, so a different destination needs a new code. If you may need to change the destination after printing, you need a dynamic code, ideally on a domain you control.</p>
+      <p>No. The address is part of the pattern, so a new destination needs a new code.</p>
     </details>
-
     <details class="faq">
       <summary>Does the checker upload my image?</summary>
-      <p>No. The image is read on your device and is never sent anywhere. See the <a href="/privacy.html">privacy page</a>.</p>
+      <p>No. It is read on your device. See <a href="/privacy.html">privacy</a>.</p>
     </details>
-
     <details class="faq">
-      <summary>The checker says "unknown short link". What does that mean?</summary>
-      <p>The code goes through a link shortener or redirect service that isn't on our list. We can't say who runs it or what happens when an account ends. If you made the code, check the account behind it.</p>
+      <summary>What does "unknown link" mean?</summary>
+      <p>The code goes through a link shortener that isn't on our list. We can't say who runs it or what happens when an account ends.</p>
     </details>
   </main>
-  <footer class="site-footer"><p>{{NAME}}: free tools that run in your browser. <a href="/privacy.html">Privacy</a> · <a href="/faq.html">FAQ</a> · <a href="/about.html">About</a></p></footer>
+  <footer class="foot">
+    <p>{{NAME}} runs in your browser.</p>
+    <p><a href="/faq.html">FAQ</a><a href="/about.html">About</a><a href="/privacy.html">Privacy</a></p>
+  </footer>
 </body>
 </html>

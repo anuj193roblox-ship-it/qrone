@@ -5,28 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>About {{NAME}}: QR codes that never expire</title>
   <meta name="description" content="Why {{NAME}} exists: static QR codes that never expire, and a free checker that shows whether a printed QR code could be switched off.">
-  <meta name="theme-color" content="#ffffff">
+  <meta name="theme-color" content="#1d1d1b">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231d1d1b'/%3E%3Cpath fill='%23f2c230' d='M6 6h8v8H6zM18 6h8v8h-8zM6 18h8v8H6zM18 18h4v4h-4zM24 24h2v2h-2z'/%3E%3C/svg%3E">
   <script type="module" src="/src/main.js"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
-  <header class="site-header">
-    <a class="brand" href="/">{{NAME}}</a>
-    <nav aria-label="Main"><a href="/#generator">Make a code</a><a href="/#checker">Check a code</a><a href="/faq.html">FAQ</a><a href="/about.html">About</a></nav>
+  <header class="frame">
+    <div class="board">
+      <nav class="topnav" aria-label="Main">
+        <a class="brand" href="/">{{NAME}}</a>
+        <div class="topnav-links"><a href="/">Make</a><a href="/#check">Check</a><a href="/faq.html">FAQ</a></div>
+      </nav>
+      <h1 class="board-text">About {{NAME}}</h1>
+    </div>
   </header>
   <main id="main" class="page">
-    <h1>About {{NAME}}</h1>
-    <p>A QR code is only as permanent as the thing it points at. Some QR generators make <em>dynamic</em> codes: the printed pattern holds the vendor's short link, and the vendor's server forwards each scan to your page. That lets you edit the destination later, but it also means the vendor can stop the forwarding, for example when a trial or subscription ends.</p>
-    <p>{{NAME}} starts with two free tools:</p>
-    <ul>
-      <li><strong>A static QR generator.</strong> Your address is stored in the code itself. Nothing sits in the middle, so there is nothing to switch off.</li>
-      <li><strong>A checker.</strong> Drop in a QR code image and see whether it points straight at a website or through a vendor's short link. The image is read on your device and never uploaded.</li>
-    </ul>
-    <h2>Where this is going</h2>
-    <p>We are building dynamic codes on your own domain, paid once, with an export of every redirect so your codes keep working even if this service disappears. It is not available yet.</p>
+    <p>A QR code is only as permanent as what it points at. Some generators make <em>dynamic</em> codes: the printed pattern holds the vendor's short link, and the vendor forwards each scan to your page. When a trial or plan ends, the vendor can stop forwarding.</p>
+    <p>{{NAME}} makes <em>static</em> codes. Your address is stored in the pattern, so there is nothing to switch off. The checker reads a code on your device and tells you which kind you have.</p>
+    <h2>Coming next</h2>
+    <p>Editable codes on your own domain, paid once, with an export of every redirect, so your codes keep working even if this service disappears. Not available yet.</p>
     <h2>How the checker decides</h2>
-    <p>It compares the code's domain with a list of known vendor short-link domains. Each entry on that list links to the vendor's own help or pricing page, so you can read what the vendor says for yourself. A domain is only added when there is a source for it. If a code isn't on the list, the checker says so and does not guess.</p>
+    <p>It compares the code's domain with a list of known QR-vendor short links. Every entry links to the vendor's own help or pricing page. If a domain isn't on the list, the checker says so and doesn't guess.</p>
   </main>
-  <footer class="site-footer"><p>{{NAME}}: free tools that run in your browser. <a href="/privacy.html">Privacy</a> · <a href="/faq.html">FAQ</a> · <a href="/about.html">About</a></p></footer>
+  <footer class="foot">
+    <p>{{NAME}} runs in your browser.</p>
+    <p><a href="/faq.html">FAQ</a><a href="/about.html">About</a><a href="/privacy.html">Privacy</a></p>
+  </footer>
 </body>
 </html>

@@ -1,6 +1,6 @@
 // Tool A: static QR generator. Everything runs in the browser.
 import QRCodeStyling from "qr-code-styling";
-import { buildData } from "./payload.js";
+import { buildData, qrText } from "./payload.js";
 
 const $ = (id) => document.getElementById(id);
 
@@ -19,8 +19,9 @@ export function initGenerator() {
     height: 512,
     type: "canvas",
     data: "https://example.com",
-    margin: 8,
-    imageOptions: { hideBackgroundDots: true, imageSize: 0.3, margin: 4 },
+    margin: 16, // the quiet zone scanners need around the code
+    // saveAsBlob: false stops the library loading the logo over XHR, which the site's security policy blocks.
+    imageOptions: { saveAsBlob: false, hideBackgroundDots: true, imageSize: 0.3, margin: 4 },
   });
   qr.append($("gen-preview"));
 
@@ -36,8 +37,10 @@ export function initGenerator() {
     mailBody: $("gen-mail-body").value,
   });
 
+  const form = $("gen-form");
+
   function refresh() {
-    const type = $("gen-type").value;
+    const type = form.elements["gen-type"].value; // the checked Link / Text / Wi-Fi / Email radio
     document.querySelectorAll("[data-fields]").forEach((el) => { el.hidden = el.dataset.fields !== type; });
 
     const result = buildData(type, values());
@@ -63,7 +66,7 @@ export function initGenerator() {
     if (!ok) return;
     const size = Math.min(1000, Math.max(200, Number($("gen-size").value) || 512));
     qr.update({
-      data: result.data,
+      data: qrText(result.data), // UTF-8, so accents and other scripts scan correctly
       width: size,
       height: size,
       image: logo,
@@ -73,9 +76,9 @@ export function initGenerator() {
     });
   }
 
-  $("gen-form").addEventListener("input", refresh);
-  $("gen-form").addEventListener("change", refresh);
-  $("gen-form").addEventListener("submit", (e) => e.preventDefault());
+  form.addEventListener("input", refresh);
+  form.addEventListener("change", refresh);
+  form.addEventListener("submit", (e) => e.preventDefault());
 
   $("gen-logo").addEventListener("change", (e) => {
     const file = e.target.files[0];
@@ -91,10 +94,10 @@ export function initGenerator() {
 
   // The checker can send a final destination here ("make a static replacement").
   function prefill(url) {
-    $("gen-type").value = "url";
+    $("tab-make")?.click(); // switch to the Make tab if we're on Check
+    form.elements["gen-type"].value = "url";
     $("gen-url").value = url;
     refresh();
-    $("generator").scrollIntoView({ behavior: "smooth" });
     $("gen-url").focus();
   }
   document.addEventListener("prefill-url", (e) => prefill(e.detail));

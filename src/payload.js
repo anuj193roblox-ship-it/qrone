@@ -4,6 +4,10 @@
 //   { empty }  nothing typed yet (no error message needed)
 //   { error }  typed something we cannot use
 
+// The QR library stores one byte per character and drops anything above 255, so "Café" or "日本"
+// would print as a broken code. Turning the text into UTF-8 bytes first is how phones expect it.
+export const qrText = (s) => String.fromCharCode(...new TextEncoder().encode(s));
+
 // Wi-Fi codes treat \ ; , : " as special, so each one needs a backslash in front.
 const wifiEscape = (s) => s.replace(/([\\;,:"])/g, "\\$1");
 

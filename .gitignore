@@ -161,3 +161,14 @@ vite.config.ts.timestamp-*
 
 # Wrangler local dev state
 .wrangler/
+
+# Design-tool working files (keep PRODUCT.md, DESIGN.md and .impeccable/surfaces)
+.impeccable/mocks/
+.impeccable/review/
+.impeccable/questions/
+.impeccable/build/
+.impeccable/config.local.json
+
+# Wrangler local secrets
+.dev.vars
+.dev.vars.*
