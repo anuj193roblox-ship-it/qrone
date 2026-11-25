@@ -39,6 +39,7 @@ export default defineConfig({
         signin: page("signin.html"),
         dashboard: page("dashboard.html"),
         pricing: page("pricing.html"),
+        check: page("check.html"),
       },
     },
   },

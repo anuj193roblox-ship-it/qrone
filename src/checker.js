@@ -46,7 +46,7 @@ async function decodeImage(file) {
 
 const ADVICE = {
   paid: "Already paying? Keep the subscription active, and ask the vendor whether your codes can be exported.",
-  notPrinted: "Haven't printed yet? Make a static code instead, on the Make a code tab. It can't be switched off.",
+  notPrinted: "Haven't printed yet? Make a static code instead, on the home page. It can't be switched off.",
   printed: "Already printed? Plan a sticker or a reprint, and make a static replacement code first.",
 };
 
@@ -58,7 +58,8 @@ function replacementForm() {
     el("div", { class: "pair pair-tight" }, input, el("button", { type: "submit", class: "btn" }, "Make a static code")));
   form.addEventListener("submit", (e) => {
     e.preventDefault();
-    if (input.value.trim()) document.dispatchEvent(new CustomEvent("prefill-url", { detail: input.value.trim() }));
+    // The maker lives on the home page, which reads ?url= and fills it in.
+    if (input.value.trim()) location.assign(`/?url=${encodeURIComponent(input.value.trim())}`);
   });
   return form;
 }

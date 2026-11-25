@@ -1,33 +1,51 @@
-// Tool A: static QR generator. Everything runs in the browser.
+// Home page QR studio: a static code maker. Everything runs in the browser; nothing is sent anywhere.
 import QRCodeStyling from "qr-code-styling";
 import { buildData, qrText } from "./payload.js";
-import { quietZone, cleanLabel, downloadFramed, printStickers } from "./frame.js";
+import { quietZone, colour, framedSvgBlob, downloadFramed, printStickers } from "./frame.js";
 
 const $ = (id) => document.getElementById(id);
 
-// WCAG relative luminance, used to warn about colour pairs that are hard to scan.
+// The code is drawn 1200px wide: the PNG stays sharp printed up to 4 inches at 300 dpi, and the SVG at any size.
+const SIZE = 1200;
+const TEXT_WARN = 300; // longer text makes a dense code that cheap cameras struggle with
+
+// Shown until something is typed, so the preview is never an empty box. Downloads stay off meanwhile.
+const EXAMPLES = {
+  url: "https://yourshop.com/menu",
+  wifi: "WIFI:T:WPA;S:Your Cafe;P:password;H:false;;",
+  text: "Thanks for visiting!",
+  email: "mailto:hello@yourshop.com",
+};
+
+// WCAG relative luminance and contrast ratio.
 function luminance(hex) {
   const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
     .map((c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4));
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
+const contrast = (a, b) => {
+  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
+};
 
 export function initGenerator() {
+  const form = $("gen-form");
   let logo = ""; // data URL of the chosen logo, or "" for none
+  let ready = false; // true once real content is typed
 
   const qr = new QRCodeStyling({
-    width: 512,
-    height: 512,
-    type: "canvas",
-    data: "https://example.com",
-    margin: quietZone(512), // the blank border scanners need around the code
+    width: SIZE,
+    height: SIZE,
+    type: "svg",
+    data: EXAMPLES.url,
+    margin: quietZone(SIZE), // the blank border scanners need around the code
     // saveAsBlob: false stops the library loading the logo over XHR, which the site's security policy blocks.
-    imageOptions: { saveAsBlob: false, hideBackgroundDots: true, imageSize: 0.3, margin: 4 },
+    imageOptions: { saveAsBlob: false, hideBackgroundDots: true, imageSize: 0.3, margin: 8 },
   });
-  qr.append($("gen-qr")); // its own box: the library empties it on every redraw
-  const previewLabel = $("gen-preview-label"); // shown under the code, like the downloaded file
-  let size = 512;
-  const printOpts = () => ({ label: $("gen-label").value, fg: $("gen-fg").value, bg: $("gen-bg").value });
+
+  const fg = () => colour($("gen-fg").value, "#000000");
+  const bg = () => colour($("gen-bg").value, "#ffffff");
+  const opts = () => ({ frame: form.elements["gen-frame"].value, label: $("gen-label").value, fg: fg(), bg: bg() });
 
   const values = () => ({
     url: $("gen-url").value,
@@ -41,55 +59,94 @@ export function initGenerator() {
     mailBody: $("gen-mail-body").value,
   });
 
-  const form = $("gen-form");
+  // The preview is the same framed SVG the download makes, shown as an image (never inserted as markup).
+  let previewUrl = null;
+  let drawing = 0;
+  let timer = 0;
+  async function drawPreview() {
+    const n = ++drawing;
+    const blob = await framedSvgBlob(qr, SIZE, opts());
+    if (n !== drawing) return; // a newer change is already on its way
+    const url = URL.createObjectURL(blob);
+    $("gen-img").src = url;
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    previewUrl = url;
+  }
 
   function refresh() {
-    const type = form.elements["gen-type"].value; // the checked Link / Text / Wi-Fi / Email radio
+    const type = form.elements["gen-type"].value;
     document.querySelectorAll("[data-fields]").forEach((el) => { el.hidden = el.dataset.fields !== type; });
 
+    const n = $("gen-text").value.length;
+    $("gen-text-count").textContent = n ? `${n} characters${n > TEXT_WARN ? ". Long text makes a dense code that's hard to scan; keep it under 300 if you can." : ""}` : "";
+    $("gen-text-count").className = n > TEXT_WARN ? "msg-warn" : "hint";
+
     const result = buildData(type, values());
+    ready = Boolean(result.data);
     $("gen-msg").textContent = result.error ?? "";
+    $("gen-example").hidden = ready;
+    $("gen-svg").disabled = $("gen-png").disabled = $("gen-stickers").disabled = !ready;
+    $("gen-note").textContent = ready
+      ? "Scan the preview with your phone camera before you print."
+      : "This is an example. Type your own details to make your code.";
 
-    const ok = Boolean(result.data);
-    $("gen-result").hidden = !ok;
-    $("gen-placeholder").hidden = ok;
-
-    const fg = $("gen-fg").value;
-    const bg = $("gen-bg").value;
-    const [hi, lo] = [luminance(fg), luminance(bg)].sort((a, b) => b - a);
-    const ratio = (hi + 0.05) / (lo + 0.05);
-    $("gen-contrast").textContent = luminance(fg) > luminance(bg)
+    // Colour checks: light-on-dark codes and low contrast both fail on some phones.
+    const ratio = contrast(fg(), bg());
+    const inverted = luminance(fg()) > luminance(bg());
+    const low = ratio < 4.5;
+    $("gen-contrast").textContent = inverted
       ? "Light code on a dark background: some phone cameras can't read these. Test before printing."
-      : ratio < 3 ? "Low contrast: this code may be hard to scan. Pick a darker code colour or a lighter background." : "";
+      : low ? `Low contrast (${ratio.toFixed(1)}:1). Phones may struggle to scan this on paper.` : "";
+    const risky = inverted || low;
+    $("gen-contrast-badge").textContent = risky ? "Low contrast" : "Print-safe contrast";
+    $("gen-contrast-badge").className = `pill ${risky ? "pill-warn" : "pill-ok"}`;
+
+    $("gen-label-box").hidden = form.elements["gen-frame"].value === "none";
 
     // A logo hides part of the code, so force the highest error correction so it still scans.
     $("gen-ec").disabled = Boolean(logo);
     $("gen-logo-clear").hidden = !logo;
-    $("gen-logo-note").textContent = logo ? "Logo added. Using High error correction so the code still scans." : "";
+    $("gen-logo-note").textContent = logo ? "Error correction set to High so your logo doesn't block scanning." : "";
 
-    const label = cleanLabel($("gen-label").value);
-    previewLabel.textContent = label;
-    previewLabel.hidden = !label;
-    previewLabel.style.color = fg;
-    previewLabel.style.backgroundColor = bg;
-
-    if (!ok) return;
-    size = Math.min(1000, Math.max(200, Number($("gen-size").value) || 512));
     qr.update({
-      data: qrText(result.data), // UTF-8, so accents and other scripts scan correctly
-      width: size,
-      height: size,
-      margin: quietZone(size),
+      data: qrText(result.data ?? EXAMPLES[type]), // UTF-8, so accents and other scripts scan correctly
       image: logo,
       qrOptions: { errorCorrectionLevel: logo ? "H" : $("gen-ec").value },
-      dotsOptions: { color: fg },
-      backgroundOptions: { color: bg },
+      dotsOptions: { color: fg() },
+      backgroundOptions: { color: bg() },
     });
+    clearTimeout(timer);
+    timer = setTimeout(drawPreview, 60); // typing fast redraws once, not on every key
   }
 
   form.addEventListener("input", refresh);
   form.addEventListener("change", refresh);
   form.addEventListener("submit", (e) => e.preventDefault());
+
+  // "yourshop.com/menu" becomes "https://yourshop.com/menu" when you leave the field, so you see what is encoded.
+  $("gen-url").addEventListener("blur", (e) => {
+    const v = e.target.value.trim();
+    if (v && !/^[a-z][a-z0-9+.-]*:/i.test(v)) { e.target.value = `https://${v}`; refresh(); }
+  });
+
+  // Colour picker and hex box stay in step; presets set both.
+  for (const key of ["fg", "bg"]) {
+    const picker = $(`gen-${key}`);
+    const hex = $(`gen-${key}-hex`);
+    picker.addEventListener("input", () => { hex.value = picker.value; });
+    hex.addEventListener("input", () => {
+      const v = hex.value.trim().startsWith("#") ? hex.value.trim() : `#${hex.value.trim()}`;
+      if (/^#[0-9a-f]{6}$/i.test(v)) picker.value = v.toLowerCase();
+    });
+  }
+  form.querySelectorAll("[data-colour]").forEach((b) => b.addEventListener("click", () => {
+    $("gen-fg").value = $("gen-fg-hex").value = b.dataset.colour;
+    refresh();
+  }));
+  form.querySelectorAll("[data-label]").forEach((b) => b.addEventListener("click", () => {
+    $("gen-label").value = b.dataset.label;
+    refresh();
+  }));
 
   $("gen-logo").addEventListener("change", (e) => {
     const file = e.target.files[0];
@@ -100,21 +157,16 @@ export function initGenerator() {
   });
   $("gen-logo-clear").addEventListener("click", () => { logo = ""; $("gen-logo").value = ""; refresh(); });
 
-  $("gen-png").addEventListener("click", () => downloadFramed(qr, size, printOpts(), "qr-code", "png"));
-  $("gen-svg").addEventListener("click", () => downloadFramed(qr, size, printOpts(), "qr-code", "svg"));
-  $("gen-stickers").addEventListener("click", () => printStickers(qr, size, printOpts(), $("gen-sticker-size").value));
+  $("gen-svg").addEventListener("click", () => ready && downloadFramed(qr, SIZE, opts(), "qrone-code", "svg"));
+  $("gen-png").addEventListener("click", () => ready && downloadFramed(qr, SIZE, opts(), "qrone-code", "png"));
+  $("gen-stickers").addEventListener("click", () => ready && printStickers(qr, SIZE, opts(), $("gen-sticker-size").value));
 
-  // The checker can send a final destination here ("make a static replacement").
-  function prefill(url) {
-    $("tab-make")?.click(); // switch to the Make tab if we're on Check
-    form.elements["gen-type"].value = "url";
-    $("gen-url").value = url;
-    refresh();
-    $("gen-url").focus();
-  }
-  document.addEventListener("prefill-url", (e) => prefill(e.detail));
-
+  // The checker's "make a static replacement" sends people here with ?url=.
   const fromLink = new URLSearchParams(location.search).get("url");
-  if (fromLink) prefill(fromLink);
-  else refresh();
+  if (fromLink) {
+    form.elements["gen-type"].value = "url";
+    $("gen-url").value = fromLink;
+  }
+  refresh();
+  if (fromLink) $("gen-url").focus();
 }

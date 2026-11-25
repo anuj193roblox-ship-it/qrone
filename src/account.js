@@ -95,7 +95,8 @@ async function showQr(code) {
       label.textContent = cleanLabel($("qr-label").value);
       label.hidden = !label.textContent;
     });
-    const opts = () => ({ label: $("qr-label").value, fg: "#000000", bg: "#ffffff" });
+    // A label prints as a black pill under the code, the same "Bottom pill" frame as the home page.
+    const opts = () => ({ frame: "pill", label: $("qr-label").value, fg: "#000000", bg: "#ffffff" });
     const name = () => `qrone-${$("qr-box").dataset.slug}`;
     $("qr-png").addEventListener("click", () => downloadFramed(qr, 512, opts(), name(), "png"));
     $("qr-svg").addEventListener("click", () => downloadFramed(qr, 512, opts(), name(), "svg"));

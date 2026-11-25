@@ -181,7 +181,7 @@ All values below come from `src/style.css` (the `:root` block and the component 
 
 QrOne is a calm, dark, single-column-on-phone interface for small business owners who are about to print a QR code, or who just found one that stopped working. The page should feel safe before it is read: a near-black ground, panels one step lighter with soft corners and hairline borders, off-white and grey text, and exactly one blue thing asking to be pressed. Nothing blinks, nothing counts down, nothing competes.
 
-Density is low and targets are large (48px tall controls, 44px minimum). The tool comes first and the explanation sits beside or below it, never in front of it. The signature device is the "What happens after you print" timeline: the product's promise is shown as a sequence of drawn steps rather than claimed in a slogan.
+Density is low and targets are large (48px tall controls, 44px minimum). The tool comes first and the explanation sits beside or below it, never in front of it. The signature device is the print preview: the code always sits on white "paper" over a quiet dot grid, so people see real print contrast before they download. The promise is shown as three steps ("What happens after you print") rather than claimed in a slogan.
 
 The design is dark only (`color-scheme: dark`). There is no light theme to support.
 
@@ -263,7 +263,8 @@ Reading text is capped at `65ch` on reading pages and `60ch` in verdicts. The su
 - **Mobile first.** Base styles target a 360px phone. Wider layouts are added at `min-width: 720px` and `min-width: 1024px`, at the bottom of `style.css`.
 - **Container:** `main` is centred, `max-width: 1200px`, with side padding `--gutter` (20px on phones, 32px from 720px). The top bar and footer use the same width, so their rules line up with the content.
 - **Reading pages** (`main.page`: about, privacy, FAQ, sign-in) narrow to `46rem`.
-- **Home** (`main.home`): one column on phones and tablets, in the order headline, tool card, timeline, 32px apart. From 1024px it becomes two columns, `minmax(0, 1fr)` and `minmax(0, 540px)`, with the headline and timeline on the left and the tool card on the right, gaps 36px by 64px.
+- **Home** (`main.home`): a compact hero (40px top, 28px below), then the studio, then the bridge cards and the story cards, 56px apart. The studio is one column on phones; from 960px it is two columns, 58% controls and 42% preview, 24px apart, with the preview sticky 20px from the top. The home headline is compact on purpose: 2rem on phones, 2.75rem from 720px, so the tool is the first thing to use.
+- **Check** (`/check`, `main.page.check-page`): the reading-page column with the checker in one card. Old `/#check` links redirect here.
 - **Page heading** (`.page-head`): 40px above, 28px below, on every non-home page.
 - **Dashboard** (`main.dash`): a vertical stack of cards 18px apart. The new-code form becomes a three-column row at 720px (destination, name, button).
 - **Tap targets:** every control is at least `--tap` (48px) tall; chips and tabs are 44px.
@@ -274,7 +275,7 @@ Reading text is capped at `65ch` on reading pages and `60ch` in verdicts. The su
 The system is flat. There are no drop shadows anywhere. Depth comes from tone: Night Ground at the bottom, Panel cards one step up, Raised Panel for inputs and selected states, and wells of Night Ground sunk back into a card for the tab track and drop zone. Every edge is a 1px line. The only `box-shadow` in the CSS is a 1px inset line on the selected tab, which is a border, not elevation.
 
 ### Named Rules
-**The No Card In A Card Rule.** A card never contains another card. To divide a card into parts, draw a 1px `--line` rule (`border-top: 1px solid var(--line)`) and add padding, as the Make result, the "Colour, size and logo" expander, the checker verdict, the dashboard code rows and the FAQ items all do. Inputs, the tab track, the drop zone, the decoded block and the QR preview are controls or content, not cards, and may sit inside one.
+**The No Card In A Card Rule.** A card never contains another card. To divide a card into parts, draw a 1px `--line` rule (`border-top: 1px solid var(--line)`) and add padding, as the studio's frame section, its expanders, the checker verdict, the dashboard code rows and the FAQ items all do. Inputs, the tab track, the drop zone, the decoded block and the QR preview are controls or content, not cards, and may sit inside one.
 
 ## Shapes
 
@@ -291,10 +292,10 @@ Borders are always 1px. Dashed borders mean "drop or fill something here" (drop 
 ## Components
 
 ### Top bar
-Slim and quiet. A 1px `--line` rule along the bottom, content inside the 1200px container with 8px vertical padding. The 26px logo mark (`public/logo.svg`) and "QrOne" on the left, 10px apart (brand role, off-white). Two or three nav links on the right in Small 600, Grey, turning Off-White on hover, with 14px by 12px padding so each is a full tap target. The home page links to How it works and Privacy; other pages link to Make, Check and FAQ. No buttons, no blue, no sign-up call to action in the bar.
+Slim and quiet. A 1px `--line` rule along the bottom, content inside the 1200px container with 8px vertical padding. The 26px logo mark (`public/logo.svg`) and "QrOne" on the left, 10px apart (brand role, off-white). Two or three nav links on the right in Small 600, Grey, turning Off-White on hover, with 14px by 12px padding so each is a full tap target. The home page links to "Check a code" and FAQ; other pages link to Make, Check and FAQ. The current page's link is Off-White (`aria-current="page"`). No buttons, no blue, no sign-up call to action in the bar.
 
 ### Headline
-`h1.hero-title` with one or two `span.line` children (see the Two-Line Headline Rule). On the home page it is followed by a `.hero-sub` subline in Title size, Grey, 14px below. Switching the Make | Check tab rewrites the headline ("QR codes that / never expire." and "Will my QR code / stop working?") through `setHeadline`, using the tab's `data-line1` and `data-line2`.
+`h1.hero-title` with one or two `span.line` children (see the Two-Line Headline Rule). It is followed by a `.hero-sub` subline in Title size, Grey, 14px below. On the home page a Lamp Blue text link ("Already printed a code? Check if it will expire →") sits under the subline and leads to `/check`. Sign-in rewrites its headline through `setHeadline`.
 
 ### Card
 - **Background:** Panel, with a 1px Hairline border.
@@ -303,11 +304,14 @@ Slim and quiet. A 1px `--line` rule along the bottom, content inside the 1200px 
 - **Shadow:** none.
 - **Inside:** divide with 1px rules, never nested cards. Lists inside a card (`.code-list`, `.faq-list`) put the padding on the sides only and let each row carry its own vertical padding and top rule.
 
-### Tabs (Make | Check)
-A pill-shaped track in Night Ground with a 1px Hairline border and 4px inner padding. Each tab fills half the width, 44px tall, Label 700, Grey. The selected tab is a Raised Panel pill with an inset 1px Hairline Strong edge and Off-White text. Real `role="tab"` buttons with `aria-selected`; arrow keys move between them.
+### QR studio (home)
+Two panels. **Controls** are one card: the type chips, the fields, then a 1px rule and the "Print frame and label" choice, then two expanders ("Style, colour and logo"; "Print a sheet of stickers"). **Preview** is a Panel with a dot grid (1px Hairline Strong dots every 18px) holding the white paper card, two status pills ("Static · never expires" in Green; "Print-safe contrast" in Green or "Low contrast" in Amber), the primary "Download SVG (best for print)" and a ghost "Download PNG (high resolution)", both full width, and a centred hint. Until something is typed the preview shows an example code with an "Example" tag and the download buttons are disabled.
+
+### Frame choice
+Four radio buttons styled as 12px-corner tiles (2 per row on phones, 4 from 720px, icon above the name): None, Bottom pill, Top banner, Box frame. Icons are 22px line drawings, with filled shapes for the label part. Choosing a frame shows the label field (24 characters at most) and quick-pick chips: small 40px ghost pills. The frames themselves are drawn by `src/frame.js` in the code's own colours, outside the code's blank border, so they never affect scanning.
 
 ### Type chips (Link / Text / Wi-Fi / Email)
-Real radio buttons, visually hidden, with a `span` styled as a pill: 44px tall, 18px side padding, 1px Hairline Strong border, Grey text. Hover: Off-White text, Hairline Hover border. Selected: Raised Panel fill, Off-White text, Lamp Blue border. Keyboard focus draws the standard focus ring around the pill.
+Real radio buttons, visually hidden, with a `span` styled as a pill: 44px tall, four equal columns on the home page, 1px Hairline Strong border, Grey text. Hover: Off-White text, Hairline Hover border. Selected: Raised Panel fill, Off-White text, Lamp Blue border. Keyboard focus draws the standard focus ring around the pill.
 
 ### Inputs
 - **Style:** Raised Panel fill, 1px Hairline Strong border, 12px corners, 11px by 14px padding, at least 48px tall, Body text.
@@ -343,10 +347,13 @@ Inline pill, 5px by 12px padding, Small 700, with an 8px dot in the current colo
 Pills are labels, not buttons: they are never clickable.
 
 ### QR preview
-The QR image sits in a white box (`#gen-preview`, `.qr-box`): pure white, 6px padding, 12px corners, at most 220px wide, the canvas or SVG inside at 100% width with 6px corners. On the home page it sits in a two-column result (168px code, then the "Never expires" title, a Grey lede, the button row and a hint) from 720px. Before a code exists, a placeholder shows a 76px dashed square with three faint finder-square marks and one Grey sentence.
+Codes are always shown on white. On the home page the preview is the downloaded file itself (an `<img>` of the framed SVG) on a white paper card: 14px padding, 12px corners, at most 320px wide. In the dashboard the code sits in `.qr-box` (white, 6px padding, at most 220px), with an optional label previewed as a black pill under it. Every code has a blank border at least 4 modules wide (`quietZone` in `src/frame.js`).
 
-### Timeline ("What happens after you print")
-An ordered list. Each step is a two-column grid: a 44px Raised Panel circle with a 1px Hairline border holding a 20px line icon, then a 700 title and a Grey sentence. A 2px Hairline connector runs down from each circle to the next. The first step ("Today") draws its icon and circle border in Lamp Blue; the rest are Grey. Icons are inline SVG on a 24px grid: `fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"`. Use this same icon recipe anywhere an icon is needed.
+### Bridge cards ("Static or editable")
+Two cards side by side from 720px. Each opens with an uppercase Small 800 tag (Green "Free forever"; Lamp Blue for the paid card), a Title 800 heading and a tick list in Grey (ticks are drawn with two 2px borders, not emoji), then a Faint footnote. The paid card carries a 2px Signal Blue top border. It never lists a feature that isn't built.
+
+### Story cards ("What happens after you print")
+Three cards in a row from 720px: a Faint Small 700 "when" line, a Title 800 heading and one Grey sentence. Claims about other vendors stay general ("many", "some") unless a vendor's own page is linked.
 
 ### Dashboard rows
 The code list is one card (`ul.code-list.card`) with 20px (28px at 720px) side padding. Each row has 18px vertical padding and a 1px rule above it (except the first). Phone: stacked. From 720px: three columns: name (700) with the short link in mono Lamp Blue beneath it, the destination in Grey, and the status pill at the right; the row of ghost action buttons (QR code, Copy link, Change destination) and a quiet Delete runs full width below. Editing a destination swaps the destination text for an inline field with a ghost Save and quiet Cancel. Counts and prices use tabular numbers.

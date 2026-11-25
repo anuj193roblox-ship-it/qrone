@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Free QR code generator that never expires, and a QR code checker | {{NAME}}</title>
-  <meta name="description" content="Make a static QR code that never expires, or check whether a QR code you already printed could be switched off. Free, no account, nothing uploaded.">
+  <title>Free QR code generator that never expires | {{NAME}}</title>
+  <meta name="description" content="Make a static QR code that never expires, with a print-ready label and frame. Free, no account, nothing uploaded. Download SVG or PNG.">
   <meta property="og:title" content="{{NAME}}: {{TAGLINE}}">
-  <meta property="og:description" content="Make a static QR code that never expires, or check whether a printed QR code could be switched off.">
+  <meta property="og:description" content="Make a static QR code that never expires. Free, no account, nothing leaves your browser.">
   <meta property="og:type" content="website">
   <meta name="theme-color" content="#0b0c0f">
   <link rel="icon" type="image/svg+xml" href="/logo.svg">
@@ -17,187 +17,205 @@
   <header class="topbar">
     <nav class="topbar-in" aria-label="Main">
       <a class="brand" href="/"><img class="brand-mark" src="/logo.svg" alt="" width="26" height="26">{{NAME}}</a>
-      <div class="nav-links"><a href="/faq.html">How it works</a><a href="/privacy.html">Privacy</a></div>
+      <div class="nav-links"><a href="/check">Check a code</a><a href="/faq.html">FAQ</a></div>
     </nav>
   </header>
 
   <main id="main" class="home">
-    <div class="hero-copy">
-      <h1 id="headline" class="hero-title"><span class="line">QR codes that</span> <span class="line accent">never expire.</span></h1>
-      <p class="hero-sub">Free. No account. Nothing leaves your browser.</p>
+    <div class="home-hero">
+      <h1 class="hero-title"><span class="line">QR codes that</span> <span class="line accent">never expire.</span></h1>
+      <p class="hero-sub">Free static codes. No account. Nothing leaves your browser.</p>
+      <a class="hero-link" href="/check">Already printed a code? Check if it will expire <span aria-hidden="true">→</span></a>
     </div>
 
-    <div class="tool card">
-      <div class="tabs" role="tablist" aria-label="Choose a tool">
-        <button type="button" role="tab" id="tab-make" aria-selected="true" aria-controls="panel-make" data-line1="QR codes that" data-line2="never expire.">Make a code</button>
-        <button type="button" role="tab" id="tab-check" aria-selected="false" aria-controls="panel-check" tabindex="-1" data-line1="Will my QR code" data-line2="stop working?">Check a code</button>
-      </div>
+    <section class="studio" aria-label="Make a QR code">
+      <form id="gen-form" class="card studio-controls" autocomplete="off" novalidate>
+        <fieldset class="segmented seg-4">
+          <legend class="sr-only">The code holds</legend>
+          <label><input type="radio" name="gen-type" value="url" checked><span>Link</span></label>
+          <label><input type="radio" name="gen-type" value="wifi"><span>Wi-Fi</span></label>
+          <label><input type="radio" name="gen-type" value="text"><span>Text</span></label>
+          <label><input type="radio" name="gen-type" value="email"><span>Email</span></label>
+        </fieldset>
 
-      <section id="panel-make" role="tabpanel" aria-labelledby="tab-make">
-        <form id="gen-form" class="make" autocomplete="off" novalidate>
-          <fieldset class="segmented">
-            <legend>The code holds</legend>
-            <label><input type="radio" name="gen-type" value="url" checked><span>Link</span></label>
-            <label><input type="radio" name="gen-type" value="text"><span>Text</span></label>
-            <label><input type="radio" name="gen-type" value="wifi"><span>Wi-Fi</span></label>
-            <label><input type="radio" name="gen-type" value="email"><span>Email</span></label>
-          </fieldset>
-
-          <div class="fields">
-            <div data-fields="url">
-              <label for="gen-url">Where should it go?</label>
-              <input id="gen-url" class="big" type="text" inputmode="url" placeholder="example.com/menu" spellcheck="false">
-            </div>
-            <div data-fields="text" hidden>
-              <label for="gen-text">Text</label>
-              <textarea id="gen-text" rows="3"></textarea>
-            </div>
-            <div data-fields="wifi" hidden>
-              <label for="gen-ssid">Network name</label>
-              <input id="gen-ssid" type="text">
-              <div class="pair">
-                <div>
-                  <label for="gen-wifi-sec">Security</label>
-                  <select id="gen-wifi-sec">
-                    <option value="WPA">WPA/WPA2/WPA3</option>
-                    <option value="WEP">WEP</option>
-                    <option value="nopass">No password</option>
-                  </select>
-                </div>
-                <div>
-                  <label for="gen-wifi-pass">Password</label>
-                  <input id="gen-wifi-pass" type="text" spellcheck="false">
-                </div>
-              </div>
-              <label class="check"><input id="gen-wifi-hidden" type="checkbox"> Hidden network</label>
-            </div>
-            <div data-fields="email" hidden>
-              <label for="gen-mail-to">Email address</label>
-              <input id="gen-mail-to" type="email">
-              <label for="gen-mail-subject">Subject (optional)</label>
-              <input id="gen-mail-subject" type="text">
-              <label for="gen-mail-body">Message (optional)</label>
-              <textarea id="gen-mail-body" rows="2"></textarea>
-            </div>
-            <p id="gen-msg" class="msg-error" role="alert"></p>
+        <div class="fields">
+          <div data-fields="url">
+            <label for="gen-url">Destination URL</label>
+            <input id="gen-url" class="big" type="text" inputmode="url" placeholder="yourshop.com/menu" spellcheck="false">
           </div>
-
-          <div class="make-out">
-            <div id="gen-placeholder" class="ghost">
-              <div class="ghost-square" aria-hidden="true"></div>
-              <p>Type an address and your code appears here.</p>
-            </div>
-            <div id="gen-result" class="result" hidden>
-              <div id="gen-preview" aria-label="QR code preview"><div id="gen-qr"></div><p id="gen-preview-label" class="preview-label" hidden></p></div>
-              <div class="result-side">
-                <p class="stamp">Never expires</p>
-                <p class="lede">The address is in the pattern itself. No account, nothing to switch off.</p>
-                <div class="actions">
-                  <button type="button" id="gen-png" class="btn btn-primary">Download PNG</button>
-                  <button type="button" id="gen-svg" class="btn">SVG</button>
-                </div>
-                <p class="hint">Scan it with your phone before you print.</p>
+          <div data-fields="wifi" hidden>
+            <label for="gen-ssid">Network name</label>
+            <input id="gen-ssid" type="text" spellcheck="false">
+            <div class="pair">
+              <div>
+                <label for="gen-wifi-pass">Password</label>
+                <input id="gen-wifi-pass" type="text" spellcheck="false">
               </div>
-            </div>
-          </div>
-
-          <details class="more">
-            <summary>Colour, size, logo and label</summary>
-            <div class="more-body">
-              <div class="pair">
-                <div>
-                  <label for="gen-fg">Code colour</label>
-                  <input id="gen-fg" type="color" value="#000000">
-                </div>
-                <div>
-                  <label for="gen-bg">Background</label>
-                  <input id="gen-bg" type="color" value="#ffffff">
-                </div>
-              </div>
-              <p id="gen-contrast" class="msg-warn" role="status"></p>
-              <div class="pair">
-                <div>
-                  <label for="gen-ec">Error correction</label>
-                  <select id="gen-ec">
-                    <option value="L">Low</option>
-                    <option value="M" selected>Medium</option>
-                    <option value="Q">Quartile</option>
-                    <option value="H">High, best with a logo</option>
-                  </select>
-                </div>
-                <div>
-                  <label for="gen-size">Size (px)</label>
-                  <input id="gen-size" type="number" inputmode="numeric" min="200" max="1000" step="10" value="512">
-                </div>
-              </div>
-              <label for="gen-logo">Logo in the middle</label>
-              <input id="gen-logo" type="file" accept="image/*">
-              <button type="button" id="gen-logo-clear" class="btn btn-quiet" hidden>Remove logo</button>
-              <p id="gen-logo-note" class="hint" role="status"></p>
-              <label for="gen-label">Label under the code (optional)</label>
-              <input id="gen-label" type="text" maxlength="24" placeholder="Scan for the menu">
-              <p class="hint">Printed under the code in the code's colour. Up to 24 characters.</p>
-            </div>
-          </details>
-
-          <details class="more">
-            <summary>Print a sheet of stickers</summary>
-            <div class="more-body">
-              <p class="hint">Cover old codes a vendor could switch off, or label tables and doors. Fits US Letter and A4. To keep a file, choose "Save as PDF" in the print window.</p>
-              <label for="gen-sticker-size">Sticker size</label>
-              <div class="pair pair-tight">
-                <select id="gen-sticker-size">
-                  <option value="1">1 inch (2.5 cm)</option>
-                  <option value="1.5" selected>1.5 inches (3.8 cm)</option>
-                  <option value="2">2 inches (5 cm)</option>
+              <div>
+                <label for="gen-wifi-sec">Security</label>
+                <select id="gen-wifi-sec">
+                  <option value="WPA">WPA/WPA2/WPA3</option>
+                  <option value="WEP">WEP</option>
+                  <option value="nopass">No password</option>
                 </select>
-                <button type="button" id="gen-stickers" class="btn">Print stickers</button>
               </div>
-              <p class="hint">Print one sheet on plain paper first, and scan a sticker with your phone.</p>
             </div>
-          </details>
-        </form>
-      </section>
-
-      <section id="panel-check" role="tabpanel" aria-labelledby="tab-check" hidden>
-        <label id="chk-drop" class="drop" for="chk-file">
-          <span class="drop-title">Drop a QR image</span>
-          <span class="btn btn-primary" aria-hidden="true">Choose a photo</span>
-          <span class="hint">or paste a screenshot</span>
-          <input id="chk-file" type="file" accept="image/*">
-        </label>
-        <form id="chk-url-form" class="inline-form">
-          <label for="chk-url">Or type what the code says</label>
-          <div class="pair pair-tight">
-            <input id="chk-url" type="text" inputmode="url" placeholder="qrco.de/abc123" spellcheck="false">
-            <button type="submit" class="btn">Check</button>
+            <label class="check"><input id="gen-wifi-hidden" type="checkbox"> Hidden network</label>
           </div>
-        </form>
-        <p class="hint">Read on your device. Nothing is uploaded.</p>
-        <div id="chk-status" class="status" role="status"></div>
-        <div id="chk-result" tabindex="-1">
-          <div class="explain">
-            <p><strong>Static codes</strong> hold your address. Nobody can switch them off.</p>
-            <p><strong>Dynamic codes</strong> go through a QR company's link. If the trial or plan ends, that company can turn it off.</p>
+          <div data-fields="text" hidden>
+            <label for="gen-text">Text</label>
+            <textarea id="gen-text" rows="3"></textarea>
+            <p id="gen-text-count" class="hint" aria-live="polite"></p>
+          </div>
+          <div data-fields="email" hidden>
+            <label for="gen-mail-to">Recipient email</label>
+            <input id="gen-mail-to" type="email" spellcheck="false">
+            <label for="gen-mail-subject">Subject (optional)</label>
+            <input id="gen-mail-subject" type="text">
+            <label for="gen-mail-body">Message (optional)</label>
+            <textarea id="gen-mail-body" rows="2"></textarea>
+          </div>
+          <p id="gen-msg" class="msg-error" role="alert"></p>
+        </div>
+
+        <div class="studio-section">
+          <fieldset class="frames">
+            <legend>Print frame and label</legend>
+            <label><input type="radio" name="gen-frame" value="none" checked><span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"/></svg>None</span></label>
+            <label><input type="radio" name="gen-frame" value="pill"><span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="3" width="12" height="12" rx="1.5"/><rect class="fill" x="5" y="17.5" width="14" height="4" rx="2"/></svg>Bottom pill</span></label>
+            <label><input type="radio" name="gen-frame" value="banner"><span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect class="fill" x="5" y="2.5" width="14" height="4" rx="1"/><rect x="6" y="9" width="12" height="12" rx="1.5"/></svg>Top banner</span></label>
+            <label><input type="radio" name="gen-frame" value="box"><span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="2.5" width="17" height="19" rx="3"/><rect x="7" y="5.5" width="10" height="10" rx="1"/></svg>Box frame</span></label>
+          </fieldset>
+          <div id="gen-label-box" hidden>
+            <label for="gen-label">Label</label>
+            <input id="gen-label" type="text" maxlength="24" value="Scan for the menu">
+            <div class="chips" role="group" aria-label="Quick labels">
+              <button type="button" class="chip" data-label="Scan for the menu">Scan for the menu</button>
+              <button type="button" class="chip" data-label="Free Wi-Fi">Free Wi-Fi</button>
+              <button type="button" class="chip" data-label="Leave a review">Leave a review</button>
+              <button type="button" class="chip" data-label="Book now">Book now</button>
+              <button type="button" class="chip" data-label="Visit our website">Website</button>
+            </div>
           </div>
         </div>
-      </section>
-    </div>
 
-    <section class="timeline-block" aria-labelledby="timeline-title">
-      <h2 id="timeline-title" class="timeline-title">What happens after you print</h2>
-      <ol class="timeline">
-        <li>
-          <span class="tl-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg></span>
-          <div><p class="tl-title">Today</p><p class="tl-text">Your code works the moment you download it.</p></div>
+        <details class="more">
+          <summary>Style, colour and logo</summary>
+          <div class="more-body">
+            <label for="gen-fg">Code colour</label>
+            <div class="colour-row">
+              <input id="gen-fg" type="color" value="#000000">
+              <input id="gen-fg-hex" type="text" value="#000000" maxlength="7" spellcheck="false" aria-label="Code colour as a hex value">
+            </div>
+            <div class="swatches" role="group" aria-label="Print-safe code colours">
+              <button type="button" class="swatch sw-000000" data-colour="#000000" aria-label="Black"></button>
+              <button type="button" class="swatch sw-111827" data-colour="#111827" aria-label="Charcoal"></button>
+              <button type="button" class="swatch sw-1e3a8a" data-colour="#1e3a8a" aria-label="Navy"></button>
+              <button type="button" class="swatch sw-14532d" data-colour="#14532d" aria-label="Forest green"></button>
+            </div>
+            <label for="gen-bg">Background</label>
+            <div class="colour-row">
+              <input id="gen-bg" type="color" value="#ffffff">
+              <input id="gen-bg-hex" type="text" value="#ffffff" maxlength="7" spellcheck="false" aria-label="Background as a hex value">
+            </div>
+            <p id="gen-contrast" class="msg-warn" role="status"></p>
+            <label for="gen-ec">Error correction</label>
+            <select id="gen-ec">
+              <option value="L">Low (7%)</option>
+              <option value="M" selected>Medium (15%)</option>
+              <option value="Q">Quartile (25%)</option>
+              <option value="H">High (30%), best with a logo</option>
+            </select>
+            <label for="gen-logo">Logo in the middle</label>
+            <input id="gen-logo" type="file" accept="image/*">
+            <button type="button" id="gen-logo-clear" class="btn btn-quiet" hidden>Remove logo</button>
+            <p id="gen-logo-note" class="hint" role="status"></p>
+          </div>
+        </details>
+
+        <details class="more">
+          <summary>Print a sheet of stickers</summary>
+          <div class="more-body">
+            <p class="hint">Cover old codes a vendor could switch off, or label tables and doors. Fits US Letter and A4. To keep a file, choose "Save as PDF" in the print window.</p>
+            <label for="gen-sticker-size">Sticker size</label>
+            <div class="pair pair-tight">
+              <select id="gen-sticker-size">
+                <option value="1">1 inch (2.5 cm)</option>
+                <option value="1.5" selected>1.5 inches (3.8 cm)</option>
+                <option value="2">2 inches (5 cm)</option>
+              </select>
+              <button type="button" id="gen-stickers" class="btn">Print stickers</button>
+            </div>
+            <p class="hint">Print one sheet on plain paper first, and scan a sticker with your phone.</p>
+          </div>
+        </details>
+      </form>
+
+      <aside class="studio-preview" aria-label="Print preview">
+        <div class="paper">
+          <img id="gen-img" alt="Preview of your QR code" width="300" height="300">
+          <span id="gen-example" class="example-tag">Example</span>
+        </div>
+        <div class="badges">
+          <span class="pill pill-ok">Static · never expires</span>
+          <span id="gen-contrast-badge" class="pill pill-ok">Print-safe contrast</span>
+        </div>
+        <div class="studio-actions">
+          <button type="button" id="gen-svg" class="btn btn-primary btn-block">Download SVG (best for print)</button>
+          <button type="button" id="gen-png" class="btn btn-block">Download PNG (high resolution)</button>
+        </div>
+        <p id="gen-note" class="hint studio-note">Scan the preview with your phone camera before you print.</p>
+      </aside>
+    </section>
+
+    <section class="bridge" aria-labelledby="bridge-title">
+      <h2 id="bridge-title" class="section-title">Static or editable: pick what fits your print run</h2>
+      <div class="bridge-grid">
+        <article class="card bridge-card">
+          <p class="tag tag-ok">Free forever</p>
+          <h3>Static codes (above)</h3>
+          <ul class="ticks">
+            <li>Your address is written into the pattern itself.</li>
+            <li>No server in the middle, so nothing can switch it off.</li>
+            <li>Can't be changed after printing.</li>
+          </ul>
+          <p class="bridge-foot">Best for Wi-Fi signs, business cards and addresses that won't change.</p>
+        </article>
+        <article class="card bridge-card bridge-paid">
+          <!-- shortcut: no button until sign-in is live; then link "See one-time plans" to /pricing -->
+          <p class="tag tag-accent">Coming soon · pay once from {{PRICE_STARTER}}</p>
+          <h3>Editable codes</h3>
+          <ul class="ticks">
+            <li>Change where a printed menu or flyer goes, any time.</li>
+            <li>No subscription: pay once, and paid codes never expire.</li>
+            <li>Download every redirect whenever you like.</li>
+          </ul>
+          <p class="bridge-foot">Best for menus, flyers and anything whose page might move.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="story" aria-labelledby="story-title">
+      <h2 id="story-title" class="section-title">What happens after you print</h2>
+      <ol class="story-grid">
+        <li class="card">
+          <p class="story-when">Day 1</p>
+          <h3>You print 500 menus</h3>
+          <p>Many free QR sites put their own short link inside your code, not your address.</p>
         </li>
-        <li>
-          <span class="tl-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
-          <div><p class="tl-title">When someone's free trial ends</p><p class="tl-text">Dynamic codes from many QR sites can be switched off. A static code from QrOne has nothing to switch off.</p></div>
+        <li class="card">
+          <p class="story-when">When their trial ends</p>
+          <h3>Some codes get switched off</h3>
+          <p>Some vendors stop those links until you pay. <a href="/check">Check a code you already printed</a>.</p>
         </li>
-        <li>
-          <span class="tl-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg></span>
-          <div><p class="tl-title">Years from now</p><p class="tl-text">It still opens your page. Nothing to renew, nothing to pay.</p></div>
+        <li class="card">
+          <p class="story-when">Years later</p>
+          <h3>A static code still works</h3>
+          <p>There's no server in the middle, so there's nothing to renew and nothing to switch off.</p>
         </li>
       </ol>
     </section>
