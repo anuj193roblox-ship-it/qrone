@@ -71,13 +71,29 @@ export function initSignin() {
     return;
   }
 
+  // The "are you a person?" check (Cloudflare Turnstile), shown only when the server has it switched on.
+  let checkId = null;
+  api("/api/session").then(({ data }) => {
+    if (typeof data.checkKey !== "string") return;
+    const script = el("script", { src: "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" });
+    script.onload = () => {
+      // The full-size check needs 300px; narrow phones get the compact one. (The empty box itself is hidden, so measure the field.)
+      const size = $("signin-email").clientWidth < 300 ? "compact" : "flexible";
+      checkId = window.turnstile.render($("signin-check"), { sitekey: data.checkKey, size });
+    };
+    script.onerror = () => error("The check that keeps robots out didn't load. Turn off content blockers for this site, or try another browser.");
+    document.head.append(script);
+  });
+
   $("signin-form").addEventListener("submit", async (e) => {
     e.preventDefault();
     const button = e.submitter ?? $("signin-form").querySelector("button");
     button.disabled = true;
     error("");
     $("signin-msg").textContent = "Sending…";
-    const r = await api("/api/auth/start", { email: $("signin-email").value });
+    const check = checkId === null ? undefined : window.turnstile.getResponse(checkId);
+    const r = await api("/api/auth/start", { email: $("signin-email").value, check });
+    if (checkId !== null) window.turnstile.reset(checkId); // each solved check works once
     button.disabled = false;
     $("signin-msg").textContent = "";
     if (r.ok) {

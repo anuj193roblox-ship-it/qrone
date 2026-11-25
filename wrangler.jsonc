@@ -29,4 +29,6 @@
   // Real sign-in email (Resend), once the domain is verified there:
   //   add "MAIL_FROM": "QrOne <signin@yourdomain.com>" to "vars" above,
   //   and set the key as a secret, never here: npx.cmd wrangler secret put RESEND_API_KEY
+  // It also needs the sign-in bot check (Cloudflare Turnstile): add "TURNSTILE_SITE_KEY" (public) to "vars",
+  //   and npx.cmd wrangler secret put TURNSTILE_SECRET
 }

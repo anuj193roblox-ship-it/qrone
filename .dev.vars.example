@@ -11,3 +11,7 @@ DODO_API_BASE=http://localhost:8799
 DODO_API_KEY=dodo_test_replace-me
 DODO_WEBHOOK_SECRET=whsec_replace-me
 DODO_PRODUCTS={}
+
+# Bot check on the sign-in form. These are Cloudflare's public TEST keys: they always pass (use 2x0000000000000000000000000000000AA as the secret to see a failure).
+TURNSTILE_SITE_KEY=1x00000000000000000000AA
+TURNSTILE_SECRET=1x0000000000000000000000000000000AA

@@ -4,7 +4,7 @@
 //   POST /api/auth/start   { email }  -> emails a one-time sign-in link
 //   POST /api/auth/verify  { token }  -> uses the link once, starts a session (cookie)
 //   GET  /api/me                      -> who is signed in (or 401)
-//   GET  /api/session                 -> { signedIn } for the header, always 200
+//   GET  /api/session                 -> { signedIn, checkKey } for the header and sign-in page, always 200
 //   POST /api/auth/logout             -> ends the session
 //   DELETE /api/account               { email } -> deletes the account and everything in it (email typed to confirm)
 //   GET    /api/codes                 -> your codes, plan and limit
@@ -19,6 +19,7 @@ import {
   sessionCookie, clearedCookie, readCookie, isSameOrigin,
 } from "./auth.js";
 import { canSend, sendSignInLink, showLinkOnPage } from "./mail.js";
+import { humanCheckOn, isHuman } from "./human.js";
 import { limitFor, planName, expiresAtFor, normalizeDestination, cleanLabel, cleanEndsAt, newSlug, FREE_DAYS } from "./codes.js";
 import { FORMATS, build } from "./export.js";
 import { upgradeKey, upgradeOptions, highestPlan, productsOf, verifyWebhook } from "./billing.js";
@@ -49,9 +50,14 @@ async function readJson(request) {
 const SENT = { ok: true, message: "If that address can receive email, a sign-in link is on its way." };
 
 async function start(request, env) {
-  const email = normalizeEmail((await readJson(request))?.email);
+  const body = await readJson(request);
+  const email = normalizeEmail(body?.email);
   if (!isValidEmail(email)) return json({ ok: false, error: "Enter a valid email address." }, 400);
   if (!canSend(env)) return json({ ok: false, error: "Sign-in isn't available yet." }, 503);
+  // Before anything is saved or sent.
+  if (!(await isHuman(env, body?.check, request.headers.get("cf-connecting-ip")))) {
+    return json({ ok: false, error: "Please complete the check above the button, then try again." }, 400);
+  }
 
   const { n } = await env.DB
     .prepare("SELECT COUNT(*) AS n FROM login_tokens WHERE email = ?1 AND created_at > ?2")
@@ -109,7 +115,8 @@ async function currentAccount(request, env) {
 // For the header on every page: always 200, so signed-out visitors never see an error in the console.
 // Says only whether you are signed in; no email or plan.
 async function session(request, env) {
-  return json({ ok: true, signedIn: Boolean(await currentAccount(request, env)) });
+  // checkKey: the public key the sign-in page needs to show the bot check (null while it's off).
+  return json({ ok: true, signedIn: Boolean(await currentAccount(request, env)), checkKey: humanCheckOn(env) ? env.TURNSTILE_SITE_KEY : null });
 }
 
 async function me(request, env) {

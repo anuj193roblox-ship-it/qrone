@@ -3,7 +3,10 @@
 //   Local testing: DEV_LOG_LINKS=1 in .dev.vars prints the link to the terminal instead of sending it.
 //   Neither set (the live site before the domain exists): sign-in reports it isn't available yet.
 
-const realEmail = (env) => Boolean(env.RESEND_API_KEY && env.MAIL_FROM);
+import { humanCheckOn } from "./human.js";
+
+// Real email also needs the bot check switched on, or a script could use up the daily allowance.
+const realEmail = (env) => Boolean(env.RESEND_API_KEY && env.MAIL_FROM) && humanCheckOn(env);
 export const canSend = (env) => realEmail(env) || env.DEV_LOG_LINKS === "1";
 
 // Local testing only: the sign-in page may show the link itself, so you don't have to dig it out of the terminal.

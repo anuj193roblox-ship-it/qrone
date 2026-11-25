@@ -50,9 +50,10 @@ D1–D2 are built and tested end to end locally (the link is printed to the term
 1. Buy the domain (B2).
 2. In Resend (free: 3,000 emails a month, 100 a day), add the domain and put the DNS records it shows into Cloudflare DNS. Wait until Resend says "Verified".
 3. In Resend, create an API key with "Sending access" only. Never paste it in chat. Run `npx.cmd wrangler secret put RESEND_API_KEY` and paste it there.
-4. Set `MAIL_FROM` in `wrangler.jsonc` → `vars` (for example `QrOne <signin@yourdomain.com>`), then deploy.
-5. ~~Update `privacy.html`~~ ✅ done: it covers the email, codes, cookie, payments, and Resend sending the sign-in emails.
-The code side is built and tested (`app/src/mail.js`): sign-in switches on by itself once both the key and `MAIL_FROM` exist.
+4. Set `MAIL_FROM` in `wrangler.jsonc` → `vars` (for example `QrOne <signin@yourdomain.com>`).
+5. Bot check (free): Cloudflare dashboard → Turnstile → Add widget, hostname = your domain, mode "Managed". Put the **site key** in `wrangler.jsonc` → `vars` as `TURNSTILE_SITE_KEY` (it's public). Set the **secret key** with `npx.cmd wrangler secret put TURNSTILE_SECRET`. Then deploy. Real email stays off until this exists, so nobody can burn the 100-a-day allowance with a script.
+6. ~~Update `privacy.html`~~ ✅ done: it covers the email, codes, cookie, payments, Resend sending the sign-in emails, and the Turnstile check.
+The code side is built and tested (`app/src/mail.js`, `app/src/human.js`): sign-in switches on by itself once the Resend key, `MAIL_FROM` and both Turnstile keys exist.
 
 | # | Step | Who | Done when |
 |---|------|-----|-----------|

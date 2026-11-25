@@ -3,7 +3,8 @@ import assert from "node:assert/strict";
 import { showLinkOnPage, canSend, sendSignInLink, RESEND_URL } from "../app/src/mail.js";
 
 const dev = { DEV_LOG_LINKS: "1" };
-const live = { RESEND_API_KEY: "re_test_123", MAIL_FROM: "QrOne <signin@qrone.example>" };
+const check = { TURNSTILE_SITE_KEY: "0x4AAA", TURNSTILE_SECRET: "0x4BBB" };
+const live = { RESEND_API_KEY: "re_test_123", MAIL_FROM: "QrOne <signin@qrone.example>", ...check };
 
 test("the sign-in link shows on the page only for local testing on this computer", () => {
   for (const url of ["http://localhost:8791/api/auth/start", "http://127.0.0.1:8791/x", "http://[::1]:8791/x"]) {
@@ -25,6 +26,16 @@ test("sign-in is available with Resend fully set up or in local testing, not wit
   assert.equal(canSend({}), false);
   assert.equal(canSend({ RESEND_API_KEY: "re_x" }), false, "a key without a From address");
   assert.equal(canSend({ MAIL_FROM: "a@b.co" }), false, "a From address without a key");
+});
+
+test("real email stays off until the bot check is on, so the live site never sends unguarded", async (t) => {
+  const noCheck = { RESEND_API_KEY: "re_test_123", MAIL_FROM: "a@b.co" };
+  assert.equal(canSend(noCheck), false);
+  assert.equal(canSend({ ...noCheck, TURNSTILE_SECRET: "x" }), false, "half the check is no check");
+  const fetchMock = t.mock.method(globalThis, "fetch", async () => new Response("{}"));
+  t.mock.method(console, "log", () => {});
+  await sendSignInLink({ ...noCheck, ...dev }, "person@example.com", "https://site.example/signin?token=abc");
+  assert.equal(fetchMock.mock.callCount(), 0, "no email goes out without the check");
 });
 
 test("with Resend set up, the link is sent through Resend's API with the secret key", async (t) => {
