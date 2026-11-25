@@ -178,7 +178,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 var(--gutter); }
 
 /* ---------- Forms ---------- */
 label, legend { display: block; font-weight: 600; font-size: var(--t-label); margin: 18px 0 8px; padding: 0; }
-input[type="text"], input[type="email"], input[type="number"], select, textarea {
+input[type="text"], input[type="email"], input[type="number"], input[type="datetime-local"], select, textarea {
   width: 100%;
   min-height: var(--tap);
   padding: 11px 14px;
@@ -402,6 +402,16 @@ details.more { margin-top: 8px; border-top: 1px solid var(--line); }
 .panel-text { color: var(--muted); margin-top: 10px; max-width: 62ch; }
 .code-link-row { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
 .plan:focus { outline: none; }
+/* "Stop working" control: a mode, then either an amount + unit or a date and time. */
+.ends-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.ends-row select, .ends-row input { width: auto; }
+.ends-row > select { flex: 1 1 14rem; }
+.ends-after, .ends-date { display: flex; gap: 8px; flex: 1 1 14rem; }
+.ends-after input { width: 6rem; }
+.ends-after select, .ends-date input { flex: 1; }
+.ends-form { grid-column: 1 / -1; }
+.ends-form .actions { margin-top: 12px; }
+@media (min-width: 720px) { .code-form .ends-control { grid-column: 1 / 3; grid-row: 2; } .code-form .ends-control { margin-top: 4px; } }
 
 /* Dialogs: one quiet panel over a dimmed page. */
 .dialog { width: min(100% - 32px, 760px); max-height: calc(100vh - 32px); padding: 24px; color: var(--text); background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--r-card); }

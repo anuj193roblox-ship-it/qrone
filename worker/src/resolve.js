@@ -26,12 +26,16 @@ export function isSafeDestination(value, ownHosts = []) {
   return !ownHosts.some((h) => host === h || host.endsWith("." + h));
 }
 
-// row: { destination, expires_at, disabled } from the database, or null when no code matches.
+// row: { destination, expires_at, ends_at, disabled } from the database, or null when no code matches.
+// expires_at is set by the plan (free codes); ends_at by the owner. Whichever passed first decides the page.
 // Returns either { status: 302, location } or { status, page } for one of the plain status pages.
 export function decide(row, nowSeconds, ownHosts = []) {
   if (!row) return { status: 404, page: "missing" };
   if (row.disabled) return { status: 410, page: "disabled" };
-  if (row.expires_at != null && nowSeconds >= row.expires_at) return { status: 410, page: "expired" };
+  const expired = row.expires_at != null && nowSeconds >= row.expires_at;
+  const ended = row.ends_at != null && nowSeconds >= row.ends_at;
+  if (ended && (!expired || row.ends_at <= row.expires_at)) return { status: 410, page: "ended" };
+  if (expired) return { status: 410, page: "expired" };
   if (!isSafeDestination(row.destination, ownHosts)) return { status: 410, page: "disabled" };
   return { status: 302, location: row.destination };
 }

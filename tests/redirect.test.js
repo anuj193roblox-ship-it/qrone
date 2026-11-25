@@ -23,6 +23,19 @@ test("free codes stop at their expiry time, not a second before", () => {
   assert.equal(decide({ ...ok, expires_at: NOW - 86400 }, NOW).page, "expired");
 });
 
+test("an owner-set end time stops the code at that second, with the 'ended' page", () => {
+  assert.equal(decide({ ...ok, ends_at: NOW + 1 }, NOW).status, 302);
+  assert.deepEqual(decide({ ...ok, ends_at: NOW }, NOW), { status: 410, page: "ended" });
+  assert.equal(decide({ ...ok, ends_at: null }, NOW + 50 * 365 * 86400).status, 302, "no end time: runs forever");
+});
+
+test("when both dates have passed, whichever came first decides the page", () => {
+  assert.equal(decide({ ...ok, ends_at: NOW - 100, expires_at: NOW - 10 }, NOW).page, "ended", "owner ended it first");
+  assert.equal(decide({ ...ok, ends_at: NOW - 10, expires_at: NOW - 100 }, NOW).page, "expired", "the free plan ran out first");
+  assert.equal(decide({ ...ok, ends_at: NOW + 99, expires_at: NOW - 1 }, NOW).page, "expired", "a future end time doesn't hide an expiry");
+  assert.equal(decide({ ...ok, disabled: 1, ends_at: NOW - 1 }, NOW).page, "disabled", "a switched-off code stays switched off");
+});
+
 test("paid codes (expires_at NULL) never expire", () => {
   assert.equal(decide({ ...ok, expires_at: null }, NOW + 50 * 365 * 86400).status, 302);
 });

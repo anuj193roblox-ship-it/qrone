@@ -6,6 +6,7 @@
 const TEXT = {
   missing: ["No QR code here", "This link doesn't belong to any QR code. Check that the whole code was scanned."],
   expired: ["This QR code has expired", "It was a free 14-day code. Ask the business that printed it for a new one."],
+  ended: ["This QR code has ended", "The business that made it set it to stop working on a chosen date. Ask them for a current link."],
   disabled: ["This QR code is switched off", "It was turned off after a report about where it led."],
   unavailable: ["Back in a moment", "QR codes on this service are briefly unavailable. Please scan again in a few minutes."],
 };

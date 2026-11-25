@@ -91,12 +91,63 @@ export function initSignin() {
 
 // ---------- Dashboard ----------
 
+// "in 5 hours" under two days, "in 3 days" after that.
+function inTime(seconds) {
+  if (seconds < 2 * 86400) {
+    const h = Math.max(1, Math.ceil(seconds / 3600));
+    return h === 1 ? "in 1 hour" : `in ${h} hours`;
+  }
+  return `in ${Math.ceil(seconds / 86400)} days`;
+}
+
+// Two dates can stop a code: the plan's expiry (free codes) and the end time the owner chose.
+// Like the redirect server, the earlier one is what the label talks about.
 function stateText(code, now) {
   if (code.disabled) return { text: "Switched off", tone: "bad" };
-  if (code.expires_at == null) return { text: "Never expires", tone: "ok" };
-  const days = Math.ceil((code.expires_at - now) / 86400);
-  if (days <= 0) return { text: "Expired", tone: "bad" };
-  return { text: days === 1 ? "Expires tomorrow" : `Expires in ${days} days`, tone: days <= 3 ? "warn" : "" };
+  const exp = code.expires_at;
+  const end = code.ends_at;
+  if (exp == null && end == null) return { text: "Never expires", tone: "ok" };
+  const byOwner = end != null && (exp == null || end <= exp);
+  const at = byOwner ? end : exp;
+  if (at <= now) return { text: byOwner ? "Ended" : "Expired", tone: "bad" };
+  return { text: `${byOwner ? "Ends" : "Expires"} ${inTime(at - now)}`, tone: at - now <= 3 * 86400 ? "warn" : "" };
+}
+
+// "Stop working" control, used when creating a code and when changing a code's end time.
+// value(): undefined = invalid input, null = no end time, or Unix seconds.
+function endsControl(prefix, current = null) {
+  const mode = el("select", { id: `${prefix}-mode` },
+    el("option", { value: "never" }, "Never (keeps working)"),
+    el("option", { value: "after" }, "After a set time"),
+    el("option", { value: "date" }, "On a date and time"));
+  const amount = el("input", { id: `${prefix}-amount`, type: "number", min: "1", max: "3650", step: "1", value: "7", "aria-label": "How long" });
+  const unit = el("select", { id: `${prefix}-unit`, "aria-label": "Hours or days" },
+    el("option", { value: "3600" }, "hours"), el("option", { value: "86400", selected: "" }, "days"));
+  const date = el("input", { id: `${prefix}-date`, type: "datetime-local", "aria-label": "End date and time" });
+  const after = el("div", { class: "ends-after", hidden: "" }, amount, unit);
+  const at = el("div", { class: "ends-date", hidden: "" }, date);
+  if (current != null) {
+    mode.value = "date";
+    // datetime-local wants local time without a zone: shift by the time-zone offset before cutting the ISO text.
+    const d = new Date(current * 1000);
+    date.value = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+  }
+  const sync = () => { after.hidden = mode.value !== "after"; at.hidden = mode.value !== "date"; };
+  mode.addEventListener("change", sync);
+  sync();
+  const box = el("div", { class: "ends-control" },
+    el("label", { for: `${prefix}-mode` }, "Stop working"),
+    el("div", { class: "ends-row" }, mode, after, at));
+  const value = () => {
+    if (mode.value === "never") return null;
+    if (mode.value === "after") {
+      const n = Number(amount.value);
+      return Number.isFinite(n) && n > 0 ? Math.floor(Date.now() / 1000) + Math.round(n * Number(unit.value)) : undefined;
+    }
+    const t = new Date(date.value).getTime(); // datetime-local is read in the visitor's own time zone
+    return Number.isFinite(t) ? Math.floor(t / 1000) : undefined;
+  };
+  return { box, value };
 }
 
 const SIZE = 1200; // codes are drawn 1200px wide, like the home page
@@ -206,6 +257,25 @@ function renderRow(code, now, reload) {
     input.focus();
   };
 
+  // Change or remove the end time, inline, in place of the action buttons.
+  const startEnds = () => {
+    const control = endsControl(`ends-${code.id}`, code.ends_at);
+    const save = async (endsAt) => {
+      if (endsAt === undefined) { error.textContent = "Pick a date and time, or a number of hours or days."; return; }
+      const r = await api(`/api/codes/${code.id}`, { destination: code.destination, label: code.label, ends_at: endsAt }, "PATCH");
+      if (r.ok) reload(endsAt == null ? "End time removed. The code keeps working." : "End time saved.");
+      else error.textContent = r.data.error ?? "That didn't save. Please try again.";
+    };
+    const form = el("form", { class: "ends-form" }, control.box,
+      el("div", { class: "actions" },
+        el("button", { type: "submit", class: "btn" }, "Save end time"),
+        el("button", { type: "button", class: "btn btn-quiet", onclick: () => form.replaceWith(actions) }, "Cancel")),
+      el("p", { class: "hint" }, "You can change this any time, even after it ends: the printed code starts working again."));
+    form.addEventListener("submit", (e) => { e.preventDefault(); error.textContent = ""; save(control.value()); });
+    actions.replaceWith(form);
+    form.querySelector("select").focus();
+  };
+
   const copy = async (e) => {
     try {
       await navigator.clipboard.writeText(code.url);
@@ -216,6 +286,14 @@ function renderRow(code, now, reload) {
     }
   };
 
+  const actions = el("div", { class: "code-actions" },
+    el("button", { type: "button", class: "btn", onclick: () => showQr(code) }, "QR code and print"),
+    // Opens the short link itself, so it tests the whole path a scan takes.
+    el("a", { class: "btn", href: code.url, target: "_blank", rel: "noopener noreferrer" }, "Open link ↗"),
+    el("button", { type: "button", class: "btn", onclick: startEdit }, "Change destination"),
+    el("button", { type: "button", class: "btn", onclick: startEnds }, code.ends_at == null ? "Set end time" : "Change end time"),
+    el("button", { type: "button", class: "btn btn-quiet", onclick: () => confirmDelete(code, reload) }, "Delete"));
+
   return el("li", { class: "code-row" },
     el("div", { class: "code-main" },
       el("p", { class: "code-name" }, code.label || "Untitled code"),
@@ -224,12 +302,7 @@ function renderRow(code, now, reload) {
         el("button", { type: "button", class: "btn btn-quiet btn-small", onclick: copy }, "Copy"))),
     dest,
     el("span", { class: `code-state pill pill-${state.tone || "neutral"}` }, state.text),
-    el("div", { class: "code-actions" },
-      el("button", { type: "button", class: "btn", onclick: () => showQr(code) }, "QR code and print"),
-      // Opens the short link itself, so it tests the whole path a scan takes.
-      el("a", { class: "btn", href: code.url, target: "_blank", rel: "noopener noreferrer" }, "Open link ↗"),
-      el("button", { type: "button", class: "btn", onclick: startEdit }, "Change destination"),
-      el("button", { type: "button", class: "btn btn-quiet", onclick: () => confirmDelete(code, reload) }, "Delete")),
+    actions,
     error);
 }
 
@@ -301,11 +374,20 @@ export async function initDashboard() {
     $("plan-error").textContent = r.data.error ?? "Checkout couldn't start. Please try again.";
   }
 
+  // Optional end time on new codes: the control sits under the destination and name.
+  const newEnds = endsControl("code-ends");
+  $("code-ends-slot").replaceWith(newEnds.box);
+
   $("code-form").addEventListener("submit", async (e) => {
     e.preventDefault();
     $("code-error").textContent = "";
+    const endsAt = newEnds.value();
+    if (endsAt === undefined) {
+      $("code-error").textContent = "Pick a date and time, or a number of hours or days.";
+      return;
+    }
     $("code-create").disabled = true;
-    const created = await api("/api/codes", { destination: $("code-dest").value, label: $("code-label").value });
+    const created = await api("/api/codes", { destination: $("code-dest").value, label: $("code-label").value, ends_at: endsAt });
     $("code-create").disabled = false;
     if (!created.ok) {
       $("code-error").textContent = created.data.error ?? "That didn't work. Please try again.";
@@ -313,6 +395,9 @@ export async function initDashboard() {
     }
     $("code-dest").value = "";
     $("code-label").value = "";
+    // Back to "Never", so the next code doesn't quietly get this one's end time.
+    $("code-ends-mode").value = "never";
+    $("code-ends-mode").dispatchEvent(new Event("change"));
     await reload(`Created ${created.data.code.url}`);
     showQr(created.data.code);
   });

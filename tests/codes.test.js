@@ -1,7 +1,26 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { limitFor, planName, expiresAtFor, normalizeDestination, cleanLabel, newSlug, FREE_DAYS } from "../app/src/codes.js";
+import { limitFor, planName, expiresAtFor, normalizeDestination, cleanLabel, cleanEndsAt, newSlug, FREE_DAYS, MIN_END, MAX_END } from "../app/src/codes.js";
 import { slugFrom } from "../worker/src/resolve.js";
+
+test("end time: none is fine, and it must be 1 hour to 10 years away", () => {
+  const now = 1_800_000_000;
+  for (const empty of [null, undefined, ""]) assert.deepEqual(cleanEndsAt(empty, now), { value: null });
+  assert.deepEqual(cleanEndsAt(now + MIN_END, now), { value: now + MIN_END });
+  assert.deepEqual(cleanEndsAt(String(now + MAX_END), now), { value: now + MAX_END }, "a number sent as text is fine");
+  assert.match(cleanEndsAt(now + MIN_END - 1, now).error, /at least an hour/);
+  assert.match(cleanEndsAt(now - 60, now).error, /at least an hour/, "the past is refused");
+  assert.match(cleanEndsAt(now + MAX_END + 1, now).error, /10 years/);
+  for (const junk of ["soon", 1.5e9 + 0.5, {}, [now + 9999]]) assert.ok(cleanEndsAt(junk, now).error, String(junk));
+});
+
+test("end time: a free code can't run past its 14-day plan expiry", () => {
+  const now = 1_800_000_000;
+  const expires = expiresAtFor("free", now);
+  assert.deepEqual(cleanEndsAt(expires, now, expires), { value: expires });
+  assert.match(cleanEndsAt(expires + 1, now, expires).error, /Free codes stop after 14 days/);
+  assert.deepEqual(cleanEndsAt(now + 400 * 86400, now, null), { value: now + 400 * 86400 }, "paid: no plan expiry");
+});
 
 test("plan limits match the pricing: 10 / 10 / 25 / 75", () => {
   assert.deepEqual(["free", "starter", "plus", "pro"].map(limitFor), [10, 10, 25, 75]);

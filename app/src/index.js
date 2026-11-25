@@ -18,7 +18,7 @@ import {
   sessionCookie, clearedCookie, readCookie, isSameOrigin,
 } from "./auth.js";
 import { canSend, sendSignInLink } from "./mail.js";
-import { limitFor, planName, expiresAtFor, normalizeDestination, cleanLabel, newSlug, FREE_DAYS } from "./codes.js";
+import { limitFor, planName, expiresAtFor, normalizeDestination, cleanLabel, cleanEndsAt, newSlug, FREE_DAYS } from "./codes.js";
 import { FORMATS, build } from "./export.js";
 import { upgradeKey, upgradeOptions, highestPlan, productsOf, verifyWebhook } from "./billing.js";
 
@@ -142,10 +142,10 @@ const ownHosts = (env, request) => [redirectOrigin(env).hostname, new URL(reques
 
 const publicCode = (env, r) => ({
   id: r.id, slug: r.slug, url: shortUrl(env, r.hostname, r.slug), destination: r.destination,
-  label: r.label, expires_at: r.expires_at, disabled: Boolean(r.disabled), created_at: r.created_at,
+  label: r.label, expires_at: r.expires_at, ends_at: r.ends_at, disabled: Boolean(r.disabled), created_at: r.created_at,
 });
 
-const SELECT_CODE = "SELECT id, slug, hostname, destination, label, expires_at, disabled, created_at FROM codes";
+const SELECT_CODE = "SELECT id, slug, hostname, destination, label, expires_at, ends_at, disabled, created_at FROM codes";
 const BAD_DESTINATION = "That doesn't look like a web address we can send people to. Try something like example.com/menu.";
 
 async function withAccount(request, env, fn) {
@@ -172,6 +172,11 @@ const createCode = (request, env) => withAccount(request, env, async (account) =
   const label = cleanLabel(body?.label);
   if (label === null) return json({ ok: false, error: "Keep the name under 80 characters." }, 400);
 
+  const t = now();
+  const expiresAt = expiresAtFor(account.plan, t);
+  const ends = cleanEndsAt(body?.ends_at, t, expiresAt);
+  if (ends.error) return json({ ok: false, error: ends.error }, 400);
+
   const limit = limitFor(account.plan);
   const hostname = redirectOrigin(env).hostname;
   for (let attempt = 0; attempt < 5; attempt++) {
@@ -180,10 +185,10 @@ const createCode = (request, env) => withAccount(request, env, async (account) =
       // The plan limit is checked inside the same statement as the insert, so two quick clicks can't exceed it.
       const result = await env.DB
         .prepare(
-          `INSERT INTO codes (account_id, hostname, slug, destination, label, expires_at)
-           SELECT ?1, ?2, ?3, ?4, ?5, ?6 WHERE (SELECT COUNT(*) FROM codes WHERE account_id = ?1) < ?7`,
+          `INSERT INTO codes (account_id, hostname, slug, destination, label, expires_at, ends_at)
+           SELECT ?1, ?2, ?3, ?4, ?5, ?6, ?8 WHERE (SELECT COUNT(*) FROM codes WHERE account_id = ?1) < ?7`,
         )
-        .bind(account.id, hostname, slug, destination, label, expiresAtFor(account.plan, now()), limit)
+        .bind(account.id, hostname, slug, destination, label, expiresAt, limit, ends.value)
         .run();
       if (result.meta.changes === 0) {
         return json({ ok: false, error: `Your ${planName(account.plan)} plan allows ${limit} codes. Delete one, or upgrade for more.` }, 403);
@@ -203,10 +208,19 @@ const editCode = (request, env, id) => withAccount(request, env, async (account)
   if (!destination) return json({ ok: false, error: BAD_DESTINATION }, 400);
   const label = cleanLabel(body?.label);
   if (label === null) return json({ ok: false, error: "Keep the name under 80 characters." }, 400);
-  // "AND account_id" means you can only ever change your own codes.
+  // "AND account_id" means you can only ever see or change your own codes.
+  const current = await env.DB.prepare("SELECT expires_at, ends_at FROM codes WHERE id = ?1 AND account_id = ?2").bind(id, account.id).first();
+  if (!current) return json({ ok: false, error: "That code wasn't found." }, 404);
+  // The end time only changes when the request mentions it; leaving it out keeps the one already set.
+  let endsAt = current.ends_at;
+  if (body && Object.hasOwn(body, "ends_at")) {
+    const ends = cleanEndsAt(body.ends_at, now(), current.expires_at);
+    if (ends.error) return json({ ok: false, error: ends.error }, 400);
+    endsAt = ends.value;
+  }
   const result = await env.DB
-    .prepare("UPDATE codes SET destination = ?1, label = ?2 WHERE id = ?3 AND account_id = ?4")
-    .bind(destination, label, id, account.id)
+    .prepare("UPDATE codes SET destination = ?1, label = ?2, ends_at = ?5 WHERE id = ?3 AND account_id = ?4")
+    .bind(destination, label, id, account.id, endsAt)
     .run();
   if (result.meta.changes === 0) return json({ ok: false, error: "That code wasn't found." }, 404);
   const row = await env.DB.prepare(`${SELECT_CODE} WHERE id = ?1`).bind(id).first();

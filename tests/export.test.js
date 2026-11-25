@@ -22,12 +22,12 @@ const HEADER = [
 
 test("E1 CSV: every code with its status, safe against spreadsheet formulas", () => {
   assert.equal(toCsv(CODES, NOW), [
-    "short_url,name,destination,status,expires_at,created_at",
-    "https://go.example.test/menu,Table menu,https://example.com/menu,never expires,,2027-01-14T08:00:00.000Z",
-    `https://go.example.test/trial,"'=HYPERLINK(""evil"")","https://example.com/a b?x=1,2",active,2027-01-16T08:00:00.000Z,2027-01-14T08:00:00.000Z`,
-    `https://go.example.test/old,"Old, flyer",https://example.com/old,expired,2027-01-15T07:59:59.000Z,2027-01-14T08:00:00.000Z`,
-    "https://go.example.test/off,Reported,https://example.com/off,switched off,,2027-01-14T08:00:00.000Z",
-    "https://go.example.test/pay,,https://example.com/p?ref=$ID,never expires,,2027-01-14T08:00:00.000Z",
+    "short_url,name,destination,status,expires_at,ends_at,created_at",
+    "https://go.example.test/menu,Table menu,https://example.com/menu,never expires,,,2027-01-14T08:00:00.000Z",
+    `https://go.example.test/trial,"'=HYPERLINK(""evil"")","https://example.com/a b?x=1,2",active,2027-01-16T08:00:00.000Z,,2027-01-14T08:00:00.000Z`,
+    `https://go.example.test/old,"Old, flyer",https://example.com/old,expired,2027-01-15T07:59:59.000Z,,2027-01-14T08:00:00.000Z`,
+    "https://go.example.test/off,Reported,https://example.com/off,switched off,,,2027-01-14T08:00:00.000Z",
+    "https://go.example.test/pay,,https://example.com/p?ref=$ID,never expires,,,2027-01-14T08:00:00.000Z",
   ].join("\r\n") + "\r\n");
 });
 
@@ -86,5 +86,20 @@ test("every format has a file name and a builder, and an empty account exports c
     assert.ok(meta.file && meta.type, key);
     assert.equal(typeof build[key], "function", key);
     assert.doesNotThrow(() => build[key]([], NOW), key);
+  }
+});
+
+test("owner-set end times: the CSV shows them; rule files leave out codes that have ended", () => {
+  const timed = [
+    code({ slug: "sale", destination: "https://example.com/sale", ends_at: NOW + 3600 }),
+    code({ slug: "done", destination: "https://example.com/done", ends_at: NOW - 1 }),
+  ];
+  const csv = toCsv(timed, NOW);
+  assert.ok(csv.includes("https://example.com/sale,active,,2027-01-15T09:00:00.000Z,"), csv);
+  assert.ok(csv.includes("https://example.com/done,ended,,2027-01-15T07:59:59.000Z,"), csv);
+  for (const f of ["netlify", "htaccess", "nginx", "cloudflare"]) {
+    const out = build[f](timed, NOW);
+    assert.ok(out.includes("example.com/sale"), `${f}: a code still running is kept`);
+    assert.ok(!out.includes("example.com/done"), `${f}: an ended code is left out`);
   }
 });

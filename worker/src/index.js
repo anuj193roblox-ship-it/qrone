@@ -36,7 +36,7 @@ export default {
     if (slug) {
       try {
         row = await env.DB
-          .prepare("SELECT destination, expires_at, disabled FROM codes WHERE hostname = ?1 AND slug = ?2")
+          .prepare("SELECT destination, expires_at, ends_at, disabled FROM codes WHERE hostname = ?1 AND slug = ?2")
           .bind(hostname, slug)
           .first();
       } catch (err) {

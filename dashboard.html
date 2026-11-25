@@ -49,6 +49,7 @@
             <label for="code-label">Name (optional)</label>
             <input id="code-label" type="text" maxlength="80" placeholder="Table menu">
           </div>
+          <div id="code-ends-slot"></div>
           <button type="submit" id="code-create" class="btn btn-primary">Create code</button>
           <p id="code-note" class="hint"></p>
           <p id="code-error" class="msg-error" role="alert"></p>
@@ -76,7 +77,7 @@
           <details class="more">
             <summary>Web server formats, for whoever runs your website</summary>
             <div class="more-body">
-              <p class="hint">If your codes use a domain you control, your web developer can load one of these files so the codes keep working without {{NAME}}. Codes on {{NAME}}'s own short-link address still need {{NAME}}.</p>
+              <p class="hint">If your codes use a domain you control, your web developer can load one of these files so the codes keep working without {{NAME}}. Codes on {{NAME}}'s own short-link address still need {{NAME}}. Web servers can't stop a link on a date, so codes with an end time are included until they end.</p>
               <div class="actions">
                 <a class="btn" href="/api/codes/export?format=cloudflare" download>Cloudflare</a>
                 <a class="btn" href="/api/codes/export?format=netlify" download>Netlify</a>
