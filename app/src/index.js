@@ -5,6 +5,7 @@
 //   POST /api/auth/verify  { token }  -> uses the link once, starts a session (cookie)
 //   GET  /api/me                      -> who is signed in (or 401)
 //   POST /api/auth/logout             -> ends the session
+//   DELETE /api/account               { email } -> deletes the account and everything in it (email typed to confirm)
 //   GET    /api/codes                 -> your codes, plan and limit
 //   POST   /api/codes                 { destination, label } -> new code
 //   PATCH  /api/codes/:id             { destination, label } -> edit
@@ -109,6 +110,22 @@ async function logout(request, env) {
   if (raw) await env.DB.prepare("DELETE FROM sessions WHERE id_hash = ?1").bind(await sha256Hex(raw)).run();
   return json({ ok: true }, 200, { "set-cookie": clearedCookie() });
 }
+
+// Deletes everything we hold about the account in one transaction. Typing the email confirms it,
+// so a stray click or a stale tab can't do it. Codes stop working at once (scans get the 404 page).
+const deleteAccount = (request, env) => withAccount(request, env, async (account) => {
+  if (normalizeEmail((await readJson(request))?.email) !== account.email) {
+    return json({ ok: false, error: "Type your email address exactly as shown above to confirm." }, 400);
+  }
+  await env.DB.batch([
+    env.DB.prepare("DELETE FROM codes WHERE account_id = ?1").bind(account.id),
+    env.DB.prepare("DELETE FROM sessions WHERE account_id = ?1").bind(account.id),
+    env.DB.prepare("DELETE FROM payments WHERE account_id = ?1").bind(account.id),
+    env.DB.prepare("DELETE FROM login_tokens WHERE email = ?1").bind(account.email),
+    env.DB.prepare("DELETE FROM accounts WHERE id = ?1").bind(account.id),
+  ]);
+  return json({ ok: true }, 200, { "set-cookie": clearedCookie() });
+});
 
 // ---------- Codes ----------
 
@@ -334,6 +351,7 @@ const ROUTES = {
   "POST /api/auth/verify": verify,
   "GET /api/me": me,
   "POST /api/auth/logout": logout,
+  "DELETE /api/account": deleteAccount,
   "GET /api/codes": listCodes,
   "POST /api/codes": createCode,
   "GET /api/codes/export": exportCodes,

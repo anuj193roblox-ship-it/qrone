@@ -79,6 +79,19 @@
           <a class="btn" href="/api/codes/export?format=cloudflare" download>Cloudflare</a>
         </div>
       </section>
+
+      <section class="delete-account card" aria-labelledby="delete-title">
+        <h2 id="delete-title" class="stamp">Delete your account</h2>
+        <p class="hint">This deletes your account, every code and your payment records. Anyone who scans your codes will see "No QR code here". It can't be undone, and it doesn't refund a payment. Download your codes above first if you want to keep them.</p>
+        <form id="delete-form" novalidate>
+          <label for="delete-email">Type <strong id="delete-email-shown"></strong> to confirm</label>
+          <div class="pair pair-tight code-edit">
+            <input id="delete-email" type="email" autocomplete="off" spellcheck="false">
+            <button type="submit" id="delete-go" class="btn btn-quiet">Delete my account</button>
+          </div>
+        </form>
+        <p id="delete-error" class="msg-error" role="alert"></p>
+      </section>
     </div>
     <p id="dash-status" class="status" role="status">Checking your sign-in…</p>
   </main>

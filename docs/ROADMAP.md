@@ -61,6 +61,7 @@ D1–D2 are built and tested end to end locally (the link is printed to the term
 | D5 | Edit a destination ✅ (takes effect on the very next scan) | Claude | A scan goes to the new address within a minute |
 | D6 | Delete a code ✅ | Claude | A scan returns the 404 page |
 | D7 | Download the QR for a code ✅ (phone scan still to do) | Both | The PNG scans to the right slug |
+| D8 | Delete your account (type your email to confirm) ✅ | Claude | A 14-step local test: everything for that account is gone, other accounts untouched |
 
 ## Phase E: export (the "works even if we disappear" promise)
 

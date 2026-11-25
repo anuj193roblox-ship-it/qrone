@@ -158,7 +158,17 @@ export async function initDashboard() {
     return;
   }
   $("dash-email").textContent = r.data.email;
+  $("delete-email-shown").textContent = r.data.email;
   $("dashboard").hidden = false;
+  $("delete-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    $("delete-error").textContent = "";
+    $("delete-go").disabled = true;
+    const gone = await api("/api/account", { email: $("delete-email").value }, "DELETE");
+    if (gone.ok) return location.replace("/");
+    $("delete-go").disabled = false;
+    $("delete-error").textContent = gone.data.error ?? "That didn't work. Please try again.";
+  });
   $("dash-logout").addEventListener("click", async () => {
     await api("/api/auth/logout", {});
     location.assign("/signin.html");
