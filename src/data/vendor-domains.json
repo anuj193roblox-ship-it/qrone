@@ -30,5 +30,21 @@
     "evidence_url": "https://appsumo.com/products/square-qr/questions/looks-like-they-shut-down-bummer-1444222/",
     "behaviour": "sqr.co is a short-link domain used by SQR. Users on AppSumo reported that their codes stopped working after the vendor appeared to shut down.",
     "verified": true
+  },
+  {
+    "domain": "scango.to",
+    "vendor": "Hovercode",
+    "domain_url": "https://hovercode.com/help/article/8-qr-code-custom-domain",
+    "evidence_url": "https://hovercode.com/help/article/32-if-you-cancel",
+    "behaviour": "scango.to is a default redirect domain of Hovercode. Its help center says that if a paid plan is cancelled, the account moves to the free plan: the first 3 dynamic codes keep working, and any beyond that become inactive until you subscribe again.",
+    "verified": true
+  },
+  {
+    "domain": "qrcodes.pro",
+    "vendor": "Uniqode (formerly Beaconstac)",
+    "domain_url": "https://docs.uniqode.com/en/articles/5039457-setting-up-your-custom-domain",
+    "evidence_url": "https://docs.uniqode.com/en/articles/17190918-what-happens-to-my-qr-codes-when-my-subscription-changes-or-ends",
+    "behaviour": "qrcodes.pro is a domain Uniqode's help center lists for its QR codes. Its help center says dynamic codes stop working when a trial expires, or after the renewal date once a plan is cancelled.",
+    "verified": true
   }
 ]
