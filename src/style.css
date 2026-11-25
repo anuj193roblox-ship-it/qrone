@@ -9,6 +9,13 @@
   --surface-2: #1b1e25;
   --line: #262a33;
   --line-strong: #353a46;
+  --line-hover: #4a5160;
+  /* Header glass and soft washes: the dark ground or white at low strength. */
+  --header-bg: rgba(11, 12, 15, 0.82);
+  --hairline-soft: rgba(255, 255, 255, 0.07);
+  --hairline-mid: rgba(255, 255, 255, 0.08);
+  --hairline-cta: rgba(255, 255, 255, 0.12);
+  --hover-wash: rgba(255, 255, 255, 0.05);
 
   --text: #f4f5f7;
   --muted: #a6acb8;
@@ -62,14 +69,71 @@ a:hover { text-decoration-thickness: 2px; }
 .skip { position: absolute; left: -999px; }
 .skip:focus { left: 12px; top: 12px; z-index: 10; background: var(--accent); color: #fff; padding: 10px 16px; border-radius: var(--r-pill); }
 
-/* ---------- Top bar ---------- */
-.topbar { border-bottom: 1px solid var(--line); }
-.topbar-in { display: flex; align-items: center; justify-content: space-between; gap: 12px; max-width: 1200px; margin: 0 auto; padding: 8px var(--gutter); }
-.brand { display: inline-flex; align-items: center; gap: 10px; color: var(--text); font-weight: 800; font-size: 1.25rem; letter-spacing: -0.01em; text-decoration: none; padding: 10px 0; }
+/* ---------- Site header: brand left, tabs centre, sign-in right; sticky, frosted ---------- */
+.site-header {
+  position: sticky; top: 0; z-index: 20;
+  background: var(--header-bg);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--hairline-soft);
+}
+.site-header-in {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  max-width: 1200px; min-height: 68px; margin: 0 auto; padding: 0 var(--gutter);
+}
+.brand { display: inline-flex; align-items: center; gap: 10px; color: var(--text); font-weight: 800; font-size: 1.25rem; letter-spacing: -0.01em; text-decoration: none; padding: 10px 0; flex: none; }
 .brand-mark { display: block; flex: none; }
-.nav-links { display: flex; margin-right: -12px; }
-.nav-links a { color: var(--muted); text-decoration: none; font-weight: 600; font-size: var(--t-small); padding: 14px 12px; }
-.nav-links a:hover { color: var(--text); }
+
+/* Tabs: quiet text that becomes a soft pill on hover, and a raised pill with a blue dot on the current page. */
+.site-nav { display: flex; flex-wrap: wrap; gap: 4px; }
+.site-nav a {
+  position: relative; display: inline-flex; align-items: center; min-height: 40px; padding: 8px 12px;
+  border: 1px solid transparent; border-radius: 8px;
+  color: var(--muted); font-size: var(--t-small); font-weight: 500; text-decoration: none; white-space: nowrap;
+  transition: color 150ms ease-out, background-color 150ms ease-out, border-color 150ms ease-out;
+}
+.site-nav a:hover { color: var(--text); background: var(--hover-wash); }
+.site-nav a[aria-current="page"] { color: var(--text); background: var(--surface); border-color: var(--hairline-mid); }
+.site-nav a[aria-current="page"]::after {
+  content: ""; position: absolute; left: 50%; bottom: 3px; width: 4px; height: 4px; margin-left: -2px;
+  border-radius: 50%; background: var(--accent-text);
+}
+.site-nav a:focus-visible, .header-cta:focus-visible, .menu-toggle:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 2px; }
+
+.header-actions { display: flex; align-items: center; gap: 8px; flex: none; }
+.header-cta {
+  display: inline-flex; align-items: center; justify-content: center; min-width: 104px; height: 38px; padding: 0 16px;
+  border-radius: 10px; border: 1px solid var(--hairline-cta); background: var(--surface);
+  color: var(--text); font-size: var(--t-small); font-weight: 600; text-decoration: none;
+  transition: background-color 150ms ease-out, border-color 150ms ease-out;
+}
+.header-cta:hover { background: var(--surface-2); border-color: var(--line-hover); }
+/* A 38px button still gets a 44px tap area. */
+.header-cta { position: relative; }
+.header-cta::before { content: ""; position: absolute; inset: -3px 0; }
+.menu-toggle { display: none; width: 44px; height: 44px; padding: 0; border: 1px solid var(--hairline-cta); border-radius: 10px; background: var(--surface); color: var(--text); cursor: pointer; }
+.menu-toggle svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; }
+
+/* Phones and small tablets: a menu button opens a panel that slides down under the header. */
+@media (max-width: 899px) {
+  .js .menu-toggle { display: inline-grid; place-items: center; }
+  .js .site-nav {
+    position: absolute; top: 100%; left: 0; right: 0; display: none; flex-direction: column; gap: 2px;
+    padding: 8px var(--gutter) 14px; background: var(--surface); border-bottom: 1px solid var(--line);
+  }
+  .js .site-header.menu-open .site-nav { display: flex; animation: menu-down 160ms ease-out both; }
+  .js .site-nav a { min-height: 48px; padding: 0 14px; font-size: var(--t-body); }
+  .js .site-nav a[aria-current="page"]::after { left: auto; right: 16px; bottom: auto; top: 50%; margin: -2px 0 0; }
+  /* Without scripts the links simply wrap under the logo, so they always stay reachable. */
+  html:not(.js) .site-header-in { flex-wrap: wrap; }
+  html:not(.js) .site-nav { order: 3; width: 100%; padding-bottom: 8px; }
+}
+@media (max-width: 359px) {
+  /* The smallest phones: logo, sign-in and menu still fit on one line. */
+  .site-header-in { gap: 8px; }
+  .header-cta { min-width: 0; padding: 0 12px; }
+}
+@keyframes menu-down { from { opacity: 0; transform: translateY(-6px); } }
+html { scroll-padding-top: 76px; } /* anchored sections aren't hidden under the sticky header */
 
 /* ---------- Headline ---------- */
 .hero-title { font-size: var(--t-hero); font-weight: 800; line-height: 1.06; letter-spacing: -0.025em; text-wrap: balance; }
@@ -172,7 +236,6 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 var(--gutter); }
 .paper-small { justify-self: start; width: min(100%, 200px); padding: 10px; }
 .rescue-side .actions { margin-top: 10px; }
 .sticker-drawer { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--line); }
-.nav-links a[aria-current="page"] { color: var(--text); }
 
 .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-card); padding: 20px; }
 

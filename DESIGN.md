@@ -291,8 +291,8 @@ Borders are always 1px. Dashed borders mean "drop or fill something here" (drop 
 
 ## Components
 
-### Top bar
-Slim and quiet. A 1px `--line` rule along the bottom, content inside the 1200px container with 8px vertical padding. The 26px logo mark (`public/logo.svg`) and "QrOne" on the left, 10px apart (brand role, off-white). Two or three nav links on the right in Small 600, Grey, turning Off-White on hover, with 14px by 12px padding so each is a full tap target. The home page links to "Check a code" and FAQ; other pages link to Make, Check and FAQ. The current page's link is Off-White (`aria-current="page"`). No buttons, no blue, no sign-up call to action in the bar.
+### Top bar (site header)
+One header for every page, inserted at build time from `src/siteheader.js` (never hand-copied), sticky at the top: 68px tall, the dark ground at 82% with a 12px blur, and a soft 7%-white rule below. Brand on the left (26px mark and "QrOne"); in the middle six tabs: Make, Check, Print guide, Why codes die, Pricing, FAQ. Tabs are Small 500 Grey with 8px corners; hover adds a 5%-white wash; the current page (`aria-current="page"`) is Off-White on Panel with an 8%-white border and a 4px Lamp Blue dot. On the right a quiet bordered "Sign in" (38px tall, 44px tap area, 10px corners, fixed width) that becomes "Dashboard" when `/api/session` says you are signed in, with no layout shift. Below 900px the tabs move into a slide-down Panel opened by a 44px menu button (48px rows, Escape closes it); without scripts the tabs simply wrap under the logo.
 
 ### Headline
 `h1.hero-title` with one or two `span.line` children (see the Two-Line Headline Rule). It is followed by a `.hero-sub` subline in Title size, Grey, 14px below. On the home page a Lamp Blue text link ("Already printed a code? Check if it will expire →") sits under the subline and leads to `/check`. Sign-in rewrites its headline through `setHeadline`.

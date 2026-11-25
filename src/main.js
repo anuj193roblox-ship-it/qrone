@@ -1,6 +1,11 @@
 // Fonts are bundled and served from this site, so no visitor's browser contacts a font company.
 import "@fontsource-variable/figtree";
 import "./style.css";
+import { initHeader } from "./header.js";
+
+// Marks that scripts run, so the phone menu can start closed (without scripts, the links simply show).
+document.documentElement.classList.add("js");
+initHeader();
 
 // The checker used to be a tab on the home page; old links and bookmarks to /#check still land on it.
 if (location.pathname === "/" && location.hash === "#check") location.replace("/check");

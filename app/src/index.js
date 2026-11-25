@@ -4,6 +4,7 @@
 //   POST /api/auth/start   { email }  -> emails a one-time sign-in link
 //   POST /api/auth/verify  { token }  -> uses the link once, starts a session (cookie)
 //   GET  /api/me                      -> who is signed in (or 401)
+//   GET  /api/session                 -> { signedIn } for the header, always 200
 //   POST /api/auth/logout             -> ends the session
 //   DELETE /api/account               { email } -> deletes the account and everything in it (email typed to confirm)
 //   GET    /api/codes                 -> your codes, plan and limit
@@ -98,6 +99,12 @@ async function currentAccount(request, env) {
     .prepare("SELECT a.id, a.email, a.plan FROM sessions s JOIN accounts a ON a.id = s.account_id WHERE s.id_hash = ?1 AND s.expires_at > ?2")
     .bind(await sha256Hex(raw), now())
     .first();
+}
+
+// For the header on every page: always 200, so signed-out visitors never see an error in the console.
+// Says only whether you are signed in; no email or plan.
+async function session(request, env) {
+  return json({ ok: true, signedIn: Boolean(await currentAccount(request, env)) });
 }
 
 async function me(request, env) {
@@ -364,6 +371,7 @@ const ROUTES = {
   "POST /api/auth/start": start,
   "POST /api/auth/verify": verify,
   "GET /api/me": me,
+  "GET /api/session": session,
   "POST /api/auth/logout": logout,
   "DELETE /api/account": deleteAccount,
   "GET /api/codes": listCodes,

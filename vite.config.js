@@ -4,6 +4,7 @@ import { BRAND } from "./src/config.js";
 import { PRICE, upgradePrice } from "./app/src/billing.js";
 import { PLANS, FREE_DAYS } from "./app/src/codes.js";
 import { contactTokens } from "./src/contact.js";
+import { siteHeader } from "./src/siteheader.js";
 
 // Prices and limits on the pricing page come from the same code that charges and enforces them.
 const dollars = (cents) => "$" + cents / 100;
@@ -21,9 +22,11 @@ const planTokens = {
 // Replaces {{NAME}} and {{TAGLINE}} in every HTML page with the values from src/config.js.
 const brand = () => ({
   name: "brand-placeholders",
-  transformIndexHtml: (html) =>
+  // The shared header goes in first (it knows which page it is on), then the brand and price tokens.
+  transformIndexHtml: (html, ctx) =>
     Object.entries(planTokens).reduce((h, [k, v]) => h.replaceAll(k, () => v),
-      html.replaceAll("{{NAME}}", BRAND.name).replaceAll("{{TAGLINE}}", BRAND.tagline)),
+      html.replace("<!--site-header-->", () => siteHeader(ctx.filename ?? ctx.path, BRAND.name))
+        .replaceAll("{{NAME}}", BRAND.name).replaceAll("{{TAGLINE}}", BRAND.tagline)),
 });
 
 const page = (file) => resolve(import.meta.dirname, file);

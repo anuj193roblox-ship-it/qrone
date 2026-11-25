@@ -36,6 +36,12 @@ for (const page of pages) {
     assert.ok(html.includes(BRAND.name), "brand name missing");
   });
 
+  test(`${page}: has the shared site header`, () => {
+    const html = built(page);
+    assert.ok(html.includes('class="site-header"'), "the header marker was not filled in");
+    assert.ok(!html.includes("<!--site-header-->"));
+  });
+
   test(`${page}: has a non-empty <title> and meta description`, () => {
     const html = built(page);
     assert.match(html, /<title>[^<]*\S[^<]*<\/title>/);
