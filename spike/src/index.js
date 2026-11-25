@@ -2,6 +2,7 @@
 const CODES = {
   "qr.customer-test.example/menu": "https://example.com/menu",
   "qr.customer-test.example/sale": "https://example.com/sale",
+  "qr-spike.qr-tool-spike.workers.dev/menu": "https://example.com/menu",
 };
 
 export default {
