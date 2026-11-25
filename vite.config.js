@@ -21,6 +21,8 @@ export default defineConfig({
         about: page("about.html"),
         privacy: page("privacy.html"),
         faq: page("faq.html"),
+        signin: page("signin.html"),
+        dashboard: page("dashboard.html"),
       },
     },
   },

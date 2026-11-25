@@ -1,8 +1,23 @@
 {
-  // The free tools site: static files only, no Worker code. Served by Cloudflare Workers Static Assets.
+  // The QrOne site: static pages from ./dist, plus a Worker (app/src/index.js) for /api/*.
   "name": "qr-tool-site",
+  "main": "app/src/index.js",
   "compatibility_date": "2026-11-24",
+  "observability": { "enabled": true },
   "assets": {
-    "directory": "./dist"
-  }
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "qrone",
+      "database_id": "76fec044-889a-40d7-9274-13b4a8e446d8",
+      "migrations_dir": "worker/migrations"
+    }
+  ]
+  // When the domain exists, add real email sending here:
+  //   "send_email": [{ "name": "EMAIL" }],
+  //   "vars": { "MAIL_FROM": "QrOne <hello@yourdomain.com>" }
 }

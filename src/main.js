@@ -35,3 +35,5 @@ if (tabs.length) {
 // Each tool is only loaded on the page that has it, so the other pages stay small.
 if (document.getElementById("gen-form")) import("./generator.js").then((m) => m.initGenerator());
 if (document.getElementById("panel-check")) import("./checker.js").then((m) => m.initChecker());
+if (document.getElementById("signin-form")) import("./account.js").then((m) => m.initSignin());
+if (document.getElementById("dashboard")) import("./account.js").then((m) => m.initDashboard());

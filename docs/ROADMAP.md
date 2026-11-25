@@ -46,10 +46,16 @@ Live at `https://qrone-redirect.qr-tool-spike.workers.dev` with an empty databas
 
 ## Phase D: accounts and dashboard
 
+D1–D2 are built and tested end to end locally (the link is printed to the terminal). Live sign-in answers "not available yet" until real email is switched on:
+1. Buy the domain (B2).
+2. Onboard it in Cloudflare → Email Service → Email Sending.
+3. Add the `send_email` binding and `MAIL_FROM` in `wrangler.jsonc`.
+4. **Update `privacy.html`**, because sign-in collects an email address.
+
 | # | Step | Who | Done when |
 |---|------|-----|-----------|
-| D1 | Sign-in page: enter email, get a link | Claude | The link arrives in your inbox |
-| D2 | Session after clicking the link (secure cookie) | Claude | Refreshing the page keeps you signed in |
+| D1 | Sign-in page: enter email, get a link ✅ built | Claude | The link arrives in your inbox (needs the domain) |
+| D2 | Session after clicking the link (secure cookie) ✅ built | Claude | Refreshing the page keeps you signed in |
 | D3 | Dashboard: list your codes | Claude | Shows codes from D1 |
 | D4 | Create a code (respecting plan limits: 10 / 25 / 75) | Claude | The 11th free code is refused with a clear message |
 | D5 | Edit a destination | Claude | A scan goes to the new address within a minute |
