@@ -41,6 +41,7 @@ export default defineConfig({
         pricing: page("pricing.html"),
         check: page("check.html"),
         printGuide: page("print-guide.html"),
+        whyCodesDie: page("why-codes-die.html"),
       },
     },
   },

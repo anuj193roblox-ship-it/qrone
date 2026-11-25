@@ -12,3 +12,4 @@ if (document.getElementById("signin-form")) import("./account.js").then((m) => m
 if (document.getElementById("dashboard")) import("./account.js").then((m) => m.initDashboard());
 if (document.getElementById("tiers")) import("./pricing.js").then((m) => m.initPricing());
 if (document.getElementById("calc-range")) import("./printguide.js").then((m) => m.initPrintGuide());
+if (document.getElementById("vendor-rows")) import("./whydie.js").then((m) => m.initWhyDie());

@@ -341,6 +341,41 @@ details.more { margin-top: 8px; border-top: 1px solid var(--line); }
 .quiet-demo svg { width: 96px; height: 96px; }
 .guide-foot { margin-top: 16px; }
 
+/* ---------- Why codes die ---------- */
+.anatomy { display: grid; gap: 16px; }
+.anatomy-card { display: grid; gap: 8px; align-content: start; }
+.anatomy-static { border-color: var(--ok); }
+.anatomy-dynamic { border-color: var(--bad); }
+.tag-bad { color: var(--bad); }
+.anatomy-label { color: var(--muted); font-size: var(--t-small); font-weight: 600; margin-top: 6px; }
+.url-box { padding: 10px 12px; background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--r-field); font: 0.875rem/1.4 var(--mono); overflow-wrap: anywhere; }
+.url-off { color: var(--bad); }
+.flow-arrow { color: var(--faint); font-size: 1.25rem; line-height: 1; padding-left: 12px; }
+.flow-step { font-weight: 600; }
+.anatomy-end { color: var(--muted); margin-top: 6px; }
+.flow-split { display: grid; gap: 10px; }
+.vendors { margin-top: 56px; }
+.vendors-intro { margin: -8px 0 14px; }
+#vendor-table { width: 100%; border-collapse: collapse; font-size: var(--t-small); }
+#vendor-table th, #vendor-table td { padding: 14px 12px 14px 0; text-align: left; vertical-align: top; border-top: 1px solid var(--line); }
+#vendor-table thead th { border-top: 0; color: var(--muted); font-weight: 700; }
+#vendor-table tbody th { font-family: var(--mono); font-weight: 600; color: var(--accent-text); }
+#vendor-table td { color: var(--muted); }
+#vendor-table td:nth-child(2) { color: var(--text); font-weight: 600; }
+#vendor-table td:last-child { white-space: nowrap; }
+/* Phones: each vendor becomes a short stacked block instead of a wide table. */
+@media (max-width: 719px) {
+  #vendor-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  #vendor-table, #vendor-table tbody, #vendor-table tr, #vendor-table th, #vendor-table td { display: block; }
+  #vendor-table tr { padding: 14px 0; border-top: 1px solid var(--line); }
+  #vendor-table tbody tr:first-child { border-top: 0; }
+  #vendor-table th, #vendor-table td { padding: 2px 0; border-top: 0; }
+}
+.cta { margin-top: 40px; display: grid; gap: 10px; justify-items: start; }
+.cta h2 { font-size: var(--t-h2); font-weight: 800; letter-spacing: -0.015em; }
+.cta p { color: var(--muted); }
+.cta .btn { margin-top: 6px; }
+
 /* ---------- Pricing ---------- */
 .pricing { padding-bottom: 56px; }
 .tiers { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
@@ -429,6 +464,8 @@ details.more { margin-top: 8px; border-top: 1px solid var(--line); }
   .frames span { flex-direction: column; justify-content: center; gap: 6px; min-height: 76px; text-align: center; }
   .bridge-grid { grid-template-columns: 1fr 1fr; }
   .rules-grid { grid-template-columns: 1fr 1fr; }
+  .anatomy { grid-template-columns: 1fr 1fr; }
+  .flow-split { grid-template-columns: 1fr 1fr; }
   .calc { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 32px; align-items: start; }
   .calc-row { grid-template-columns: minmax(0, 1fr) 84px auto; }
   .calc-row .units { grid-column: auto; }

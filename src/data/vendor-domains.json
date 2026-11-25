@@ -5,7 +5,8 @@
     "domain_url": "https://support.qr-code-generator.com/hc/en-us/articles/7665667969677",
     "evidence_url": "https://support.qr-code-generator.com/hc/en-us/articles/7665046137613",
     "behaviour": "qrco.de is the short-link domain of QR Code Generator PRO. Its help center says that after the trial, dynamic codes are deactivated and point to a service page.",
-    "verified": true
+    "verified": true,
+    "on_end": "Dynamic codes are deactivated after the trial and point to a service page."
   },
   {
     "domain": "l.ead.me",
@@ -13,7 +14,8 @@
     "domain_url": "https://support.qr-code-generator.com/hc/en-us/articles/7665667969677",
     "evidence_url": "https://support.qr-code-generator.com/hc/en-us/articles/7665046137613",
     "behaviour": "l.ead.me is a short-link domain named on the help pages of QR Code Generator PRO. Its help center says that after the trial, dynamic codes are deactivated and point to a service page.",
-    "verified": true
+    "verified": true,
+    "on_end": "Dynamic codes are deactivated after the trial and point to a service page."
   },
   {
     "domain": "qr1.be",
@@ -21,7 +23,8 @@
     "domain_url": "https://www.qrcode-tiger.com/short-url-generator",
     "evidence_url": "https://www.qrcode-tiger.com/qr-code-generator-with-no-expiration-limit",
     "behaviour": "qr1.be is the default short-link domain of QR TIGER. QR TIGER's page says its free dynamic codes are capped and require a subscription to stay active.",
-    "verified": true
+    "verified": true,
+    "on_end": "Free dynamic codes are capped and need a subscription to stay active."
   },
   {
     "domain": "sqr.co",
@@ -29,7 +32,8 @@
     "domain_url": "https://appsumo.com/products/square-qr/questions/looks-like-they-shut-down-bummer-1444222/",
     "evidence_url": "https://appsumo.com/products/square-qr/questions/looks-like-they-shut-down-bummer-1444222/",
     "behaviour": "sqr.co is a short-link domain used by SQR. Users on AppSumo reported that their codes stopped working after the vendor appeared to shut down.",
-    "verified": true
+    "verified": false,
+    "note": "Only source is user reports on AppSumo, not SQR's own page, so the checker treats it as an unknown short link."
   },
   {
     "domain": "scango.to",
@@ -37,7 +41,8 @@
     "domain_url": "https://hovercode.com/help/article/8-qr-code-custom-domain",
     "evidence_url": "https://hovercode.com/help/article/32-if-you-cancel",
     "behaviour": "scango.to is a default redirect domain of Hovercode. Its help center says that if a paid plan is cancelled, the account moves to the free plan: the first 3 dynamic codes keep working, and any beyond that become inactive until you subscribe again.",
-    "verified": true
+    "verified": true,
+    "on_end": "After a paid plan is cancelled, the first 3 dynamic codes keep working; the rest become inactive."
   },
   {
     "domain": "qrcodes.pro",
@@ -45,6 +50,7 @@
     "domain_url": "https://docs.uniqode.com/en/articles/5039457-setting-up-your-custom-domain",
     "evidence_url": "https://docs.uniqode.com/en/articles/17190918-what-happens-to-my-qr-codes-when-my-subscription-changes-or-ends",
     "behaviour": "qrcodes.pro is a domain Uniqode's help center lists for its QR codes. Its help center says dynamic codes stop working when a trial expires, or after the renewal date once a plan is cancelled.",
-    "verified": true
+    "verified": true,
+    "on_end": "Dynamic codes stop working when a trial expires, or after the renewal date once a plan is cancelled."
   }
 ]

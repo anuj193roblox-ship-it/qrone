@@ -38,6 +38,19 @@ test("no domain is listed twice", () => {
   assert.equal(new Set(domains).size, domains.length);
 });
 
+test("every verified entry has a short 'when the plan ends' line for the directory page", () => {
+  for (const v of vendors.filter((x) => x.verified)) {
+    assert.equal(typeof v.on_end, "string", v.domain);
+    assert.ok(v.on_end.trim().length > 10, `${v.domain}: on_end is too short`);
+  }
+});
+
+test("an unverified entry is never named as a vendor, only as an unknown short link", () => {
+  for (const v of vendors.filter((x) => !x.verified)) {
+    assert.equal(classify(`https://${v.domain}/abc`, vendors).kind, "unknown-short", v.domain);
+  }
+});
+
 test("every verified entry is actually recognised by the checker", () => {
   for (const v of vendors.filter((x) => x.verified)) {
     assert.equal(classify(`https://${v.domain}/abc`, vendors).kind, "vendor", v.domain);
