@@ -1,5 +1,5 @@
 {
-  "name": "qr-tool",
+  "name": "qrone",
   "version": "1.0.0",
   "description": "Dynamic QR codes that keep working. Pay once, export every redirect any time, and your codes survive even if this service disappears.",
   "scripts": {
@@ -11,16 +11,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anuj193roblox-ship-it/qr-tool.git"
+    "url": "git+https://github.com/anuj193roblox-ship-it/qrone.git"
   },
   "keywords": [],
   "author": "",
   "license": "AGPL-3.0-only",
   "type": "module",
   "bugs": {
-    "url": "https://github.com/anuj193roblox-ship-it/qr-tool/issues"
+    "url": "https://github.com/anuj193roblox-ship-it/qrone/issues"
   },
-  "homepage": "https://github.com/anuj193roblox-ship-it/qr-tool#readme",
+  "homepage": "https://github.com/anuj193roblox-ship-it/qrone#readme",
   "devDependencies": {
     "vite": "^8.3.8",
     "wrangler": "^4.168.0"
