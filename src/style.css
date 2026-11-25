@@ -316,7 +316,9 @@ label.check input { width: 20px; height: 20px; }
 .code-actions .btn-quiet { margin-top: 0; }
 .code-edit { margin: 0; }
 .code-row .msg-error { grid-column: 1 / -1; }
-.qr-panel { padding: 24px 0; border-bottom: 1px solid var(--seam); }
+.qr-panel, .export { padding: 24px 0; border-bottom: 1px solid var(--seam); }
+.export .hint { max-width: 60ch; }
+.export .actions { flex-wrap: wrap; }
 .qr-panel-body { display: grid; gap: 20px; margin-top: 14px; }
 .qr-box { background: #fff; border: 1px solid var(--seam); width: 100%; max-width: 240px; }
 .qr-box canvas, .qr-box svg { display: block; width: 100% !important; height: auto !important; }

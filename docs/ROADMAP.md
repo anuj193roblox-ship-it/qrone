@@ -66,11 +66,11 @@ D1–D2 are built and tested end to end locally (the link is printed to the term
 
 | # | Step | Who | Done when |
 |---|------|-----|-----------|
-| E1 | Export CSV | Claude | A test compares output to a known file |
-| E2 | Export Netlify `_redirects` | Claude | Same |
-| E3 | Export `.htaccess` | Claude | Same |
-| E4 | Export nginx rules | Claude | Same |
-| E5 | Export Cloudflare redirect rules | Claude | Same |
+| E1 | Export CSV ✅ | Claude | A test compares output to a known file |
+| E2 | Export Netlify `_redirects` ✅ | Claude | Same |
+| E3 | Export `.htaccess` ✅ | Claude | Same |
+| E4 | Export nginx rules ✅ | Claude | Same |
+| E5 | Export Cloudflare redirect rules ✅ | Claude | Same |
 | E6 | Real test: host an export on Netlify's free tier and scan a code | Both | The code still works without QrOne |
 
 ## Phase F: payments (test mode first)

@@ -47,6 +47,18 @@
       <p id="code-empty" class="hint" hidden>No codes yet. Create your first one above.</p>
       <ul id="code-list" class="code-list"></ul>
 
+      <section class="export" aria-labelledby="export-title">
+        <h2 id="export-title" class="stamp">Take your codes with you</h2>
+        <p class="hint">Download every redirect at any time, on every plan. If your codes use a domain you control, these files keep them working even without QrOne.</p>
+        <div class="actions">
+          <a class="btn" href="/api/codes/export?format=csv" download>Spreadsheet (CSV)</a>
+          <a class="btn" href="/api/codes/export?format=netlify" download>Netlify</a>
+          <a class="btn" href="/api/codes/export?format=htaccess" download>Apache .htaccess</a>
+          <a class="btn" href="/api/codes/export?format=nginx" download>nginx</a>
+          <a class="btn" href="/api/codes/export?format=cloudflare" download>Cloudflare</a>
+        </div>
+      </section>
+
       <section id="qr-panel" class="qr-panel" hidden aria-labelledby="qr-title">
         <h2 id="qr-title" class="stamp"></h2>
         <div class="qr-panel-body">

@@ -9,12 +9,14 @@
 //   POST   /api/codes                 { destination, label } -> new code
 //   PATCH  /api/codes/:id             { destination, label } -> edit
 //   DELETE /api/codes/:id             -> delete (scans then get the 404 page)
+//   GET    /api/codes/export?format=csv|netlify|htaccess|nginx|cloudflare -> download every redirect
 import {
   LINK_TTL, SESSION_TTL, LINKS_PER_WINDOW, normalizeEmail, isValidEmail, newToken, sha256Hex,
   sessionCookie, clearedCookie, readCookie, isSameOrigin,
 } from "./auth.js";
 import { canSend, sendSignInLink } from "./mail.js";
 import { limitFor, planName, expiresAtFor, normalizeDestination, cleanLabel, newSlug } from "./codes.js";
+import { FORMATS, build } from "./export.js";
 
 const now = () => Math.floor(Date.now() / 1000);
 
@@ -196,6 +198,25 @@ const deleteCode = (request, env, id) => withAccount(request, env, async (accoun
   return json({ ok: true });
 });
 
+// Export works on every plan, including expired free codes: the customer's redirects are theirs to keep.
+const exportCodes = (request, env) => withAccount(request, env, async (account) => {
+  const format = new URL(request.url).searchParams.get("format");
+  if (!Object.hasOwn(FORMATS, format)) return json({ ok: false, error: "Unknown export format." }, 400);
+  const { results } = await env.DB
+    .prepare(`${SELECT_CODE} WHERE account_id = ?1 ORDER BY created_at, id`)
+    .bind(account.id)
+    .all();
+  const codes = results.map((r) => ({ ...publicCode(env, r), hostname: r.hostname }));
+  return new Response(build[format](codes, now()), {
+    headers: {
+      "content-type": FORMATS[format].type,
+      "content-disposition": `attachment; filename="${FORMATS[format].file}"`,
+      "cache-control": "no-store",
+      "x-content-type-options": "nosniff",
+    },
+  });
+});
+
 // ---------- Routing ----------
 
 const ROUTES = {
@@ -205,6 +226,7 @@ const ROUTES = {
   "POST /api/auth/logout": logout,
   "GET /api/codes": listCodes,
   "POST /api/codes": createCode,
+  "GET /api/codes/export": exportCodes,
 };
 
 function route(method, pathname) {
