@@ -7,7 +7,7 @@ Who does it: **You** = Anuj (accounts, money, phone, decisions). **Claude** = co
 
 ---
 
-## Phase A: finish the free tools
+## Phase A: finish the free tools (A1–A5 ✅ done; A6–A8 are yours)
 
 | # | Step | Who | Done when |
 |---|------|-----|-----------|
@@ -29,7 +29,9 @@ Who does it: **You** = Anuj (accounts, money, phone, decisions). **Claude** = co
 | B3 | Apply to Paddle or Dodo Payments | You | The identity check is submitted |
 | B4 | Pick an email service for sign-in links (Claude compares free tiers first) | Both | An account exists and the domain is verified |
 
-## Phase C: the redirect engine (core of the paid product)
+## Phase C: the redirect engine (core of the paid product) ✅ done 2026-11-25
+
+Live at `https://qrone-redirect.qr-tool-spike.workers.dev` with an empty database in Eastern North America. Code: `worker/`. Rules: `worker/src/resolve.js`, tested in `tests/redirect.test.js`.
 
 | # | Step | Who | Done when |
 |---|------|-----|-----------|
