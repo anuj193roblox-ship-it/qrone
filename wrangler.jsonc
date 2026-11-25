@@ -1,0 +1,8 @@
+{
+  // The free tools site: static files only, no Worker code. Served by Cloudflare Workers Static Assets.
+  "name": "qr-tool-site",
+  "compatibility_date": "2026-11-24",
+  "assets": {
+    "directory": "./dist"
+  }
+}
