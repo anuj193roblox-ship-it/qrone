@@ -10,3 +10,4 @@ if (document.getElementById("gen-form")) import("./generator.js").then((m) => m.
 if (document.getElementById("chk-file")) import("./checker.js").then((m) => m.initChecker());
 if (document.getElementById("signin-form")) import("./account.js").then((m) => m.initSignin());
 if (document.getElementById("dashboard")) import("./account.js").then((m) => m.initDashboard());
+if (document.getElementById("tiers")) import("./pricing.js").then((m) => m.initPricing());

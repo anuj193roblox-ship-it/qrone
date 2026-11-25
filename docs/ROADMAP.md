@@ -85,10 +85,10 @@ D1–D2 are built and tested end to end locally (the link is printed to the term
    |---|---|
    | `free-starter` | $29 |
    | `free-plus` | $49 |
-   | `free-pro` | $100 |
+   | `free-pro` | $99 |
    | `starter-plus` | $20 |
-   | `starter-pro` | $71 |
-   | `plus-pro` | $51 |
+   | `starter-pro` | $70 |
+   | `plus-pro` | $50 |
 
 2. Send Claude the 6 product IDs (`pdt_…`). They aren't secret, and they go into `DODO_PRODUCTS` in `wrangler.jsonc`.
 3. **Developer → API Keys:** create a TEST key (`dodo_test_…`). **Don't paste it in chat.** Run `npx.cmd wrangler secret put DODO_API_KEY` and paste it there.

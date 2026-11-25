@@ -3,19 +3,19 @@ import assert from "node:assert/strict";
 import { createHmac } from "node:crypto";
 import { PRICE, upgradeKey, upgradePrice, upgradeOptions, highestPlan, productsOf, verifyWebhook } from "../app/src/billing.js";
 
-test("prices match the plans: $29 / $49 / $100, paid once", () => {
-  assert.deepEqual(PRICE, { free: 0, starter: 2900, plus: 4900, pro: 10000 });
+test("prices match the plans: $29 / $49 / $99, paid once", () => {
+  assert.deepEqual(PRICE, { free: 0, starter: 2900, plus: 4900, pro: 9900 });
 });
 
 test("upgrades pay the difference; downgrades and sideways moves are not sold", () => {
   assert.equal(upgradePrice("free", "starter"), 2900);
   assert.equal(upgradePrice("starter", "plus"), 2000);
-  assert.equal(upgradePrice("starter", "pro"), 7100);
-  assert.equal(upgradePrice("plus", "pro"), 5100);
+  assert.equal(upgradePrice("starter", "pro"), 7000);
+  assert.equal(upgradePrice("plus", "pro"), 5000);
   for (const [from, to] of [["pro", "plus"], ["plus", "plus"], ["starter", "free"], ["free", "gold"], ["x", "pro"], [undefined, "pro"]]) {
     assert.equal(upgradeKey(from, to), null, `${from}->${to}`);
   }
-  assert.deepEqual(upgradeOptions("starter"), [{ plan: "plus", price: 2000 }, { plan: "pro", price: 7100 }]);
+  assert.deepEqual(upgradeOptions("starter"), [{ plan: "plus", price: 2000 }, { plan: "pro", price: 7000 }]);
   assert.deepEqual(upgradeOptions("pro"), []);
 });
 

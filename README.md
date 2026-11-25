@@ -15,7 +15,7 @@ Many "free QR code" sites make *dynamic* codes: the printed code points at the v
 | Free | $0 | 10, each redirects for 14 days |
 | Starter | $29 once | 10, no expiry |
 | Plus | $49 once | 25, no expiry |
-| Pro | $100 once | 75, no expiry |
+| Pro | $99 once | 75, no expiry |
 
 ## Planned architecture
 

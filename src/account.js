@@ -28,8 +28,25 @@ async function api(path, body, method = body === undefined ? "GET" : "POST") {
   return { ok: res.ok && data.ok !== false, status: res.status, data };
 }
 
+// Where to go after the email link: back to pricing if you came from a plan button. Only these two
+// fixed pages are ever used, so a crafted link can never send someone elsewhere.
+const AFTER_SIGNIN = "qrone-after-signin";
+function nextPage() {
+  try {
+    const next = localStorage.getItem(AFTER_SIGNIN) === "/pricing" ? "/pricing" : "/dashboard.html";
+    localStorage.removeItem(AFTER_SIGNIN);
+    return next;
+  } catch {
+    return "/dashboard.html"; // storage blocked: the dashboard is always a fine place to land
+  }
+}
+
 export function initSignin() {
-  const token = new URLSearchParams(location.search).get("token");
+  const params = new URLSearchParams(location.search);
+  const token = params.get("token");
+  if (["starter", "plus", "pro"].includes(params.get("plan"))) {
+    try { localStorage.setItem(AFTER_SIGNIN, "/pricing"); } catch { /* fine: you land on the dashboard instead */ }
+  }
   const error = (text) => { $("signin-error").textContent = text; };
 
   if (token) {
@@ -42,7 +59,7 @@ export function initSignin() {
       $("signin-go").disabled = true;
       error("");
       const r = await api("/api/auth/verify", { token });
-      if (r.ok) location.assign("/dashboard.html");
+      if (r.ok) location.assign(nextPage());
       else {
         error(r.data.error ?? "That didn't work. Ask for a new link.");
         $("signin-finish").hidden = true;

@@ -1,6 +1,6 @@
 // Plans, upgrade prices and Dodo webhook signature checks. Pure (WebCrypto only), so each rule has a test.
 
-export const PRICE = { free: 0, starter: 2900, plus: 4900, pro: 10000 }; // US cents, paid once
+export const PRICE = { free: 0, starter: 2900, plus: 4900, pro: 9900 }; // US cents, paid once
 const RANK = { free: 0, starter: 1, plus: 2, pro: 3 };
 
 // Upgrades pay the difference: Starter -> Plus is $49 - $29 = $20. Downgrades and sideways moves aren't sold.

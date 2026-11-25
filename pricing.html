@@ -22,46 +22,95 @@
 
   <main id="main" class="pricing">
     <div class="page-head">
-      <h1 id="headline" class="hero-title"><span class="line">Pay once.</span> <span class="line accent">Your codes never expire.</span></h1>
-      <p class="hero-sub">Editable QR codes for menus, signs and flyers. Change where they go at any time. No monthly bill.</p>
+      <h1 class="hero-title"><span class="line">Pay once.</span> <span class="line accent">Your codes never expire.</span></h1>
+      <p class="hero-sub">Editable QR codes for menus, signs and flyers. No monthly bill. Upgrade later by paying only the difference.</p>
+      <p id="pricing-who" class="hint" role="status"></p>
     </div>
 
-    <ul class="tiers">
-      <li class="card tier">
+    <ul id="tiers" class="tiers">
+      <li class="card tier" data-plan="free">
         <h2>Free</h2>
+        <p class="tier-for">Try how editable codes work</p>
         <p class="tier-price">$0</p>
-        <p class="tier-codes">{{LIMIT_FREE}} codes</p>
-        <p class="msg-warn">Each code stops after {{FREE_DAYS}} days. For testing, not for printing.</p>
-        <a class="btn" href="/signin.html">Start free</a>
+        <p class="tier-test">Test only: each code stops after {{FREE_DAYS}} days. Don't print these.</p>
+        <ul class="ticks">
+          <li>{{LIMIT_FREE}} test codes</li>
+          <li>Change where they go any time</li>
+          <li>Download every redirect (5 formats)</li>
+        </ul>
+        <a class="btn tier-btn" href="/signin.html">Start free test</a>
+        <p class="msg-error tier-error" role="alert"></p>
       </li>
-      <li class="card tier">
+      <li class="card tier" data-plan="starter">
         <h2>Starter</h2>
+        <p class="tier-for">For a single shop, café or salon</p>
         <p class="tier-price">{{PRICE_STARTER}} <span>once</span></p>
-        <p class="tier-codes">{{LIMIT_STARTER}} codes</p>
-        <p class="tier-note">Never expire</p>
-        <a class="btn" href="/signin.html">Get Starter</a>
+        <ul class="ticks">
+          <li>{{LIMIT_STARTER}} editable codes</li>
+          <li>Never expire, nothing to renew</li>
+          <li>Download every redirect (5 formats)</li>
+        </ul>
+        <a class="btn btn-primary tier-btn" href="/signin.html?plan=starter">Buy Starter: {{PRICE_STARTER}} once</a>
+        <p class="msg-error tier-error" role="alert"></p>
       </li>
-      <li class="card tier">
+      <li class="card tier tier-mid" data-plan="plus">
         <h2>Plus</h2>
+        <p class="tier-for">For more menus, signs and flyers</p>
         <p class="tier-price">{{PRICE_PLUS}} <span>once</span></p>
-        <p class="tier-codes">{{LIMIT_PLUS}} codes</p>
-        <p class="tier-note">Never expire</p>
-        <a class="btn" href="/signin.html">Get Plus</a>
+        <ul class="ticks">
+          <li>{{LIMIT_PLUS}} editable codes</li>
+          <li>Never expire, nothing to renew</li>
+          <li>Download every redirect (5 formats)</li>
+        </ul>
+        <a class="btn btn-primary tier-btn" href="/signin.html?plan=plus">Buy Plus: {{PRICE_PLUS}} once</a>
+        <p class="msg-error tier-error" role="alert"></p>
       </li>
-      <li class="card tier">
+      <li class="card tier" data-plan="pro">
         <h2>Pro</h2>
+        <p class="tier-for">For several locations or print runs</p>
         <p class="tier-price">{{PRICE_PRO}} <span>once</span></p>
-        <p class="tier-codes">{{LIMIT_PRO}} codes</p>
-        <p class="tier-note">Never expire</p>
-        <a class="btn" href="/signin.html">Get Pro</a>
+        <ul class="ticks">
+          <li>{{LIMIT_PRO}} editable codes</li>
+          <li>Never expire, nothing to renew</li>
+          <li>Download every redirect (5 formats)</li>
+        </ul>
+        <a class="btn btn-primary tier-btn" href="/signin.html?plan=pro">Buy Pro: {{PRICE_PRO}} once</a>
+        <p class="msg-error tier-error" role="alert"></p>
       </li>
     </ul>
+    <!-- Only built features are listed above; planned ones are named as planned. -->
+    <p class="hint tier-planned">Planned for paid plans: using your own domain for your codes, and an email if a code's destination stops loading.</p>
 
-    <ul class="card tier-facts">
-      <li><strong>Upgrade for the difference.</strong> Starter to Plus costs {{UP_STARTER_PLUS}}, not the full price.</li>
-      <li><strong>Refund within 14 days.</strong> Your codes keep working for {{FREE_DAYS}} more days, so nothing you printed breaks overnight.</li>
-      <li><strong>Download every code at any time,</strong> on every plan.</li>
-      <li><strong>Payments by Dodo Payments.</strong> We never see your card.</li>
+    <section class="cost" aria-labelledby="cost-title">
+      <h2 id="cost-title" class="section-title">3-year cost: a monthly plan vs paying once</h2>
+      <div class="table-wrap card">
+        <table>
+          <thead>
+            <tr><th scope="col"><span class="sr-only">Compare</span></th><th scope="col">A $15/month plan (example)</th><th scope="col">{{NAME}} Starter ({{PRICE_STARTER}} once)</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Year 1</th><td>$180</td><td>{{PRICE_STARTER}}</td></tr>
+            <tr><th scope="row">After 3 years</th><td>$540</td><td>{{PRICE_STARTER}}</td></tr>
+            <tr><th scope="row">If you stop paying</th><td>Depends on the vendor. Some switch the codes off. <a href="/check">Check yours</a></td><td>Nothing to stop paying</td></tr>
+            <tr><th scope="row">Taking your links elsewhere</th><td>Depends on the vendor</td><td>Download every redirect at any time</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <ul class="trust">
+      <li class="card">
+        <h3>Refund within 14 days</h3>
+        <p>Full refund within 14 days. Your codes keep working for {{FREE_DAYS}} more days, so nothing you printed breaks overnight.</p>
+      </li>
+      <li class="card">
+        <h3>Pay only the difference</h3>
+        <p>Start on Starter ({{PRICE_STARTER}}). Need Plus later? Pay {{UP_STARTER_PLUS}}, not {{PRICE_PLUS}}.</p>
+      </li>
+      <li class="card">
+        <h3>Checkout by Dodo Payments</h3>
+        <p>Dodo is the merchant of record: it runs the secure checkout and handles sales tax and VAT. We never see your card.</p>
+      </li>
     </ul>
 
     <p class="hint pricing-foot">Only need a code that never changes? <a href="/">Static codes are free</a> and never expire. Questions? <a href="/faq.html">Read the FAQ</a>.</p>

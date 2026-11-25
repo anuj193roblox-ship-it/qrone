@@ -316,20 +316,35 @@ details.more { margin-top: 8px; border-top: 1px solid var(--line); }
 
 /* ---------- Dashboard ---------- */
 /* ---------- Pricing ---------- */
-.pricing { padding-bottom: 48px; }
-.tiers { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
-.tier { display: flex; flex-direction: column; gap: 6px; }
-.tier h2 { font-size: var(--t-big); font-weight: 700; color: var(--muted); }
-.tier-price { font-size: var(--t-hero); font-weight: 800; letter-spacing: -0.025em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.pricing { padding-bottom: 56px; }
+.tiers { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
+.tier { display: flex; flex-direction: column; gap: 8px; }
+.tier h2 { font-size: var(--t-big); font-weight: 800; }
+.tier-for { color: var(--muted); font-size: var(--t-small); }
+.tier-price { margin-top: 6px; font-size: 2.5rem; font-weight: 800; letter-spacing: -0.025em; line-height: 1.1; font-variant-numeric: tabular-nums; }
 .tier-price span { font-size: var(--t-big); font-weight: 600; color: var(--muted); letter-spacing: 0; }
-.tier-codes { font-weight: 700; }
-.tier-note { color: var(--ok); font-size: var(--t-small); font-weight: 600; }
-.tier .msg-warn { margin-top: 0; }
-.tier .btn { margin-top: auto; align-self: flex-start; }
-.tier .tier-note, .tier .msg-warn { margin-bottom: 14px; }
-.tier-facts { list-style: none; margin-top: 14px; display: grid; gap: 12px; color: var(--muted); }
-.tier-facts strong { color: var(--text); }
-.pricing-foot { margin-top: 20px; font-size: var(--t-big); }
+.tier-test { color: var(--warn); background: var(--warn-bg); border-radius: var(--r-field); padding: 8px 12px; font-size: var(--t-small); font-weight: 600; }
+.tier .ticks { margin: 6px 0 18px; font-size: var(--t-small); }
+.tier .btn { margin-top: auto; width: 100%; white-space: normal; text-align: center; line-height: 1.25; padding: 10px 16px; }
+.tier-mid { border-color: var(--accent-text); } /* a quiet highlight, with no "most popular" claim */
+.tier-current { border-color: var(--ok); }
+.tier-badge { align-self: flex-start; }
+.tier-below { opacity: 0.6; }
+.tier-included { margin-top: auto; text-align: center; }
+.tier-error { margin-top: 4px; }
+.tier-planned { margin-top: 14px; }
+.cost { margin-top: 56px; }
+.table-wrap { padding: 4px 20px; overflow-x: auto; }
+.cost table { width: 100%; border-collapse: collapse; font-size: var(--t-small); }
+.cost th, .cost td { padding: 14px 12px 14px 0; text-align: left; vertical-align: top; border-top: 1px solid var(--line); }
+.cost thead th { border-top: 0; color: var(--muted); font-weight: 700; }
+.cost tbody th { font-weight: 700; min-width: 6.5rem; }
+.cost td { color: var(--muted); }
+.cost td:last-child { color: var(--text); font-weight: 600; }
+.trust { list-style: none; padding: 0; margin: 24px 0 0; display: grid; gap: 14px; }
+.trust h3 { font-size: var(--t-big); font-weight: 800; margin-bottom: 6px; }
+.trust p { color: var(--muted); font-size: var(--t-small); }
+.pricing-foot { margin-top: 24px; font-size: var(--t-body); }
 
 .dash { padding-bottom: 48px; }
 .dash > #dashboard { display: grid; gap: 18px; }
@@ -387,9 +402,13 @@ details.more { margin-top: 8px; border-top: 1px solid var(--line); }
   .frames { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .frames span { flex-direction: column; justify-content: center; gap: 6px; min-height: 76px; text-align: center; }
   .bridge-grid { grid-template-columns: 1fr 1fr; }
+  .tiers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .table-wrap { padding: 4px 28px; }
   .story-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 @media (min-width: 960px) {
+  .tiers { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .trust { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .workspace { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; }
   .rescue-out { grid-template-columns: 200px 1fr; }
   .studio { grid-template-columns: minmax(0, 58fr) minmax(0, 42fr); gap: 24px; }
