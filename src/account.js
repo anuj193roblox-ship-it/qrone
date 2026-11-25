@@ -83,6 +83,13 @@ export function initSignin() {
     if (r.ok) {
       $("signin-msg").textContent = r.data.message;
       setHeadline("Check your", "inbox.");
+      // Local testing only (the server sends these just on this computer): show the link instead of an email.
+      const link = r.data.dev_link;
+      if (typeof link === "string" && link.startsWith(`${location.origin}/signin?token=`)) {
+        $("signin-msg").replaceChildren("Local testing: no email is sent. ", el("a", { href: link }, "Open your sign-in link"), ".");
+      } else if (r.data.dev_note) {
+        $("signin-msg").textContent = r.data.dev_note;
+      }
     } else {
       error(r.data.error ?? "That didn't work. Please try again.");
     }

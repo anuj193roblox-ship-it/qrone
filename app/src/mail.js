@@ -5,6 +5,13 @@
 
 export const canSend = (env) => Boolean((env.EMAIL && env.MAIL_FROM) || env.DEV_LOG_LINKS === "1");
 
+// Local testing only: the sign-in page may show the link itself, so you don't have to dig it out of the terminal.
+// All three must hold: no real email set up, DEV_LOG_LINKS=1, and the page opened on this computer.
+// Otherwise anyone could sign in as anyone, so the live site (real hostname) never qualifies.
+const LOCAL_HOSTS = new Set(["localhost", "127.0.0.1", "[::1]"]);
+export const showLinkOnPage = (env, requestUrl) =>
+  !(env.EMAIL && env.MAIL_FROM) && env.DEV_LOG_LINKS === "1" && LOCAL_HOSTS.has(new URL(requestUrl).hostname);
+
 export async function sendSignInLink(env, to, link) {
   if (env.EMAIL && env.MAIL_FROM) {
     await env.EMAIL.send({

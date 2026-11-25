@@ -18,7 +18,7 @@ import {
   LINK_TTL, SESSION_TTL, LINKS_PER_WINDOW, normalizeEmail, isValidEmail, newToken, sha256Hex,
   sessionCookie, clearedCookie, readCookie, isSameOrigin,
 } from "./auth.js";
-import { canSend, sendSignInLink } from "./mail.js";
+import { canSend, sendSignInLink, showLinkOnPage } from "./mail.js";
 import { limitFor, planName, expiresAtFor, normalizeDestination, cleanLabel, cleanEndsAt, newSlug, FREE_DAYS } from "./codes.js";
 import { FORMATS, build } from "./export.js";
 import { upgradeKey, upgradeOptions, highestPlan, productsOf, verifyWebhook } from "./billing.js";
@@ -57,7 +57,11 @@ async function start(request, env) {
     .prepare("SELECT COUNT(*) AS n FROM login_tokens WHERE email = ?1 AND created_at > ?2")
     .bind(email, now() - LINK_TTL)
     .first();
-  if (n >= LINKS_PER_WINDOW) return json(SENT); // limit reached: same answer, nothing sent
+  const local = showLinkOnPage(env, request.url);
+  if (n >= LINKS_PER_WINDOW) {
+    // Limit reached: the same answer, nothing sent. Local testing gets told why, so it doesn't look broken.
+    return json(local ? { ...SENT, dev_note: `Local testing: that's ${LINKS_PER_WINDOW} links for this email in 15 minutes, so no new one was made. Use the last link, wait, or try another email.` } : SENT);
+  }
 
   const token = newToken();
   await env.DB
@@ -65,8 +69,9 @@ async function start(request, env) {
     .bind(await sha256Hex(token), email, now() + LINK_TTL)
     .run();
   // The link opens a page with a "Sign in" button, so email scanners that open links can't use it up.
-  await sendSignInLink(env, email, `${new URL(request.url).origin}/signin?token=${token}`);
-  return json(SENT);
+  const link = `${new URL(request.url).origin}/signin?token=${token}`;
+  await sendSignInLink(env, email, link);
+  return json(local ? { ...SENT, dev_link: link } : SENT);
 }
 
 async function verify(request, env) {
