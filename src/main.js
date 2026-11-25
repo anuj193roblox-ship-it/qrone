@@ -11,3 +11,4 @@ if (document.getElementById("chk-file")) import("./checker.js").then((m) => m.in
 if (document.getElementById("signin-form")) import("./account.js").then((m) => m.initSignin());
 if (document.getElementById("dashboard")) import("./account.js").then((m) => m.initDashboard());
 if (document.getElementById("tiers")) import("./pricing.js").then((m) => m.initPricing());
+if (document.getElementById("calc-range")) import("./printguide.js").then((m) => m.initPrintGuide());

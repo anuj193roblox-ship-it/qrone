@@ -40,6 +40,7 @@ export default defineConfig({
         dashboard: page("dashboard.html"),
         pricing: page("pricing.html"),
         check: page("check.html"),
+        printGuide: page("print-guide.html"),
       },
     },
   },

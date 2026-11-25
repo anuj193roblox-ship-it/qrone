@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How big should a QR code be? Print size guide | {{NAME}}</title>
+  <meta name="description" content="Work out how big to print a QR code for a menu, flyer, window or poster, plus five plain rules so it scans on the first try.">
+  <meta property="og:title" content="Print QR codes that scan on the first try | {{NAME}}">
+  <meta property="og:description" content="A print size calculator and five plain rules for menus, flyers, window decals and posters.">
+  <meta property="og:type" content="article">
+  <meta name="theme-color" content="#0b0c0f">
+  <link rel="icon" type="image/svg+xml" href="/logo.svg">
+  <script type="module" src="/src/main.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="topbar">
+    <nav class="topbar-in" aria-label="Main">
+      <a class="brand" href="/"><img class="brand-mark" src="/logo.svg" alt="" width="26" height="26">{{NAME}}</a>
+      <div class="nav-links"><a href="/">Make</a><a href="/check">Check</a><a href="/faq.html">FAQ</a></div>
+    </nav>
+  </header>
+
+  <main id="main" class="guide">
+    <div class="page-head">
+      <h1 class="hero-title"><span class="line">Print QR codes that</span> <span class="line accent">scan on the first try.</span></h1>
+      <p class="hero-sub">A plain-English checklist for menus, flyers, window decals and posters.</p>
+    </div>
+
+    <section class="card calc" aria-labelledby="calc-title">
+      <div class="calc-in">
+        <h2 id="calc-title" class="calc-title">How big should it be?</h2>
+        <label for="calc-range">How far away will people scan it?</label>
+        <div class="calc-row">
+          <input id="calc-range" type="range" min="15" max="500" step="5" value="30" aria-describedby="calc-distance">
+          <input id="calc-num" type="number" min="15" max="500" step="1" value="30" aria-label="Scanning distance">
+          <fieldset class="segmented units">
+            <legend class="sr-only">Units</legend>
+            <label><input type="radio" name="calc-unit" value="cm" checked><span>cm</span></label>
+            <label><input type="radio" name="calc-unit" value="in"><span>in</span></label>
+          </fieldset>
+        </div>
+        <p id="calc-distance" class="hint">Scanning from 30 cm (12 in).</p>
+        <div class="chips" role="group" aria-label="Common places">
+          <button type="button" class="chip" data-cm="30">Table tent (30 cm)</button>
+          <button type="button" class="chip" data-cm="25">Flyer (25 cm)</button>
+          <button type="button" class="chip" data-cm="100">Shop window (100 cm)</button>
+          <button type="button" class="chip" data-cm="250">Poster (250 cm)</button>
+        </div>
+      </div>
+
+      <div class="calc-out" aria-live="polite">
+        <p class="calc-label">Print it at least</p>
+        <p class="calc-big"><span id="calc-min">3 cm</span> <span id="calc-min-alt" class="calc-alt">1.2 in</span></p>
+        <p class="calc-label">Safer size</p>
+        <p class="calc-big calc-rec"><span id="calc-rec">3.8 cm</span> <span id="calc-rec-alt" class="calc-alt">1.5 in</span></p>
+        <p id="calc-border" class="hint">Plus a white border of at least 0.6 cm on every side. Codes made on {{NAME}} already include it.</p>
+        <a class="btn btn-primary" href="/">Make a print-ready code now <span aria-hidden="true">→</span></a>
+        <p class="hint">Rule of thumb: the code's width is about a tenth of the scanning distance. Bigger is always safer, and long addresses need more room.</p>
+      </div>
+    </section>
+
+    <section class="rules" aria-labelledby="rules-title">
+      <h2 id="rules-title" class="section-title">Five rules for printing</h2>
+      <ol class="rules-grid">
+        <li class="card rule">
+          <p class="story-when">Rule 1</p>
+          <h3>Never go below 2 cm (0.8 in)</h3>
+          <p>Each square in the pattern gets tiny on a small code. Older and cheaper phone cameras can't focus that close, so a code on a business card often fails exactly when someone tries it.</p>
+        </li>
+        <li class="card rule">
+          <p class="story-when">Rule 2</p>
+          <h3>Keep the white border</h3>
+          <p>Phones find a code by its empty edge, called the quiet zone. Don't crop it, and don't print text or pictures right up to the code.</p>
+          <figure class="quiet-demo">
+            <div>
+              <svg viewBox="0 0 64 64" role="img" aria-label="A code with a clear white border">
+                <rect width="64" height="64" rx="6" fill="#ffffff"/>
+                <g fill="#000000">
+                  <path d="M14 14h12v12H14zM38 14h12v12H38zM14 38h12v12H14z"/>
+                  <path fill="#ffffff" d="M16 16h8v8h-8zM40 16h8v8h-8zM16 40h8v8h-8z"/>
+                  <path d="M18 18h4v4h-4zM42 18h4v4h-4zM18 42h4v4h-4zM30 14h4v4h-4zM30 22h4v8h-4zM38 30h4v4h-4zM42 38h8v4h-8zM30 38h4v12h-4zM38 46h4v4h-4zM46 46h4v4h-4zM22 30h4v4h-4zM14 30h4v4h-4z"/>
+                </g>
+              </svg>
+              <figcaption><span class="pill pill-ok">Scans</span></figcaption>
+            </div>
+            <div>
+              <svg viewBox="0 0 64 64" role="img" aria-label="The same code cropped to its edge, sitting on a busy background">
+                <rect width="64" height="64" rx="6" fill="#3a4a5c"/>
+                <path fill="#6b7a8c" d="M0 8l64-8v10L0 18zM0 40l64-10v10L0 50z"/>
+                <rect x="10" y="10" width="44" height="44" fill="#ffffff"/>
+                <g fill="#000000" transform="translate(-4 -4) scale(1.1)">
+                  <path d="M14 14h12v12H14zM38 14h12v12H38zM14 38h12v12H14z"/>
+                  <path fill="#ffffff" d="M16 16h8v8h-8zM40 16h8v8h-8zM16 40h8v8h-8z"/>
+                  <path d="M18 18h4v4h-4zM42 18h4v4h-4zM18 42h4v4h-4zM30 14h4v4h-4zM30 22h4v8h-4zM38 30h4v4h-4zM42 38h8v4h-8zM30 38h4v12h-4zM38 46h4v4h-4zM46 46h4v4h-4zM22 30h4v4h-4zM14 30h4v4h-4z"/>
+                </g>
+              </svg>
+              <figcaption><span class="pill pill-bad">May fail</span></figcaption>
+            </div>
+          </figure>
+        </li>
+        <li class="card rule">
+          <p class="story-when">Rule 3</p>
+          <h3>Dark ink on light paper</h3>
+          <p>White-on-black codes confuse some phone cameras, and pale colours like yellow on white fade into the paper under dim restaurant lights. Black or a deep navy on white is safest. Our maker warns you about weak colour pairs.</p>
+        </li>
+        <li class="card rule">
+          <p class="story-when">Rule 4</p>
+          <h3>Watch out for glossy lamination</h3>
+          <p>Overhead lights bounce off gloss and wash out part of the code, so diners have to tilt the menu to scan it. Ask your printer for a matte finish, or keep the code away from the shiniest spot.</p>
+        </li>
+        <li class="card rule">
+          <p class="story-when">Rule 5</p>
+          <h3>SVG for print shops, PNG for Word or Canva</h3>
+          <p>An SVG is drawn from shapes, so it stays sharp at any size, from a sticker to a billboard. A PNG is made of pixels: perfect for documents and social posts, but it blurs if it's stretched far beyond its size.</p>
+        </li>
+      </ol>
+      <p class="hint guide-foot">Always scan a printed test copy with two different phones before printing the whole run.</p>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p>{{NAME}} runs in your browser.</p>
+    <p><a href="/print-guide.html">Print guide</a><a href="/faq.html">FAQ</a><a href="/about.html">About</a><a href="/privacy.html">Privacy</a></p>
+  </footer>
+</body>
+</html>

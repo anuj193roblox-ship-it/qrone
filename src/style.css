@@ -315,6 +315,32 @@ details.more { margin-top: 8px; border-top: 1px solid var(--line); }
 .faq p { padding-bottom: 18px; }
 
 /* ---------- Dashboard ---------- */
+/* ---------- Print guide ---------- */
+.guide { padding-bottom: 56px; }
+.calc { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; }
+.calc-title { font-size: var(--t-big); font-weight: 800; }
+.calc-in label[for="calc-range"] { margin-top: 14px; }
+.calc-row { display: grid; grid-template-columns: minmax(0, 1fr) 76px; gap: 10px; align-items: center; }
+.calc-row .units { grid-column: 1 / -1; } /* phones: units on their own row */
+.calc-row input[type="range"] { width: 100%; accent-color: var(--accent); min-height: var(--tap); }
+.calc-row input[type="number"] { min-height: 44px; padding: 8px 10px; font-variant-numeric: tabular-nums; }
+.units { display: flex; gap: 4px; }
+.units span { min-height: 44px; padding: 0 12px; }
+.calc-out { display: grid; gap: 4px; align-content: start; padding: 20px; background: var(--bg); border: 1px solid var(--line); border-radius: 16px; }
+.calc-label { color: var(--muted); font-size: var(--t-small); font-weight: 600; margin-top: 8px; }
+.calc-big { font-size: 2.25rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; font-variant-numeric: tabular-nums; }
+.calc-rec { color: var(--accent-text); }
+.calc-alt { font-size: var(--t-big); font-weight: 600; color: var(--muted); letter-spacing: 0; }
+.calc-out .btn { margin-top: 14px; justify-self: start; white-space: normal; text-align: center; line-height: 1.25; padding: 10px 20px; }
+.rules { margin-top: 56px; }
+.rules-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
+.rule h3 { font-size: var(--t-big); font-weight: 800; margin: 8px 0 8px; }
+.rule p:not(.story-when) { color: var(--muted); }
+.quiet-demo { display: flex; gap: 20px; margin: 16px 0 0; }
+.quiet-demo div { display: grid; gap: 8px; justify-items: center; }
+.quiet-demo svg { width: 96px; height: 96px; }
+.guide-foot { margin-top: 16px; }
+
 /* ---------- Pricing ---------- */
 .pricing { padding-bottom: 56px; }
 .tiers { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
@@ -402,6 +428,10 @@ details.more { margin-top: 8px; border-top: 1px solid var(--line); }
   .frames { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .frames span { flex-direction: column; justify-content: center; gap: 6px; min-height: 76px; text-align: center; }
   .bridge-grid { grid-template-columns: 1fr 1fr; }
+  .rules-grid { grid-template-columns: 1fr 1fr; }
+  .calc { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 32px; align-items: start; }
+  .calc-row { grid-template-columns: minmax(0, 1fr) 84px auto; }
+  .calc-row .units { grid-column: auto; }
   .tiers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .table-wrap { padding: 4px 28px; }
   .story-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
