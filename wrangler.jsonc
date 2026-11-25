@@ -26,7 +26,7 @@
     // IDs are not secret. The API key and webhook secret are, so they're set with `wrangler secret put`.
     "DODO_PRODUCTS": {}
   }
-  // When the domain exists, add real email sending here:
-  //   "send_email": [{ "name": "EMAIL" }],
-  //   and add "MAIL_FROM": "QrOne <hello@yourdomain.com>" to "vars" above.
+  // Real sign-in email (Resend), once the domain is verified there:
+  //   add "MAIL_FROM": "QrOne <signin@yourdomain.com>" to "vars" above,
+  //   and set the key as a secret, never here: npx.cmd wrangler secret put RESEND_API_KEY
 }

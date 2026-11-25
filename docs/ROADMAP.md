@@ -27,7 +27,7 @@ Who does it: **You** = Anuj (accounts, money, phone, decisions). **Claude** = co
 | B1 | Search trademarks for "QrOne" (USPTO, and India's IP office) | You | No live mark for QR or link software |
 | B2 | Buy the domain on Cloudflare Registrar | You | The domain shows in your Cloudflare dashboard |
 | B3 | Apply to Paddle or Dodo Payments | You | The identity check is submitted |
-| B4 | Pick an email service for sign-in links (Claude compares free tiers first) | Both | An account exists and the domain is verified |
+| B4 | Email service for sign-in links: Resend picked ✅, code built ✅; you create the account and verify the domain | Both | Resend shows the domain as "Verified" |
 
 ## Phase C: the redirect engine (core of the paid product) ✅ done 2026-11-25
 
@@ -48,9 +48,11 @@ Live at `https://qrone-redirect.qr-tool-spike.workers.dev` with an empty databas
 
 D1–D2 are built and tested end to end locally (the link is printed to the terminal). Live sign-in answers "not available yet" until real email is switched on:
 1. Buy the domain (B2).
-2. Onboard it in Cloudflare → Email Service → Email Sending.
-3. Add the `send_email` binding and `MAIL_FROM` in `wrangler.jsonc`.
-4. ~~Update `privacy.html`~~ ✅ done: it now covers the email, codes, cookie and payments.
+2. In Resend (free: 3,000 emails a month, 100 a day), add the domain and put the DNS records it shows into Cloudflare DNS. Wait until Resend says "Verified".
+3. In Resend, create an API key with "Sending access" only. Never paste it in chat. Run `npx.cmd wrangler secret put RESEND_API_KEY` and paste it there.
+4. Set `MAIL_FROM` in `wrangler.jsonc` → `vars` (for example `QrOne <signin@yourdomain.com>`), then deploy.
+5. ~~Update `privacy.html`~~ ✅ done: it covers the email, codes, cookie, payments, and Resend sending the sign-in emails.
+The code side is built and tested (`app/src/mail.js`): sign-in switches on by itself once both the key and `MAIL_FROM` exist.
 
 | # | Step | Who | Done when |
 |---|------|-----|-----------|

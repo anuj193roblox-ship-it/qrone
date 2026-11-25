@@ -1,6 +1,9 @@
 ﻿# Copy to .dev.vars for local development. Never commit .dev.vars.
 # Prints sign-in links to the terminal instead of emailing them (local only).
 DEV_LOG_LINKS=1
+# To send real email locally instead, set both (a Resend key with sending access only; MAIL_FROM on your verified domain):
+# RESEND_API_KEY=re_replace-me
+# MAIL_FROM=QrOne <signin@yourdomain.com>
 # Where short links point during local development (the redirect Worker's local port).
 REDIRECT_ORIGIN=http://localhost:8790
 # Payments in local tests point at a fake Dodo. For real test mode, use your Dodo TEST key and webhook secret.
