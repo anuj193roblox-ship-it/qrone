@@ -209,7 +209,7 @@ function endsControl(prefix, current = null) {
 
 const SIZE = 1200; // codes are drawn 1200px wide, like the home page
 let currentPlan = "free";
-const FREE_WARN = "Free codes stop working 14 days after you make them. Test them with your phone, but don't print them. Upgrade first: paid codes never expire.";
+const FREE_WARN = "Free codes stop working 14 days after you make them. Test them with your phone, but don't print them.";
 
 // Make | Domains | Account tabs. Arrow keys move between them; #account opens the account tab directly.
 function initTabs() {

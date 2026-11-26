@@ -5,7 +5,6 @@ export const NAV = [
   { href: "/check", label: "Check", page: "check.html" },
   { href: "/print-guide", label: "Print guide", page: "print-guide.html" },
   { href: "/why-codes-die", label: "Why codes die", page: "why-codes-die.html" },
-  { href: "/pricing", label: "Pricing", page: "pricing.html" },
   { href: "/faq", label: "FAQ", page: "faq.html" },
 ];
 

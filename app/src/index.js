@@ -195,6 +195,7 @@ const deleteAccount = (request, env) => withAccount(request, env, async (account
 
 // Where codes live until custom domains exist, e.g. https://qrone-redirect.<account>.workers.dev
 const redirectOrigin = (env) => new URL(env.REDIRECT_ORIGIN);
+const paymentsOn = (env) => Boolean(env.DODO_API_KEY) && Object.keys(productsOf(env)).length > 0;
 
 function shortUrl(env, hostname, slug) {
   const origin = redirectOrigin(env);
@@ -237,7 +238,8 @@ const listCodes = (request, env) => withAccount(request, env, async (account) =>
   return json({
     ok: true, now: now(), plan: account.plan, planName: planName(account.plan),
     limit: limitFor(account.plan), used: results.length, codes: results.map((r) => publicCode(env, r)),
-    upgrades: upgradeOptions(account.plan).map((u) => ({ ...u, name: planName(u.plan), limit: limitFor(u.plan) })),
+    // No upgrade buttons unless payments are set up (DODO_API_KEY secret and product IDs).
+    upgrades: !paymentsOn(env) ? [] : upgradeOptions(account.plan).map((u) => ({ ...u, name: planName(u.plan), limit: limitFor(u.plan) })),
   });
 });
 

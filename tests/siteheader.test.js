@@ -5,7 +5,7 @@ import { siteHeader, NAV } from "../src/siteheader.js";
 test("the header has all six links, the sign-in button and the menu toggle", () => {
   const html = siteHeader("/faq.html", "QrOne");
   for (const n of NAV) assert.ok(html.includes(`href="${n.href}"`), n.label);
-  assert.deepEqual(NAV.map((n) => n.href), ["/", "/check", "/print-guide", "/why-codes-die", "/pricing", "/faq"]);
+  assert.deepEqual(NAV.map((n) => n.href), ["/", "/check", "/print-guide", "/why-codes-die", "/faq"]);
   assert.match(html, /class="header-cta" href="\/signin"/);
   assert.match(html, /aria-controls="site-nav"/);
 });
