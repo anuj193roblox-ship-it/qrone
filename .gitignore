@@ -173,3 +173,7 @@ vite.config.ts.timestamp-*
 .dev.vars
 .dev.vars.*
 !.dev.vars.example
+
+# Software factory runtime state and job worktrees
+/factory/jobs/
+/.worktrees/
