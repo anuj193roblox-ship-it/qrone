@@ -1,3 +1,0 @@
-# The factory's scripts run through a shebang; CRLF (core.autocrlf on Windows) breaks them.
-factory/checks.sh text eol=lf
-factory/bin/* text eol=lf
