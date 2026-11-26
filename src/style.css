@@ -190,6 +190,14 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 var(--gutter); }
 .example-tag { position: absolute; top: 8px; right: 8px; padding: 3px 10px; border-radius: var(--r-pill); background: var(--surface-2); color: var(--text); font-size: 0.75rem; font-weight: 700; }
 .badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
 .studio-actions { display: grid; gap: 10px; }
+/* Scan meter: a verdict pill plus one tick or cross per test. */
+.scan-meter { display: grid; gap: 8px; padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--r-card); background: var(--surface); }
+.scan-meter-head { margin: 0; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; font-weight: 700; }
+.scan-tests { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; font-size: var(--t-small); }
+.scan-tests .pass { color: var(--ok); }
+.scan-tests .fail { color: var(--bad); }
+.scan-meter .hint { margin: 0; }
+.scan-meter .hint:empty { display: none; }
 .btn-block { width: 100%; }
 .studio-actions .btn:not(.btn-primary) { background: var(--surface); } /* solid, so the dot grid doesn't show through */
 .studio-note { text-align: center; margin-top: 0; }

@@ -101,6 +101,27 @@
         <details class="more">
           <summary>Style, colour and logo</summary>
           <div class="more-body">
+            <div class="pair">
+              <div>
+                <label for="gen-dots">Dot shape</label>
+                <select id="gen-dots">
+                  <option value="square" selected>Square (scans best)</option>
+                  <option value="rounded">Rounded</option>
+                  <option value="extra-rounded">Extra rounded</option>
+                  <option value="classy">Classy</option>
+                  <option value="classy-rounded">Classy rounded</option>
+                  <option value="dots">Round dots</option>
+                </select>
+              </div>
+              <div>
+                <label for="gen-corners">Corner shape</label>
+                <select id="gen-corners">
+                  <option value="square" selected>Square</option>
+                  <option value="extra-rounded">Rounded</option>
+                  <option value="dot">Circle</option>
+                </select>
+              </div>
+            </div>
             <label for="gen-fg">Code colour</label>
             <div class="colour-row">
               <input id="gen-fg" type="color" value="#000000">
@@ -158,6 +179,11 @@
         <div class="badges">
           <span class="pill pill-ok">Static · never expires</span>
           <span id="gen-contrast-badge" class="pill pill-ok">Print-safe contrast</span>
+        </div>
+        <div class="scan-meter" aria-labelledby="scan-meter-title">
+          <p class="scan-meter-head"><span id="scan-meter-title">Scan meter</span> <span id="gen-scan-badge" class="pill pill-neutral">Checking…</span></p>
+          <ul id="gen-scan-tests" class="scan-tests"></ul>
+          <p id="gen-scan-tip" class="hint" role="status"></p>
         </div>
         <div class="studio-actions">
           <button type="button" id="gen-svg" class="btn btn-primary btn-block">Download SVG (best for print)</button>

@@ -2,6 +2,7 @@
 import QRCodeStyling from "qr-code-styling";
 import { buildData, qrText } from "./payload.js";
 import { quietZone, colour, framedSvgBlob, downloadFramed, printStickers } from "./frame.js";
+import { measure, verdict, tipFor } from "./scanmeter.js";
 
 const $ = (id) => document.getElementById(id);
 
@@ -63,6 +64,7 @@ export function initGenerator() {
   let previewUrl = null;
   let drawing = 0;
   let timer = 0;
+  let current = { text: EXAMPLES.url, dots: "square", logo: false, lowContrast: false }; // what the meter checks against
   async function drawPreview() {
     const n = ++drawing;
     const blob = await framedSvgBlob(qr, SIZE, opts());
@@ -71,6 +73,35 @@ export function initGenerator() {
     $("gen-img").src = url;
     if (previewUrl) URL.revokeObjectURL(previewUrl);
     previewUrl = url;
+    runMeter(url, n);
+  }
+
+  // Scan meter: once the preview settles, read it back under tough conditions.
+  let meterTimer = 0;
+  function runMeter(url, n) {
+    $("gen-scan-badge").textContent = "Checking…";
+    $("gen-scan-badge").className = "pill pill-neutral";
+    clearTimeout(meterTimer);
+    meterTimer = setTimeout(async () => {
+      let results;
+      try {
+        results = await measure(url, current.text, qrText(current.text));
+      } catch {
+        return; // a newer preview replaced this image while it loaded
+      }
+      if (n !== drawing) return;
+      const passed = results.filter((r) => r.ok).length;
+      const v = verdict(passed);
+      $("gen-scan-badge").textContent = `${v.text} · ${passed}/${results.length}`;
+      $("gen-scan-badge").className = `pill pill-${v.tone}`;
+      $("gen-scan-tests").replaceChildren(...results.map((r) => {
+        const li = document.createElement("li");
+        li.className = r.ok ? "pass" : "fail";
+        li.textContent = `${r.ok ? "✓" : "✗"} ${r.name}`;
+        return li;
+      }));
+      $("gen-scan-tip").textContent = tipFor(results.filter((r) => !r.ok).map((r) => r.id), current);
+    }, 250);
   }
 
   function refresh() {
@@ -108,11 +139,17 @@ export function initGenerator() {
     $("gen-logo-clear").hidden = !logo;
     $("gen-logo-note").textContent = logo ? "Error correction set to High so your logo doesn't block scanning." : "";
 
+    const text = result.data ?? EXAMPLES[type];
+    const dots = $("gen-dots").value;
+    const corners = $("gen-corners").value;
+    current = { text, dots, logo: Boolean(logo), lowContrast: risky };
     qr.update({
-      data: qrText(result.data ?? EXAMPLES[type]), // UTF-8, so accents and other scripts scan correctly
+      data: qrText(text), // UTF-8, so accents and other scripts scan correctly
       image: logo,
       qrOptions: { errorCorrectionLevel: logo ? "H" : $("gen-ec").value },
-      dotsOptions: { color: fg() },
+      dotsOptions: { color: fg(), type: dots },
+      cornersSquareOptions: { color: fg(), type: corners },
+      cornersDotOptions: { color: fg(), type: corners === "dot" ? "dot" : "square" },
       backgroundOptions: { color: bg() },
     });
     clearTimeout(timer);
